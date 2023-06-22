@@ -1,5 +1,5 @@
 'use client'
-import { Button, Card, Dropdown, Sidebar, TextInput } from 'flowbite-react'
+import { Button, Card, Dropdown, TextInput } from 'flowbite-react'
 import 'flowbite'
 import { AiOutlineSearch } from 'react-icons/ai'
 
@@ -21,28 +21,6 @@ const DefaultPagination = () => {
     />
   )
 }
-const Category = () => (
-  <>
-    <Sidebar aria-label="peer-flow">
-      <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item href="#">
-            <p>peerFlow</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#">
-            <p># Minishell</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#">
-            <p># Minirt</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#">
-            <p># Fdf</p>
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
-    </Sidebar>
-  </>
-)
 
 const DefaultDropdown = () => {
   return (
@@ -56,11 +34,11 @@ const DefaultDropdown = () => {
 
 const DefaultCard = () => {
   return (
-    <Card className="max-w-sm max-h-48 flex flex-col" href="#">
-      <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white flex-1">
+    <Card className="max-h-48 text-white" href="#">
+      <h5 className="text-xl font-bold tracking-tight text-white">
         <span className={'text-blue-600/75'}>Q. </span>minishell 질문입니다
       </h5>
-      <div className="font-normal text-gray-700 dark:text-gray-400 flex-none">
+      <div className="font-normal text-gray-700 dark:text-gray-400 text-ellipsis overflow-hidden ">
         minishell 너무 오래걸려요 힘들어요. minishell 너무 오래걸려요 힘들어요.
         minishell 너무 오래걸려요 힘들어요. minishell 너무 오래걸려요 힘들어요
         minishell 너무 오래걸려요 힘들어요 minishell 너무 오래걸려요 힘들어요
@@ -68,8 +46,10 @@ const DefaultCard = () => {
         minishell 너무 오래걸려요 힘들어요 minishell 너무 오래걸려요 힘들어요
         minishell 너무 오래걸려요 힘들어요
       </div>
-      <div className={'flex-1'}>추천</div>
-      <div className={'flex-1'}>답변</div>
+      <div className={'flex gap-2'}>
+        <span>추천</span>
+        <span>답변</span>
+      </div>
     </Card>
   )
 }
@@ -77,22 +57,28 @@ const DefaultCard = () => {
 const MainPage = () => {
   return (
     <div>
-      <Category />
-      <div className={'flex'}>
-        <TextInput
-          id="small"
-          sizing="sm"
-          type="text"
-          placeholder={'제목을 입력하세요'}
-        />
-        <Button className={'w-10'} color="dark">
-          <AiOutlineSearch />
-        </Button>
+      <div className={'flex justify-between'}>
+        <div className={'flex gap-0.5 '}>
+          <TextInput
+            id="small"
+            sizing="md"
+            type="text"
+            placeholder={'제목을 입력하세요'}
+          />
+          <Button className={'w-10'} color="dark" size="lg">
+            <AiOutlineSearch />
+          </Button>
+        </div>
+        <DefaultDropdown />
       </div>
-      <DefaultDropdown />
       <DefaultCard />
-      <DefaultPagination />
-      <Button>새 글</Button>
+      <DefaultCard />
+      <DefaultCard />
+      <DefaultCard />
+      <div className={'flex'}>
+        <DefaultPagination />
+        <Button>새 글</Button>
+      </div>
     </div>
   )
 }

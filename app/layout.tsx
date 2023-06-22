@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import { Inter } from 'next/font/google'
+import MainLayout from '@/components/MainLayout'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,8 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
-        <script src="https://cdn.tailwindcss.com"></script>
+        <MainLayout>{children}</MainLayout>
+        <script src="https://cdn.tailwindcss.com" async></script>
       </body>
     </html>
   )
