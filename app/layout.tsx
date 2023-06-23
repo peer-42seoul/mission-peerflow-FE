@@ -17,8 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        />
         <MainLayout>{children}</MainLayout>
-        <script src="https://cdn.tailwindcss.com" async></script>
       </body>
     </html>
   )

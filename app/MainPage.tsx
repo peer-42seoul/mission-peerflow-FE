@@ -1,85 +1,159 @@
 'use client'
-import { Button, Card, Dropdown, TextInput } from 'flowbite-react'
-import 'flowbite'
-import { AiOutlineSearch } from 'react-icons/ai'
-
-import { Pagination } from 'flowbite-react'
-import { useState } from 'react'
+import {
+  Box,
+  CardContent,
+  MenuItem,
+  Pagination,
+  Select,
+  SelectChangeEvent,
+  Typography,
+  Card,
+  Chip,
+  TextField,
+  IconButton,
+  InputAdornment,
+  FormControl,
+  Stack,
+  Container,
+} from '@mui/material'
+import React, { useState } from 'react'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 
 const DefaultPagination = () => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const onPageChange = (page: number) => setCurrentPage(page)
-
-  return (
-    <Pagination
-      nextLabel={''}
-      previousLabel={''}
-      showIcons
-      currentPage={currentPage}
-      onPageChange={() => onPageChange(currentPage)}
-      totalPages={100}
-    />
-  )
+  const [page, setPage] = useState(1)
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  }
+  return <Pagination count={5} page={page} onChange={handleChange} />
 }
 
 const DefaultDropdown = () => {
+  const [sort, setSort] = useState<'recent' | 'view' | 'recommend'>('recent')
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSort(event.target.value as 'recent' | 'view' | 'recommend')
+  }
   return (
-    <Dropdown label="게시글 정렬">
-      <Dropdown.Item>최신순</Dropdown.Item>
-      <Dropdown.Item>조회순</Dropdown.Item>
-      <Dropdown.Item>추천순</Dropdown.Item>
-    </Dropdown>
+    <FormControl size="small">
+      <Select
+        sx={{ minWidth: 100 }}
+        id="post-sort"
+        value={sort}
+        onChange={handleChange}
+      >
+        <MenuItem value={'recent'}>최신순</MenuItem>
+        <MenuItem value={'view'}>조회순</MenuItem>
+        <MenuItem value={'recommend'}>추천순</MenuItem>
+      </Select>
+    </FormControl>
   )
 }
 
-const DefaultCard = () => {
+const DefaultCard = ({ title }: Post[]) => {
+  const card = (
+    <React.Fragment>
+      <CardContent sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
+        <Box>
+          <Chip label="카테고리" variant="outlined" />
+        </Box>
+        <Typography variant="h5" component="div">
+          <strong style={{ color: 'green' }}>Q. </strong>
+          {title}
+        </Typography>
+        <Stack spacing={1}>
+          <Typography variant="body2">작성자</Typography>
+          <Typography color="text.secondary" variant="body2">
+            작성날짜
+          </Typography>
+        </Stack>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          maxHeight={40}
+          textOverflow={'ellipsis'}
+          overflow={'hidden'}
+        >
+          minishell 너무 어려워요 너무 어려워요 너무 어려워요 minishell 너무
+          어려워요 너무 어려워요 너무 어려워요minishell 너무 어려워요 너무
+          어려워요 너무 어려워요minishell 너무 어려워요 너무 어려워요 너무
+          어려워요minishell 너무 어려워요 너무 어려워요 너무 어려워요minishell
+          너무 어려워요 너무 어려워요 너무 어려워요minishell 너무 어려워요 너무
+          어려워요 너무 어려워요minishell 너무 어려워요 너무 어려워요 너무
+          어려워요 minishell 너무 어려워요 너무 어려워요 너무 어려워요minishell
+          너무 어려워요 너무 어려워요 너무 어려워요minishell 너무 어려워요 너무
+          어려워요 너무 어려워요minishell 너무 어려워요 너무 어려워요 너무
+          어려워요
+        </Typography>
+        <Stack spacing={1} direction="row">
+          <Typography variant="body2">
+            조회 <span>0</span>
+          </Typography>
+          <Typography variant="body2">
+            추천 <span>0</span>
+          </Typography>
+          <Typography variant="body2">
+            답변 <span>0</span>
+          </Typography>
+        </Stack>
+      </CardContent>
+    </React.Fragment>
+  )
+
   return (
-    <Card className="max-h-48 text-white" href="#">
-      <h5 className="text-xl font-bold tracking-tight text-white">
-        <span className={'text-blue-600/75'}>Q. </span>minishell 질문입니다
-      </h5>
-      <div className="font-normal text-gray-700 dark:text-gray-400 text-ellipsis overflow-hidden ">
-        minishell 너무 오래걸려요 힘들어요. minishell 너무 오래걸려요 힘들어요.
-        minishell 너무 오래걸려요 힘들어요. minishell 너무 오래걸려요 힘들어요
-        minishell 너무 오래걸려요 힘들어요 minishell 너무 오래걸려요 힘들어요
-        minishell 너무 오래걸려요 힘들어요 minishell 너무 오래걸려요 힘들어요
-        minishell 너무 오래걸려요 힘들어요 minishell 너무 오래걸려요 힘들어요
-        minishell 너무 오래걸려요 힘들어요
-      </div>
-      <div className={'flex gap-2'}>
-        <span>추천</span>
-        <span>답변</span>
-      </div>
-    </Card>
+    <Box sx={{ minWidth: 275 }}>
+      <Card variant="outlined">{card}</Card>
+    </Box>
   )
 }
 
 const MainPage = () => {
+  const datas = [
+    {
+      title: 'minishell',
+      content: 'minishell 너무 어려워요',
+      category: 0,
+      nickname: 'nickname',
+      recomment: 1,
+      views: 2,
+      created: '2023-06-23',
+    },
+    {
+      title: 'minishell2',
+      content: 'minishell 너무 어려워요2',
+      category: 0,
+      nickname: 'nickname',
+      recomment: 2,
+      views: 2,
+      created: '2023-06-23',
+    },
+  ]
   return (
-    <div>
-      <div className={'flex justify-between'}>
-        <div className={'flex gap-0.5 '}>
-          <TextInput
-            id="small"
-            sizing="md"
-            type="text"
-            placeholder={'제목을 입력하세요'}
-          />
-          <Button className={'w-10'} color="dark" size="lg">
-            <AiOutlineSearch />
-          </Button>
-        </div>
+    <Container sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
+      <Stack justifyContent={'space-between'} direction="row" mt={1}>
+        <TextField
+          id="outlined-search"
+          type="search"
+          placeholder="제목 검색"
+          size={'small'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position={'end'}>
+                <IconButton>
+                  <SearchOutlinedIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
         <DefaultDropdown />
-      </div>
-      <DefaultCard />
-      <DefaultCard />
-      <DefaultCard />
-      <DefaultCard />
-      <div className={'flex'}>
+      </Stack>
+      {datas?.map((item) => {
+        return <DefaultCard props={item} />
+      })}
+      <Stack justifyContent={'center'} direction="row" m={1}>
         <DefaultPagination />
-        <Button>새 글</Button>
-      </div>
-    </div>
+      </Stack>
+    </Container>
   )
 }
 export default MainPage

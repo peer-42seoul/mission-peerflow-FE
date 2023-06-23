@@ -1,38 +1,54 @@
 'use client'
-import { Sidebar } from 'flowbite-react'
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Stack,
+} from '@mui/material'
+import React from 'react'
 
 const Category = () => {
   return (
-    <Sidebar aria-label="peer-flow" className={'h-screen'}>
-      <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item href="#">
-            <p>peerFlow</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#">
-            <p># Minishell</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#">
-            <p># Minirt</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#">
-            <p># Fdf</p>
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
-    </Sidebar>
+    <List sx={{ backgroundColor: 'blue', padding: 0 }}>
+      {['Peer-flow', '# Minishell', '# Minirt', '# Fdf'].map((text) => (
+        <ListItem
+          key={text}
+          disablePadding
+          sx={{ width: 200, backgroundColor: 'yellow', px: 2, py: 0 }}
+        >
+          <ListItemButton>
+            <ListItemText primary={text} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
   )
 }
 
 const MainLayout = ({ children }) => {
   return (
-    <div className={'flex'}>
+    <Stack direction={'row'}>
       <Category />
-      <div className={'flex-1 h-screen'}>
-        <h5 className={'py-4 px-8 bg-blue-50'}>peerFlow</h5>
-        <div className={'w-full bg-red-50'}>{children}</div>
-      </div>
-    </div>
+      <Stack>
+        <Stack
+          justifyContent={'space-between'}
+          direction={'row'}
+          alignItems={'center'}
+          py={2}
+          px={4}
+          bgcolor={'red'}
+        >
+          <Box>사이드바 메뉴</Box>
+          <Stack>
+            <Button>새 글</Button>
+          </Stack>
+        </Stack>
+        <Box width={'100%'}>{children}</Box>
+      </Stack>
+    </Stack>
   )
 }
 
