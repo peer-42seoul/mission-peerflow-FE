@@ -11,8 +11,6 @@ import {
   IconButton,
 } from '@mui/material'
 
-import PageviewIcon from '@mui/icons-material/Pageview'
-import RecommendIcon from '@mui/icons-material/Recommend'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 
@@ -39,14 +37,14 @@ const PageInfo = () => {
           <Typography variant="h3">Q. {minishell.title}</Typography>
           <Stack direction={'row'} justifyContent={'space-between'}>
             <Stack>
-              <Typography variant="h6">
-                <RecommendIcon /> {minishell.recomment}{' '}
-                <PageviewIcon viewBox="조회수" />
-                {minishell.views} {minishell.nickname}{' '}
-                {minishell.updated ? minishell.updated : minishell.created}
+              <Typography variant="h6" my={1}>
+                {minishell.nickname}{' '}
               </Typography>
             </Stack>
             <Stack direction={'row'}>
+              <Typography my={1} variant="h6">
+                {minishell.updated ? minishell.updated : minishell.created}
+              </Typography>
               <IconButton size="small">
                 <EditIcon fontSize="small" />
               </IconButton>

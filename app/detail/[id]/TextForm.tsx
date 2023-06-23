@@ -1,35 +1,24 @@
 'use client'
 
-// import { Button, Textarea } from 'flowbite-react'
 import { Button, Stack } from '@mui/material'
 import { TextField } from '@mui/material'
 
 const TextForm = () => {
   return (
     <>
-      <Stack component={'form'} spacing={1} useFlexGap flexWrap={'wrap'}>
-        <Stack direction={'row'}>
-          <TextField
-            label="Nickname"
-            size="small"
-            inputProps={{ sx: { height: 12 } }}
-          />
-          <TextField
-            label="Password"
-            size="small"
-            inputProps={{ sx: { height: 12 } }}
-          />
+      <Stack component={'form'} direction={'row'} sx={{ my: 1 }}>
+        <Stack spacing={2} sx={{ mx: 2, my: 1 }}>
+          <TextField label="Nickname" size="small" />
+          <TextField label="Password" size="small" />
         </Stack>
-        <Stack direction={'row'}>
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            autoComplete="off"
-            label="Press your words"
-          />
-          <Button type="submit">입력</Button>
-        </Stack>
+        <TextField
+          fullWidth
+          multiline
+          rows={4}
+          autoComplete="off"
+          label="Press your words"
+        />
+        <Button type="submit">입력</Button>
       </Stack>
     </>
   )

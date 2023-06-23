@@ -1,9 +1,11 @@
 'use client'
 
-import { Card, CardContent } from '@mui/material'
+import { Card, CardContent, Typography, Stack } from '@mui/material'
 import Comment from './Comment'
-import { Question } from '@/types/Question'
+import { Question } from '../../types/Question'
 import { IComment } from './Comment'
+import PageviewIcon from '@mui/icons-material/Pageview'
+import RecommendIcon from '@mui/icons-material/Recommend'
 
 const minishell: Question = {
   question_id: 0,
@@ -30,7 +32,15 @@ const Question = () => {
   return (
     <>
       <Card>
-        <CardContent>{minishell.content}</CardContent>
+        <CardContent>
+          <Typography my={1}>{minishell.content}</Typography>
+        </CardContent>
+        <CardContent sx={{ margin: 0, py: 0 }}>
+          <Stack direction={'row'} spacing={1} my={1} margin={0} padding={0}>
+            <RecommendIcon /> <span>{minishell.recomment}</span>
+            <PageviewIcon viewBox="조회수" /> <span>{minishell.views}</span>
+          </Stack>
+        </CardContent>
         <Comment comment={minishell_comments} />
       </Card>
     </>
