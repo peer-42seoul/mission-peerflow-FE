@@ -1,3 +1,9 @@
+import WritingForm from './WritingForm'
+
 export default function Home() {
-  return <></>
+  return (
+    <>
+      <WritingForm />
+    </>
+  )
 }
