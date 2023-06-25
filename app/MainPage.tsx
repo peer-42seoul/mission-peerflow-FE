@@ -36,7 +36,7 @@ const DefaultDropdown = () => {
   return (
     <FormControl size="small">
       <Select
-        sx={{ minWidth: 100 }}
+        sx={{ minWidth: 80 }}
         id="post-sort"
         value={sort}
         onChange={handleChange}
@@ -49,7 +49,8 @@ const DefaultDropdown = () => {
   )
 }
 
-const DefaultCard = ({ title }: Post[]) => {
+const DefaultCard = ({ data }) => {
+  console.log('data', data)
   const card = (
     <React.Fragment>
       <CardContent sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
@@ -58,12 +59,12 @@ const DefaultCard = ({ title }: Post[]) => {
         </Box>
         <Typography variant="h5" component="div">
           <strong style={{ color: 'green' }}>Q. </strong>
-          {title}
+          {data?.title}
         </Typography>
-        <Stack spacing={1}>
-          <Typography variant="body2">작성자</Typography>
+        <Stack spacing={1} direction={'row'}>
+          <Typography variant="body2"> {data?.nickname}</Typography>
           <Typography color="text.secondary" variant="body2">
-            작성날짜
+            {data?.created}
           </Typography>
         </Stack>
         <Typography
@@ -73,16 +74,7 @@ const DefaultCard = ({ title }: Post[]) => {
           textOverflow={'ellipsis'}
           overflow={'hidden'}
         >
-          minishell 너무 어려워요 너무 어려워요 너무 어려워요 minishell 너무
-          어려워요 너무 어려워요 너무 어려워요minishell 너무 어려워요 너무
-          어려워요 너무 어려워요minishell 너무 어려워요 너무 어려워요 너무
-          어려워요minishell 너무 어려워요 너무 어려워요 너무 어려워요minishell
-          너무 어려워요 너무 어려워요 너무 어려워요minishell 너무 어려워요 너무
-          어려워요 너무 어려워요minishell 너무 어려워요 너무 어려워요 너무
-          어려워요 minishell 너무 어려워요 너무 어려워요 너무 어려워요minishell
-          너무 어려워요 너무 어려워요 너무 어려워요minishell 너무 어려워요 너무
-          어려워요 너무 어려워요minishell 너무 어려워요 너무 어려워요 너무
-          어려워요
+          {data.content}
         </Typography>
         <Stack spacing={1} direction="row">
           <Typography variant="body2">
@@ -147,9 +139,9 @@ const MainPage = () => {
         />
         <DefaultDropdown />
       </Stack>
-      {datas?.map((item) => {
-        return <DefaultCard props={item} />
-      })}
+      {datas?.map((item: Post) => (
+        <DefaultCard data={item} key={item.title} />
+      ))}
       <Stack justifyContent={'center'} direction="row" m={1}>
         <DefaultPagination />
       </Stack>
