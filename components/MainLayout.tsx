@@ -2,7 +2,6 @@
 import {
   AppBar,
   Box,
-  Button,
   CssBaseline,
   Divider,
   IconButton,
@@ -13,6 +12,7 @@ import {
   Toolbar,
   Typography,
   Drawer,
+  useMediaQuery,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import React, { useState } from 'react'
@@ -20,7 +20,8 @@ import React, { useState } from 'react'
 const Category = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [title, setTitle] = useState('전체보기')
-  const drawerWidth = 240
+  const isTablet = useMediaQuery('(max-width: 900px)')
+  const drawerWidth = isTablet ? 180 : 240
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -29,7 +30,7 @@ const Category = ({ children }) => {
   const drawer = (
     <div>
       <Toolbar>
-        <Button onClick={() => setTitle('전체 보기')}>Peer-flow</Button>
+        <Typography onClick={() => setTitle('전체 보기')}>Peer-flow</Typography>
       </Toolbar>
       <Divider />
       <List sx={{ padding: 0, height: '100%' }}>
