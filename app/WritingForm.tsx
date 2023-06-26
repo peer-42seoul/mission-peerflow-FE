@@ -1,12 +1,20 @@
 'use client'
-import Dropdown from '@/components/Dropdown'
 import useInput from '@/hooks/useInput'
-import { Button, TextareaAutosize } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextareaAutosize,
+} from '@mui/material'
 import Stack from '@mui/material/Stack'
 import axios, { AxiosResponse } from 'axios'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { log } from 'console'
+import React, { useCallback, useEffect, useState } from 'react'
 
-interface options {
+interface Options {
   value: number
   name: string
 }
@@ -15,82 +23,62 @@ const WritingForm = () => {
   const [nickname, changeNickname] = useInput('')
   const [password, changePassword] = useInput('')
   const [mainText, changeMainText] = useInput('')
-  const [option, setOption] = useState<options[]>([
-    {
-      value: 1,
-      name: '자유 게시판',
-    },
-    {
-      value: 2,
-      name: '정보 게시판',
-    },
-    {
-      value: 3,
-      name: '핫딜 게시판',
-    },
+  const [option, setOptions] = useState<Options[]>([
+    { value: 1, name: '자유 게시판' },
+    { value: 2, name: '정보 게시판' },
+    { value: 3, name: '42 게시판' },
   ])
+  const [name, setName] = useState('')
+
   const [showError, setShowError] = useState(false)
 
-  // const changeOptions = (e: React.ChangeEvent<{ value: unknown }>) => {
-  //   const selectionOption = option.find((o) => o.value === e.target.value)
-  //   if (selectionOption) {
-  //     setOption(selectionOption)
-  //   }
-  // }
+  const optionHandler = useCallback((e: SelectChangeEvent) => {
+    setName(e.target.value as string)
+  }, [])
 
-  const changeOptions = (e: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedValue = e.target.value as number
-    const selectedOption = option.find((o) => o.value === selectedValue)
-    if (selectedOption) {
-      setOption(selectedOption)
-    }
-  }
-  // const changeInputHandler = (
-  //   e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-  // ) => {
-  //   const { name, value } = e.target
-  //   if (name === 'mainText') {
-  //     setMainText(value)
-  //   }
-  // }
+  const submitHnadler = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      if (title.trim().length === 0) {
+        setShowError(true)
+        return
+      } else if (nickname.trim().length === 0) {
+        setShowError(true)
+        return
+      } else if (password.trim().length === 0) {
+        setShowError(true)
+        return
+      } else if (mainText.trim().length === 0) {
+        setShowError(true)
+        return
+      }
+      // console.log(
+      //   `Data: ${title}, ${
+      //     option.find((item) => item.value === name)?.value
+      //   }, ${nickname}, ${password}, ${mainText}`,
+      // )
 
-  const submitHnadler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (title.trim().length === 0) {
-      setShowError(true)
-      return
-    } else if (nickname.trim().length === 0) {
-      setShowError(true)
-      return
-    } else if (password.trim().length === 0) {
-      setShowError(true)
-      return
-    } else if (mainText.trim().length === 0) {
-      setShowError(true)
-      return
-    }
-    console.log(
-      `Data : ${title}, ${option} ${nickname}, ${password}, ${mainText}`,
-    )
-    axios
-      .post('/v1/question', {
-        title,
-        nickname,
-        password,
-        mainText,
-        option,
-      })
-      .then((res: AxiosResponse<any>) => {
-        console.log(`res : ${res}`)
-      })
-      .catch((err) => {
-        console.log(`err ${err}`)
-      })
-  }
+      axios
+        .post('/v1/question', {
+          title,
+          nickname,
+          password,
+          mainText,
+          option: option.find((item) => item.value === name)?.value,
+        })
+        .then((res: AxiosResponse<any>) => {
+          console.log(`res : ${res}`)
+        })
+        .catch((err) => {
+          console.log(`err ${err}`)
+        })
+    },
+    [title, nickname, password, mainText, option],
+  )
 
   return (
     <Stack spacing={2}>
-      <form action={'/somewhere'} onSubmit={submitHnadler}>
+      <form onSubmit={submitHnadler}>
         <input
           required
           type="text"
@@ -101,9 +89,22 @@ const WritingForm = () => {
         {showError && title.trim().length === 0 && (
           <span>제목을 입력해주세요.</span>
         )}
-
-        <Dropdown changeOptions={changeOptions} option={option} />
-        {/* </FormControl> */}
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">게시판 타입</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={name}
+            label="name"
+            onChange={optionHandler}
+          >
+            {option.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <input
           type="text"
           placeholder="닉네임"
