@@ -1,5 +1,4 @@
 'use client'
-import useInput from '@/hooks/useInput'
 import {
   Button,
   FormControl,
@@ -13,6 +12,7 @@ import Stack from '@mui/material/Stack'
 import axios, { AxiosResponse } from 'axios'
 import { log } from 'console'
 import React, { useCallback, useEffect, useState } from 'react'
+import useInput from '../../hooks/useInput'
 
 interface Options {
   value: number
