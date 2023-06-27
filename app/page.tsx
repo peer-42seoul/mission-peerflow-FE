@@ -1,3 +1,9 @@
+import mainPage from './MainPage'
+import MainPage from './MainPage'
 export default function Home() {
-  return <p>it's home</p>
+  return (
+    <>
+      <MainPage />
+    </>
+  )
 }
