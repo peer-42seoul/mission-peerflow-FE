@@ -18,7 +18,7 @@ interface Options {
   value: number
   name: string
 }
-const WritingForm = () => {
+const Page = () => {
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
   const [password, changePassword] = useInput('')
@@ -145,4 +145,4 @@ const WritingForm = () => {
   )
 }
 
-export default WritingForm
+export default Page
