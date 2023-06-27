@@ -1,39 +1,37 @@
 'use client'
 import {
   Button,
+  Container,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextareaAutosize,
+  TextField,
 } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import axios, { AxiosResponse } from 'axios'
-import { log } from 'console'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import useInput from '../../hooks/useInput'
+import { WritingForm } from '../../types/WritingForm'
 
-interface Options {
-  value: number
-  name: string
-}
 const Page = () => {
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
   const [password, changePassword] = useInput('')
   const [mainText, changeMainText] = useInput('')
-  const [option, setOptions] = useState<Options[]>([
-    { value: 1, name: '자유 게시판' },
-    { value: 2, name: '정보 게시판' },
-    { value: 3, name: '42 게시판' },
+  const [category, setCategory] = useState<WritingForm['category'][]>([
+    { value: 1, name: 'Minishell' },
+    { value: 2, name: 'Minirt' },
+    { value: 3, name: 'Fdf' },
   ])
+
   const [name, setName] = useState('')
 
   const [showError, setShowError] = useState(false)
 
-  const optionHandler = useCallback((e: SelectChangeEvent) => {
-    setName(e.target.value as string)
+  const categoryHandler = useCallback((e: SelectChangeEvent) => {
+    setName(e.target.value)
   }, [])
 
   const submitHnadler = useCallback(
@@ -52,11 +50,11 @@ const Page = () => {
         setShowError(true)
         return
       }
-      // console.log(
-      //   `Data: ${title}, ${
-      //     option.find((item) => item.value === name)?.value
-      //   }, ${nickname}, ${password}, ${mainText}`,
-      // )
+      console.log(
+        `Data: ${title}, ${
+          category.find((item) => item.value === name)?.value
+        }, ${nickname}, ${password}, ${mainText}`,
+      )
 
       axios
         .post('/v1/question', {
@@ -64,7 +62,7 @@ const Page = () => {
           nickname,
           password,
           mainText,
-          option: option.find((item) => item.value === name)?.value,
+          category: category.find((item) => item.value === name)?.value,
         })
         .then((res: AxiosResponse<any>) => {
           console.log(`res : ${res}`)
@@ -73,75 +71,89 @@ const Page = () => {
           console.log(`err ${err}`)
         })
     },
-    [title, nickname, password, mainText, option],
+    [title, nickname, password, mainText, category],
   )
 
   return (
-    <Stack spacing={2}>
+    <Container>
       <form onSubmit={submitHnadler}>
-        <input
-          required
-          type="text"
-          placeholder="제목"
-          name="title"
-          onChange={changeTitle}
-        />
-        {showError && title.trim().length === 0 && (
-          <span>제목을 입력해주세요.</span>
-        )}
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">게시판 타입</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={name}
-            label="name"
-            onChange={optionHandler}
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={2}
+        >
+          <TextField
+            id="standard-basic"
+            label="제목"
+            fullWidth
+            onChange={changeTitle}
+          />
+          {showError && title.trim().length === 0 && (
+            <span style={{ color: 'red' }}>제목을 입력해주세요.</span>
+          )}
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">게시판 타입</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={name}
+              label="name"
+              onChange={categoryHandler}
+            >
+              {category.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Stack
+            spacing={{ xs: 1, sm: 2 }}
+            direction="row"
+            useFlexGap
+            flexWrap="wrap"
+            justifyContent="space-between"
           >
-            {option.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <input
-          type="text"
-          placeholder="닉네임"
-          name="nickname"
-          onChange={changeNickname}
-        />
-        {showError && nickname.trim().length === 0 && (
-          <span>닉네임을 입력해주세요.</span>
-        )}
+            <TextField
+              type="text"
+              placeholder="닉네임"
+              name="nickname"
+              onChange={changeNickname}
+              style={{ width: '40%' }}
+            />
+            {showError && nickname.trim().length === 0 && (
+              <span style={{ color: 'red' }}>닉네임을 입력해주세요.</span>
+            )}
 
-        <input
-          type="password"
-          placeholder="비밀번호"
-          name="password"
-          onChange={changePassword}
-        />
-        {showError && password.trim().length === 0 && (
-          <span>비밀번호를 입력해주세요.</span>
-        )}
-        <TextareaAutosize
-          name="mainText"
-          color="neutral"
-          disabled={false}
-          minRows={2}
-          placeholder={'입력해주세요 ...'}
-          size="lg"
-          variant="solid"
-          onChange={changeMainText}
-        />
-        {showError && mainText.trim().length === 0 && (
-          <span>텍스트를 입력해주세요 </span>
-        )}
-        <Button type="submit" variant="outlined">
-          작성하기
-        </Button>
+            <TextField
+              type="password"
+              placeholder="비밀번호"
+              name="password"
+              onChange={changePassword}
+              style={{ width: '40%' }}
+            />
+            {showError && password.trim().length === 0 && (
+              <span style={{ color: 'red' }}>비밀번호를 입력해주세요.</span>
+            )}
+          </Stack>
+          <TextField
+            id="outlined-multiline-static"
+            multiline
+            rows={4}
+            // defaultValue={title}
+            fullWidth
+            onChange={changeMainText}
+          />
+          {showError && mainText.trim().length === 0 && (
+            <span style={{ color: 'red' }}>텍스트를 입력해주세요 </span>
+          )}
+          <Button type="submit" variant="outlined">
+            작성하기
+          </Button>
+        </Stack>
       </form>
-    </Stack>
+    </Container>
   )
 }
 
