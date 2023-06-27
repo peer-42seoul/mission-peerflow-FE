@@ -1,11 +1,9 @@
-'use client'
-
-import { useState } from 'react'
-import WritingForm from './WritingForm'
-import EditForm from '@/components/EditForm'
-
+import mainPage from './MainPage'
+import MainPage from './MainPage'
 export default function Home() {
-  let qid = 42
-  const [test, setTest] = useState(true)
-  return <>{test ? <WritingForm /> : <EditForm questionId={qid} />}</>
+  return (
+    <>
+      <MainPage />
+    </>
+  )
 }
