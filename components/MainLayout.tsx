@@ -13,15 +13,24 @@ import {
   Typography,
   Drawer,
   useMediaQuery,
+  Stack,
+  Button,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import React, { useState } from 'react'
+import TagIcon from '@mui/icons-material/Tag'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import React, { useContext, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { MyContext } from '../hooks/myContext'
 
 const Category = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [title, setTitle] = useState('전체보기')
+  const router = useRouter()
   const isTablet = useMediaQuery('(max-width: 900px)')
   const drawerWidth = isTablet ? 180 : 240
+  const [drawerTitle, setDrawerTitle] = useState('전체 보기')
+  const { title, type } = useContext(MyContext)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -30,14 +39,35 @@ const Category = ({ children }) => {
   const drawer = (
     <div>
       <Toolbar>
-        <Typography onClick={() => setTitle('전체 보기')}>Peer-flow</Typography>
+        <Link href={'/'}>
+          <Typography
+            onClick={() => {
+              setDrawerTitle('전체 보기')
+            }}
+            fontWeight={'bold'}
+          >
+            Peer-flow
+          </Typography>
+        </Link>
       </Toolbar>
       <Divider />
       <List sx={{ padding: 0, height: '100%' }}>
-        {['# Minishell', '# Minirt', '# Fdf'].map((text) => (
+        {['Minishell', 'Minirt', 'Fdf'].map((text) => (
           <ListItem key={text} disablePadding sx={{ px: 2, py: 1 }}>
-            <ListItemButton onClick={() => setTitle(text)}>
-              <ListItemText primary={text} />
+            <ListItemButton
+              onClick={() => {
+                setDrawerTitle(text)
+                router.push('/')
+              }}
+            >
+              <ListItemText
+                primary={
+                  <Stack direction={'row'} spacing={0.5}>
+                    <TagIcon />
+                    <Typography>{text}</Typography>
+                  </Stack>
+                }
+              />
             </ListItemButton>
           </ListItem>
         ))}
@@ -66,11 +96,23 @@ const Category = ({ children }) => {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ color: 'white' }} />
           </IconButton>
-          <Typography noWrap component="div">
-            {title}
-          </Typography>
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            flex={1}
+            justifyContent={'space-between'}
+          >
+            <Typography noWrap component="div" color={'white'}>
+              {title}
+            </Typography>
+            <Link href={'/write'}>
+              <IconButton>
+                <AddOutlinedIcon sx={{ color: 'white' }} />
+              </IconButton>
+            </Link>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Box

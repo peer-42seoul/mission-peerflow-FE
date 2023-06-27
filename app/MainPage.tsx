@@ -15,9 +15,13 @@ import {
   FormControl,
   Stack,
   Container,
+  Tooltip,
 } from '@mui/material'
 import React, { useState } from 'react'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import Link from 'next/link'
+import RecommendIcon from '@mui/icons-material/Recommend'
+import PageviewIcon from '@mui/icons-material/Pageview'
 
 const DefaultPagination = () => {
   const [page, setPage] = useState(1)
@@ -55,37 +59,60 @@ const DefaultCard = ({ data }) => {
     <React.Fragment>
       <CardContent sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
         <Box>
-          <Chip label="카테고리" variant="outlined" />
+          <Chip label={data?.category} />
         </Box>
-        <Typography variant="h5" component="div">
-          <strong style={{ color: 'green' }}>Q. </strong>
-          {data?.title}
-        </Typography>
-        <Stack spacing={1} direction={'row'}>
+        <Link href={`/detail/1`}>
+          <Tooltip title={data.title} arrow>
+            <Typography
+              variant="h5"
+              fontWeight={'bold'}
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: '2',
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              <strong style={{ color: 'skyblue' }}>Q. </strong>
+              {data?.title}
+            </Typography>
+          </Tooltip>
+        </Link>
+        <Stack spacing={1} direction={'row'} justifyContent={'space-between'}>
           <Typography variant="body2"> {data?.nickname}</Typography>
-          <Typography color="text.secondary" variant="body2">
+          <Typography color="text.secondary" variant="body2" pr={1}>
             {data?.created}
           </Typography>
         </Stack>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          maxHeight={40}
-          textOverflow={'ellipsis'}
-          overflow={'hidden'}
+        <Link href={`/detail/1`}>
+          <Typography
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: '2',
+              WebkitBoxOrient: 'vertical',
+            }}
+            variant="body2"
+            color="text.secondary"
+            maxHeight={40}
+          >
+            {data.content}
+          </Typography>
+        </Link>
+        <Stack
+          direction={'row'}
+          spacing={1}
+          my={1}
+          margin={0}
+          padding={0}
+          fontSize={'12px'}
         >
-          {data.content}
-        </Typography>
-        <Stack spacing={1} direction="row">
-          <Typography variant="body2">
-            조회 <span>0</span>
-          </Typography>
-          <Typography variant="body2">
-            추천 <span>0</span>
-          </Typography>
-          <Typography variant="body2">
-            답변 <span>0</span>
-          </Typography>
+          <RecommendIcon />
+          <span>{data?.recomment}</span>
+          <PageviewIcon viewBox="조회수" />
+          <span>{data?.views}</span>
         </Stack>
       </CardContent>
     </React.Fragment>
@@ -101,22 +128,26 @@ const DefaultCard = ({ data }) => {
 const MainPage = () => {
   const datas = [
     {
-      title: 'minishell',
-      content: 'minishell 너무 어려워요',
+      title:
+        'minishell minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
+      content:
+        'minishell 너무 어려워요 minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
       category: 0,
       nickname: 'nickname',
       recomment: 1,
       views: 2,
-      created: '2023-06-23',
+      created: '2023-06-23 12:17',
     },
     {
-      title: 'minishell2',
-      content: 'minishell 너무 어려워요2',
+      title:
+        'minishell2 minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
+      content:
+        'minishell 너무 어려워요2 minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
       category: 0,
       nickname: 'nickname',
       recomment: 2,
       views: 2,
-      created: '2023-06-23',
+      created: '2023-06-23 12:17',
     },
   ]
   return (
