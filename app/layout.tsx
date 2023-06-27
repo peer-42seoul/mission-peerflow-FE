@@ -2,11 +2,11 @@
 
 import '../styles/globals.css'
 import { Inter } from 'next/font/google'
-import MainLayout from '@/components/MainLayout'
 
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import { Theme } from '../styles/Theme'
+import MainLayout from '../components/MainLayout'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,11 +25,13 @@ export default function RootLayout({
       <head />
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <body className={inter.className}><MainLayout>{children}</MainLayout>
-        <link
+        <body className={inter.className}>
+          <MainLayout>{children}</MainLayout>
+          <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        /></body>
+          />
+        </body>
       </ThemeProvider>
     </html>
   )
