@@ -11,11 +11,10 @@ import {
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
 import React, { useState } from 'react'
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
+import EditDeleteButton from './EditDeleteButton'
 
 export interface IComment {
-  id: number
+  id?: number
   nickname: string
   password: string
   content: string
@@ -25,15 +24,14 @@ export interface IComment {
 
 const Comment = ({ comment }: { comment: IComment | null }) => {
   const [hidden, setHidden] = useState(true)
-
-  const handleButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleButton = () => {
     console.log('click')
     setHidden(!hidden)
   }
 
   return (
     <>
-      <Box my={1}>
+      <Card sx={{ my: 1 }} variant="outlined">
         <Button onClick={handleButton}>댓글</Button>
         {!hidden ? (
           !comment ? (
@@ -49,27 +47,17 @@ const Comment = ({ comment }: { comment: IComment | null }) => {
                 <CardContent>
                   <Stack direction={'row'} justifyContent={'space-between'}>
                     <Stack direction={'row'}>
-                      <Typography
-                        fontWeight={'bolder'}
-                        width={'100px'}
-                        minWidth={'100px'}
-                        my={1}
-                      >
-                        {comment.nickname}
-                      </Typography>
+                      <Stack margin={'5px'}>
+                        <Typography fontWeight={'bolder'}>
+                          {comment.nickname}
+                        </Typography>
+                        <Typography width={'max-content'} fontSize={'12px'}>
+                          {comment.created}
+                        </Typography>
+                      </Stack>
                       <Typography my={1}>{comment.content}</Typography>
                     </Stack>
-                    <Stack direction={'row'}>
-                      <Typography width={'max-content'} my={1}>
-                        {comment.created}
-                      </Typography>
-                      <IconButton size="small">
-                        <EditIcon fontSize="inherit" />
-                      </IconButton>
-                      <IconButton size="small">
-                        <DeleteIcon fontSize="inherit" />
-                      </IconButton>
-                    </Stack>
+                    <EditDeleteButton />
                   </Stack>
                 </CardContent>
                 <TextForm />
@@ -79,7 +67,7 @@ const Comment = ({ comment }: { comment: IComment | null }) => {
         ) : (
           <br />
         )}
-      </Box>
+      </Card>
     </>
   )
 }

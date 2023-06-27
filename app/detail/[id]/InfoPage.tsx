@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
   IconButton,
+  Tooltip,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -16,7 +17,8 @@ import EditIcon from '@mui/icons-material/Edit'
 
 const minishell: Question = {
   question_id: 0,
-  title: 'minishell 하는 중인데',
+  title:
+    'minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데',
   content:
     'minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 ',
   category: 0,
@@ -34,7 +36,24 @@ const PageInfo = () => {
       <Card variant="outlined">
         <CardContent>
           <Chip label={`home/${minishell.category}`}></Chip>
-          <Typography variant="h3">Q. {minishell.title}</Typography>
+          <Stack direction={'row'}>
+            <Typography variant="h3">Q.</Typography>
+            <Tooltip title={minishell.title} arrow>
+              <Typography
+                variant="h4"
+                fontWeight={'bold'}
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: '2',
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {minishell.title}
+              </Typography>
+            </Tooltip>
+          </Stack>
           <Stack direction={'row'} justifyContent={'space-between'}>
             <Stack>
               <Typography variant="h6" my={1}>

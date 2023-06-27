@@ -1,6 +1,7 @@
 'use client'
 
-import { Card, CardContent, Typography, Stack } from '@mui/material'
+import { Card, CardContent, Typography } from '@mui/material'
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import Comment, { IComment } from './Comment'
 import TextForm from './TextForm'
 import { Answer } from '../../../types/Answer'
@@ -18,7 +19,6 @@ const minishell_answer: Answer = {
 }
 
 const minishell_answer_comment: IComment = {
-  id: 0,
   nickname: 'jujeon',
   password: '4242',
   content:
@@ -27,12 +27,18 @@ const minishell_answer_comment: IComment = {
 }
 
 const Answer = () => {
+  const [answers, setAnswers] = useState<Answer[]>([])
+  const [comments, setComments] = useState<IComment[]>([])
+
+  const commentId = useRef()
+
   return (
     <>
       <Card variant="outlined">
         <CardContent>
           <Typography>{minishell_answer.nickname}</Typography>
           <Typography>{minishell_answer.content}</Typography>
+          {/* map */}
           <Comment comment={minishell_answer_comment} />
         </CardContent>
         <TextForm />

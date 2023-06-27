@@ -31,17 +31,17 @@ const minishell_comments: IComment = {
 const Question = () => {
   return (
     <>
-      <Card>
+      <Card variant="outlined">
         <CardContent>
           <Typography my={1}>{minishell.content}</Typography>
         </CardContent>
-        <CardContent sx={{ margin: 0, py: 0 }}>
+        <CardContent sx={{ margin: 0, padding: 1, paddingBottom: 0 }}>
           <Stack direction={'row'} spacing={1} my={1} margin={0} padding={0}>
             <RecommendIcon /> <span>{minishell.recomment}</span>
             <PageviewIcon viewBox="조회수" /> <span>{minishell.views}</span>
           </Stack>
+          <Comment comment={minishell_comments} />
         </CardContent>
-        <Comment comment={minishell_comments} />
       </Card>
     </>
   )
