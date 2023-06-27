@@ -9,9 +9,24 @@ import {
   Select,
   Stack,
   TextField,
+  Typography,
 } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { WritingForm } from '../types/WritingForm'
+import { Modal } from '@mui/base'
+import { Box } from '@mui/system'
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+}
 
 const EditForm = ({ questionId }: number) => {
   const [questionData, setQuestionData] = useState({})
@@ -19,20 +34,27 @@ const EditForm = ({ questionId }: number) => {
   const [nickname, changeNickname] = useInput('')
   const [password, changePassword] = useInput('')
   const [mainText, changeMainText] = useInput('')
+  const [name, setName] = useState('')
+  const [showError, setShowError] = useState(false)
   const [category, setCategory] = useState<WritingForm['category'][]>([
     { value: 1, name: 'Minishell' },
     { value: 2, name: 'Minirt' },
     { value: 3, name: 'Fdf' },
   ])
-
-  const [name, setName] = useState('')
-
-  const [showError, setShowError] = useState(false)
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   const categoryHandler = useCallback((e: SelectChangeEvent) => {
     setName(e.target.value)
   }, [])
 
+  //delete 구현해야함
+  // const deleteHandler = useCallback(
+  //   (e: MouseEvent<HTMLButtonElement>) => {},
+
+  //   [],
+  // )
   const submitHnadler = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -136,8 +158,31 @@ const EditForm = ({ questionId }: number) => {
             <span style={{ color: 'red' }}>텍스트를 입력해주세요 </span>
           )}
           <Button type="submit" variant="outlined">
-            작성하기
+            수정하기
           </Button>
+          <Button type="button" variant="outlined" onClick={handleOpen}>
+            삭제하기
+          </Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                정말로 삭제하시겠습니까?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Button variant="contained" onClick={}>
+                  네
+                </Button>
+                <Button variant="outlined" onClick={handleClose}>
+                  아니요
+                </Button>
+              </Typography>
+            </Box>
+          </Modal>
         </Stack>
       </form>
     </Container>
