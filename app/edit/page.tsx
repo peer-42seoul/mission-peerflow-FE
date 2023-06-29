@@ -1,37 +1,64 @@
 'use client'
+
+import updateQuestion from '../../api/updateQuestion'
+import useInput from '../../hooks/useInput'
 import {
   Button,
-  Container,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
+  Stack,
   TextField,
 } from '@mui/material'
-import Stack from '@mui/material/Stack'
-import axios, { AxiosResponse } from 'axios'
-import React, { useCallback, useState } from 'react'
-import useInput from '../../hooks/useInput'
+import { useCallback, useState } from 'react'
+import PulbicModal from '../../components/PublicModal'
+import axios from 'axios'
 import { WritingForm } from '../../types/WritingForm'
 
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+}
+
+// 임시로 questionId을 활용해 api 테스트
+
+const questionId = 42
+
 const Page = () => {
+  const [questionData, setQuestionData] = useState({})
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
   const [password, changePassword] = useInput('')
   const [mainText, changeMainText] = useInput('')
+  const [name, setName] = useState('')
+  const [showError, setShowError] = useState(false)
   const [category, setCategory] = useState<WritingForm['category'][]>([
     { value: 1, name: 'Minishell' },
     { value: 2, name: 'Minirt' },
     { value: 3, name: 'Fdf' },
   ])
-
-  const [name, setName] = useState('')
-
-  const [showError, setShowError] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [action, setAction] = useState('')
+  const handleOpen = (action) => {
+    setAction(action)
+    setOpen(true)
+  }
+  const handleClose = () => setOpen(false)
 
   const categoryHandler = useCallback((e: SelectChangeEvent) => {
     setName(e.target.value)
+  }, [])
+
+  const deleteHandler = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    axios.delete(`/v1/question/${questionId}`)
   }, [])
 
   const submitHnadler = useCallback(
@@ -50,32 +77,25 @@ const Page = () => {
         setShowError(true)
         return
       }
-      console.log(
-        `Data: ${title}, ${
-          category.find((item) => item.value === name)?.value
-        }, ${nickname}, ${password}, ${mainText}`,
-      )
 
-      axios
-        .post('/v1/question', {
+      setQuestionData((prevQuestionData) => {
+        const updatedQuestionData = {
+          ...prevQuestionData,
           title,
           nickname,
           password,
           mainText,
           category: category.find((item) => item.value === name)?.value,
-        })
-        .then((res: AxiosResponse<any>) => {
-          console.log(`res : ${res}`)
-        })
-        .catch((err) => {
-          console.log(`err ${err}`)
-        })
+        }
+        return updatedQuestionData
+      })
+      updateQuestion({ questionId: questionId, data: questionData })
     },
     [title, nickname, password, mainText, category],
   )
 
   return (
-    <Container>
+    <>
       <form onSubmit={submitHnadler}>
         <Stack
           direction="column"
@@ -124,9 +144,7 @@ const Page = () => {
                 style={{ width: '100%' }}
               />
               {showError && nickname.trim().length === 0 && (
-                <div style={{ color: 'red', marginTop: '16px' }}>
-                  닉네임을 입력해주세요.
-                </div>
+                <div style={{ color: 'red' }}>닉네임을 입력해주세요.</div>
               )}
             </Stack>
             <Stack width={'45%'}>
@@ -138,9 +156,7 @@ const Page = () => {
                 style={{ width: '100%' }}
               />
               {showError && password.trim().length === 0 && (
-                <div style={{ color: 'red', marginTop: '16px' }}>
-                  비밀번호를 입력해주세요.
-                </div>
+                <div style={{ color: 'red' }}>비밀번호를 입력해주세요.</div>
               )}
             </Stack>
           </Stack>
@@ -148,19 +164,43 @@ const Page = () => {
             id="outlined-multiline-static"
             multiline
             rows={4}
-            // defaultValue={title}
+            // defaultValue={} //
             fullWidth
             onChange={changeMainText}
           />
           {showError && mainText.trim().length === 0 && (
             <div style={{ color: 'red' }}>텍스트를 입력해주세요 </div>
           )}
-          <Button type="submit" variant="outlined">
-            작성하기
-          </Button>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Button
+              type="submit"
+              variant="outlined"
+              onClick={() => handleOpen('수정')}
+            >
+              수정하기
+            </Button>
+            <Button
+              type="button"
+              variant="outlined"
+              onClick={() => handleOpen('삭제')}
+            >
+              삭제하기
+            </Button>
+          </Stack>
+          <PulbicModal
+            open={open}
+            handleClose={handleClose}
+            evtHandler={action === '수정' ? submitHnadler : deleteHandler}
+            action={action}
+          />
         </Stack>
       </form>
-    </Container>
+    </>
   )
 }
 

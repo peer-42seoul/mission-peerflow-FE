@@ -4,6 +4,7 @@ const updateQuestion = async ({ questionId, data }) => {
   try {
     const response = await axios.put(`/v1/question/${questionId}`, data)
     console.log('Update successful:', response)
+    return response
   } catch (error) {
     console.error('Update failed:', error)
   }
