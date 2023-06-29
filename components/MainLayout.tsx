@@ -22,15 +22,14 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import React, { useContext, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { MyContext } from '../hooks/myContext'
+import GnbContext from '../hooks/GnbContext'
+import { ArrowBackIosNew } from '@mui/icons-material'
 
-const Category = ({ children }) => {
+const Category = ({ children, changeGnb, gnb }) => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const router = useRouter()
   const isTablet = useMediaQuery('(max-width: 900px)')
   const drawerWidth = isTablet ? 180 : 240
-  const [drawerTitle, setDrawerTitle] = useState('전체 보기')
-  const { title, type } = useContext(MyContext)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -42,7 +41,7 @@ const Category = ({ children }) => {
         <Link href={'/'}>
           <Typography
             onClick={() => {
-              setDrawerTitle('전체 보기')
+              changeGnb({ title: '전체 보기', add: true, back: false })
             }}
             fontWeight={'bold'}
           >
@@ -56,7 +55,7 @@ const Category = ({ children }) => {
           <ListItem key={text} disablePadding sx={{ px: 2, py: 1 }}>
             <ListItemButton
               onClick={() => {
-                setDrawerTitle(text)
+                changeGnb({ title: text, add: true, back: false })
                 router.push('/')
               }}
             >
@@ -89,29 +88,37 @@ const Category = ({ children }) => {
         }}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon sx={{ color: 'white' }} />
-          </IconButton>
           <Stack
             direction={'row'}
             alignItems={'center'}
             flex={1}
             justifyContent={'space-between'}
           >
-            <Typography noWrap component="div" color={'white'}>
-              {title}
-            </Typography>
-            <Link href={'/write'}>
-              <IconButton>
-                <AddOutlinedIcon sx={{ color: 'white' }} />
+            {gnb.back ? (
+              <IconButton onClick={() => router.back()} edge="start">
+                <ArrowBackIosNew sx={{ color: 'white' }} />
               </IconButton>
-            </Link>
+            ) : (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ visibility: { sm: 'hidden' } }}
+              >
+                <MenuIcon sx={{ color: 'white' }} />
+              </IconButton>
+            )}
+            <Typography noWrap component="div" color={'white'}>
+              {gnb.title}
+            </Typography>
+            {gnb.add && (
+              <Link href={'/write'}>
+                <IconButton sx={{ visibility: { sm: 'hidden' } }}>
+                  <AddOutlinedIcon sx={{ color: 'white' }} />
+                </IconButton>
+              </Link>
+            )}
           </Stack>
         </Toolbar>
       </AppBar>
@@ -169,7 +176,25 @@ const Category = ({ children }) => {
 }
 
 const MainLayout = ({ children }) => {
-  return <Category>{children}</Category>
+  const [gnb, setGnb] = useState<{
+    title: string
+    back: boolean
+    add: boolean
+  }>({
+    title: '전체 보기',
+    back: false,
+    add: true,
+  })
+  const changeGnb = (title) => {
+    setGnb(title)
+  }
+  return (
+    <GnbContext.Provider value={{ gnb, changeGnb }}>
+      <Category changeGnb={changeGnb} gnb={gnb}>
+        {children}
+      </Category>
+    </GnbContext.Provider>
+  )
 }
 
 export default MainLayout

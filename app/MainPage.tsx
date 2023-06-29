@@ -17,11 +17,12 @@ import {
   Container,
   Tooltip,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Link from 'next/link'
 import RecommendIcon from '@mui/icons-material/Recommend'
 import PageviewIcon from '@mui/icons-material/Pageview'
+import GnbContext from '../hooks/GnbContext'
 
 const DefaultPagination = () => {
   const [page, setPage] = useState(1)
@@ -126,6 +127,12 @@ const DefaultCard = ({ data }) => {
 }
 
 const MainPage = () => {
+  const { changeGnb } = useContext(GnbContext)
+
+  useEffect(() => {
+    changeGnb({ title: '전체 보기', back: false, add: true })
+  }, [])
+
   const datas = [
     {
       title:

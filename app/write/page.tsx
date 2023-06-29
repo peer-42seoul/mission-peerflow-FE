@@ -11,14 +11,20 @@ import {
 import Stack from '@mui/material/Stack'
 import axios, { AxiosResponse } from 'axios'
 import { log } from 'console'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import useInput from '../../hooks/useInput'
+import GnbContext, { MyContext } from '../../hooks/GnbContext'
 
 interface Options {
   value: number
   name: string
 }
 const Page = () => {
+  const { changeGnb } = useContext(GnbContext)
+
+  useEffect(() => {
+    changeGnb({ title: '새 글', back: true, add: false })
+  }, [])
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
   const [password, changePassword] = useInput('')

@@ -7,7 +7,6 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import { Theme } from '../styles/Theme'
 import MainLayout from '../components/MainLayout'
-import { MyContext } from '../hooks/myContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,18 +23,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <MyContext.Provider value={{ title: '전체 보기2', type: 0 }}>
-        <ThemeProvider theme={Theme}>
-          <CssBaseline />
-          <body className={inter.className}>
-            <MainLayout>{children}</MainLayout>
-            <link
-              rel="stylesheet"
-              href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-            />
-          </body>
-        </ThemeProvider>
-      </MyContext.Provider>
+      <ThemeProvider theme={Theme}>
+        <CssBaseline />
+        <body className={inter.className}>
+          <MainLayout>{children}</MainLayout>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+        </body>
+      </ThemeProvider>
     </html>
   )
 }
