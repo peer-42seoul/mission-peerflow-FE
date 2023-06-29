@@ -12,7 +12,7 @@ import {
   TextField,
 } from '@mui/material'
 import { useCallback, useState } from 'react'
-import PulbicModal from '../../components/PublicModal'
+import DeleteAndEditModal from '../../components/DeleteAndEditModal'
 import axios from 'axios'
 import { WritingForm } from '../../types/WritingForm'
 
@@ -173,26 +173,27 @@ const Page = () => {
           )}
           <Stack
             direction="row"
-            justifyContent="center"
+            justifyContent="flex-end"
             alignItems="center"
             spacing={2}
           >
             <Button
-              type="submit"
+              type="button"
               variant="outlined"
-              onClick={() => handleOpen('수정')}
+              onClick={() => showError === false && handleOpen('수정')}
             >
               수정하기
             </Button>
             <Button
+              color="error"
               type="button"
               variant="outlined"
-              onClick={() => handleOpen('삭제')}
+              onClick={() => !showError && handleOpen('삭제')}
             >
               삭제하기
             </Button>
           </Stack>
-          <PulbicModal
+          <DeleteAndEditModal
             open={open}
             handleClose={handleClose}
             evtHandler={action === '수정' ? submitHnadler : deleteHandler}

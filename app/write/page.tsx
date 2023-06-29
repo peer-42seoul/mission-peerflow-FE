@@ -155,9 +155,16 @@ const Page = () => {
           {showError && mainText.trim().length === 0 && (
             <div style={{ color: 'red' }}>텍스트를 입력해주세요 </div>
           )}
-          <Button type="submit" variant="outlined">
-            작성하기
-          </Button>
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+            spacing={2}
+          >
+            <Button type="submit" variant="outlined">
+              작성하기
+            </Button>
+          </Stack>
         </Stack>
       </form>
     </Container>
