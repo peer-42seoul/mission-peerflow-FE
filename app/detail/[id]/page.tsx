@@ -8,10 +8,10 @@ import { useContext, useEffect } from 'react'
 import GnbContext from '../../../hooks/GnbContext'
 
 const Page = ({ params }: { params: { id: number } }) => {
-  const { changeGnb } = useContext(GnbContext)
+  const { setGnb } = useContext(GnbContext)
 
   useEffect(() => {
-    changeGnb({ title: '', back: true, add: false })
+    setGnb({ title: '', back: true, add: false })
   }, [])
 
   return (

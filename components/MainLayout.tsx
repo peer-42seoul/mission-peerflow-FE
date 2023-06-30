@@ -25,7 +25,7 @@ import { useRouter } from 'next/navigation'
 import GnbContext from '../hooks/GnbContext'
 import { ArrowBackIosNew } from '@mui/icons-material'
 
-const Category = ({ children, changeGnb, gnb }) => {
+const Category = ({ children, setGnb, gnb }) => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const router = useRouter()
   const isTablet = useMediaQuery('(max-width: 900px)')
@@ -41,7 +41,7 @@ const Category = ({ children, changeGnb, gnb }) => {
         <Link href={'/'}>
           <Typography
             onClick={() => {
-              changeGnb({ title: '전체 보기', add: true, back: false })
+              setGnb({ title: '전체 보기', add: true, back: false })
             }}
             fontWeight={'bold'}
           >
@@ -55,7 +55,7 @@ const Category = ({ children, changeGnb, gnb }) => {
           <ListItem key={text} disablePadding sx={{ px: 2, py: 1 }}>
             <ListItemButton
               onClick={() => {
-                changeGnb({ title: text, add: true, back: false })
+                setGnb({ title: text, add: true, back: false })
                 router.push('/')
               }}
             >
@@ -185,12 +185,10 @@ const MainLayout = ({ children }) => {
     back: false,
     add: true,
   })
-  const changeGnb = (title) => {
-    setGnb(title)
-  }
+
   return (
-    <GnbContext.Provider value={{ gnb, changeGnb }}>
-      <Category changeGnb={changeGnb} gnb={gnb}>
+    <GnbContext.Provider value={{ gnb, setGnb }}>
+      <Category setGnb={setGnb} gnb={gnb}>
         {children}
       </Category>
     </GnbContext.Provider>

@@ -20,10 +20,10 @@ interface Options {
   name: string
 }
 const Page = () => {
-  const { changeGnb } = useContext(GnbContext)
+  const { setGnb } = useContext(GnbContext)
 
   useEffect(() => {
-    changeGnb({ title: '새 글', back: true, add: false })
+    setGnb({ title: '새 글', back: true, add: false })
   }, [])
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')

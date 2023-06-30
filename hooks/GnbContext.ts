@@ -2,5 +2,4 @@
 import React from 'react'
 
 const GnbContext = React.createContext(null)
-
 export default GnbContext

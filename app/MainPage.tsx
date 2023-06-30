@@ -23,14 +23,7 @@ import Link from 'next/link'
 import RecommendIcon from '@mui/icons-material/Recommend'
 import PageviewIcon from '@mui/icons-material/Pageview'
 import GnbContext from '../hooks/GnbContext'
-
-const DefaultPagination = () => {
-  const [page, setPage] = useState(1)
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-  }
-  return <Pagination count={5} page={page} onChange={handleChange} />
-}
+import DefaultPagination from '../components/DefaultPagination'
 
 const DefaultDropdown = () => {
   const [sort, setSort] = useState<'recent' | 'view' | 'recommend'>('recent')
@@ -55,7 +48,6 @@ const DefaultDropdown = () => {
 }
 
 const DefaultCard = ({ data }) => {
-  console.log('data', data)
   const card = (
     <React.Fragment>
       <CardContent sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
@@ -127,10 +119,11 @@ const DefaultCard = ({ data }) => {
 }
 
 const MainPage = () => {
-  const { changeGnb } = useContext(GnbContext)
+  const { setGnb } = useContext(GnbContext)
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
-    changeGnb({ title: '전체 보기', back: false, add: true })
+    setGnb({ title: '전체 보기', back: false, add: true })
   }, [])
 
   const datas = [
@@ -181,7 +174,7 @@ const MainPage = () => {
         <DefaultCard data={item} key={item.title} />
       ))}
       <Stack justifyContent={'center'} direction="row" m={1}>
-        <DefaultPagination />
+        <DefaultPagination count={5} page={page} setPage={setPage} />
       </Stack>
     </Container>
   )
