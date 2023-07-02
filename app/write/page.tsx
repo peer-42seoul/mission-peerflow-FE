@@ -11,8 +11,9 @@ import {
 } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import axios, { AxiosResponse } from 'axios'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import useInput from '../../hooks/useInput'
+import GnbContext from '../../hooks/GnbContext'
 
 const Page = () => {
   const { setGnb } = useContext(GnbContext)
