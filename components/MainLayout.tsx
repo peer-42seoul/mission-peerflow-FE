@@ -13,13 +13,21 @@ import {
   Typography,
   Drawer,
   useMediaQuery,
+  Stack,
+  Button,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import React, { useState } from 'react'
+import TagIcon from '@mui/icons-material/Tag'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import React, { useContext, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import GnbContext from '../hooks/GnbContext'
+import { ArrowBackIosNew } from '@mui/icons-material'
 
-const Category = ({ children }) => {
+const Category = ({ children, setGnb, gnb }) => {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [title, setTitle] = useState('전체보기')
+  const router = useRouter()
   const isTablet = useMediaQuery('(max-width: 900px)')
   const drawerWidth = isTablet ? 180 : 240
 
@@ -30,14 +38,35 @@ const Category = ({ children }) => {
   const drawer = (
     <div>
       <Toolbar>
-        <Typography onClick={() => setTitle('전체 보기')}>Peer-flow</Typography>
+        <Link href={'/'}>
+          <Typography
+            onClick={() => {
+              setGnb({ title: '전체 보기', add: true, back: false })
+            }}
+            fontWeight={'bold'}
+          >
+            Peer-flow
+          </Typography>
+        </Link>
       </Toolbar>
       <Divider />
       <List sx={{ padding: 0, height: '100%' }}>
-        {['# Minishell', '# Minirt', '# Fdf'].map((text) => (
+        {['Minishell', 'Minirt', 'Fdf'].map((text) => (
           <ListItem key={text} disablePadding sx={{ px: 2, py: 1 }}>
-            <ListItemButton onClick={() => setTitle(text)}>
-              <ListItemText primary={text} />
+            <ListItemButton
+              onClick={() => {
+                setGnb({ title: text, add: true, back: false })
+                router.push('/')
+              }}
+            >
+              <ListItemText
+                primary={
+                  <Stack direction={'row'} spacing={0.5}>
+                    <TagIcon />
+                    <Typography>{text}</Typography>
+                  </Stack>
+                }
+              />
             </ListItemButton>
           </ListItem>
         ))}
@@ -59,18 +88,38 @@ const Category = ({ children }) => {
         }}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            flex={1}
+            justifyContent={'space-between'}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography noWrap component="div">
-            {title}
-          </Typography>
+            {gnb.back ? (
+              <IconButton onClick={() => router.back()} edge="start">
+                <ArrowBackIosNew sx={{ color: 'white' }} />
+              </IconButton>
+            ) : (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ visibility: { sm: 'hidden' } }}
+              >
+                <MenuIcon sx={{ color: 'white' }} />
+              </IconButton>
+            )}
+            <Typography noWrap component="div" color={'white'}>
+              {gnb.title}
+            </Typography>
+            {gnb.add && (
+              <Link href={'/write'}>
+                <IconButton sx={{ visibility: { sm: 'hidden' } }}>
+                  <AddOutlinedIcon sx={{ color: 'white' }} />
+                </IconButton>
+              </Link>
+            )}
+          </Stack>
         </Toolbar>
       </AppBar>
       <Box
@@ -127,7 +176,23 @@ const Category = ({ children }) => {
 }
 
 const MainLayout = ({ children }) => {
-  return <Category>{children}</Category>
+  const [gnb, setGnb] = useState<{
+    title: string
+    back: boolean
+    add: boolean
+  }>({
+    title: '전체 보기',
+    back: false,
+    add: true,
+  })
+
+  return (
+    <GnbContext.Provider value={{ gnb, setGnb }}>
+      <Category setGnb={setGnb} gnb={gnb}>
+        {children}
+      </Category>
+    </GnbContext.Provider>
+  )
 }
 
 export default MainLayout
