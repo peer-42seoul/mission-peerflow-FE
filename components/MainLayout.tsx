@@ -14,12 +14,11 @@ import {
   Drawer,
   useMediaQuery,
   Stack,
-  Button,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import TagIcon from '@mui/icons-material/Tag'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import GnbContext from '../hooks/GnbContext'
@@ -51,7 +50,7 @@ const Category = ({ children, setGnb, gnb }) => {
       </Toolbar>
       <Divider />
       <List sx={{ padding: 0, height: '100%' }}>
-        {['Minishell', 'Minirt', 'Fdf'].map((text) => (
+        {['MINISHELL', 'MINIRT', 'FT_IRC'].map((text) => (
           <ListItem key={text} disablePadding sx={{ px: 2, py: 1 }}>
             <ListItemButton
               onClick={() => {
@@ -95,9 +94,16 @@ const Category = ({ children, setGnb, gnb }) => {
             justifyContent={'space-between'}
           >
             {gnb.back ? (
-              <IconButton onClick={() => router.back()} edge="start">
-                <ArrowBackIosNew sx={{ color: 'white' }} />
-              </IconButton>
+              <Link href={'/'}>
+                <IconButton
+                  edge="start"
+                  onClick={() =>
+                    setGnb({ title: '전체 보기', back: false, add: true })
+                  }
+                >
+                  <ArrowBackIosNew sx={{ color: 'white' }} />
+                </IconButton>
+              </Link>
             ) : (
               <IconButton
                 color="inherit"
@@ -112,13 +118,13 @@ const Category = ({ children, setGnb, gnb }) => {
             <Typography noWrap component="div" color={'white'}>
               {gnb.title}
             </Typography>
-            {gnb.add && (
+            <Box sx={!gnb.add && { visibility: 'hidden' }}>
               <Link href={'/write'}>
-                <IconButton sx={{ visibility: { sm: 'hidden' } }}>
+                <IconButton>
                   <AddOutlinedIcon sx={{ color: 'white' }} />
                 </IconButton>
               </Link>
-            )}
+            </Box>
           </Stack>
         </Toolbar>
       </AppBar>
