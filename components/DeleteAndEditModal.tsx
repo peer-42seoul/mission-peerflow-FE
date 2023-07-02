@@ -30,9 +30,11 @@ const DeleteAndEditModal = ({ open, handleClose, evtHandler, action }) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h7" component="h2">
+        {/* <Typography id="modal-modal-title" variant="h7" component="h2"> */}
+        <h2 style={{ textAlign: 'center', marginBottom: '14px' }}>
           정말로 {action}하시겠어요?
-        </Typography>
+        </h2>
+        {/* </Typography> */}
         <Stack
           direction="row"
           justifyContent="center"
