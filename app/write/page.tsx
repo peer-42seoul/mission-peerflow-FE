@@ -124,7 +124,7 @@ const Page = () => {
             <Stack width={'45%'}>
               <TextField
                 type="text"
-                placeholder="닉네임"
+                label="닉네임"
                 name="nickname"
                 onChange={changeNickname}
                 style={{ width: '100%' }}
@@ -138,7 +138,7 @@ const Page = () => {
             <Stack width={'45%'}>
               <TextField
                 type="password"
-                placeholder="비밀번호"
+                label="비밀번호"
                 name="password"
                 onChange={changePassword}
                 style={{ width: '100%' }}
@@ -154,7 +154,7 @@ const Page = () => {
             id="outlined-multiline-static"
             multiline
             rows={4}
-            // defaultValue={title}
+            placeholder="내용을 입력해주세요."
             fullWidth
             onChange={changeContent}
           />
