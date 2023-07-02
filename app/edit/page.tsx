@@ -1,20 +1,20 @@
-import updateQuestion from '@/api/updateQuestion'
-import useInput from '@/hooks/useInput'
+'use client'
+
+import updateQuestion from '../../api/updateQuestion'
+import useInput from '../../hooks/useInput'
 import {
   Button,
   FormControl,
-  Container,
   InputLabel,
   MenuItem,
   Select,
   Stack,
   TextField,
-  Typography,
 } from '@mui/material'
 import { useCallback, useState } from 'react'
-import { WritingForm } from '../types/WritingForm'
-import { Modal } from '@mui/base'
-import { Box } from '@mui/system'
+import DeleteAndEditModal from '../../components/DeleteAndEditModal'
+import axios from 'axios'
+import { WritingForm } from '../../types/WritingForm'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -28,7 +28,11 @@ const style = {
   p: 4,
 }
 
-const EditForm = ({ questionId }: number) => {
+// 임시로 questionId을 활용해 api 테스트
+
+const questionId = 42
+
+const Page = () => {
   const [questionData, setQuestionData] = useState({})
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
@@ -42,19 +46,21 @@ const EditForm = ({ questionId }: number) => {
     { value: 3, name: 'Fdf' },
   ])
   const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
+  const [action, setAction] = useState('')
+  const handleOpen = (action) => {
+    setAction(action)
+    setOpen(true)
+  }
   const handleClose = () => setOpen(false)
 
   const categoryHandler = useCallback((e: SelectChangeEvent) => {
     setName(e.target.value)
   }, [])
 
-  //delete 구현해야함
-  // const deleteHandler = useCallback(
-  //   (e: MouseEvent<HTMLButtonElement>) => {},
+  const deleteHandler = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    axios.delete(`/v1/question/${questionId}`)
+  }, [])
 
-  //   [],
-  // )
   const submitHnadler = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -71,20 +77,25 @@ const EditForm = ({ questionId }: number) => {
         setShowError(true)
         return
       }
-      setQuestionData({
-        title,
-        nickname,
-        password,
-        mainText,
-        category: category.find((item) => item.value === name)?.value,
+
+      setQuestionData((prevQuestionData) => {
+        const updatedQuestionData = {
+          ...prevQuestionData,
+          title,
+          nickname,
+          password,
+          mainText,
+          category: category.find((item) => item.value === name)?.value,
+        }
+        return updatedQuestionData
       })
-      updateQuestion(questionId, questionData)
+      updateQuestion({ questionId: questionId, data: questionData })
     },
     [title, nickname, password, mainText, category],
   )
 
   return (
-    <Container>
+    <>
       <form onSubmit={submitHnadler}>
         <Stack
           direction="column"
@@ -99,7 +110,7 @@ const EditForm = ({ questionId }: number) => {
             onChange={changeTitle}
           />
           {showError && title.trim().length === 0 && (
-            <span style={{ color: 'red' }}>제목을 입력해주세요.</span>
+            <div style={{ color: 'red' }}>제목을 입력해주세요.</div>
           )}
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">게시판 타입</InputLabel>
@@ -124,69 +135,74 @@ const EditForm = ({ questionId }: number) => {
             flexWrap="wrap"
             justifyContent="space-between"
           >
-            <TextField
-              type="text"
-              placeholder="닉네임"
-              name="nickname"
-              onChange={changeNickname}
-              style={{ width: '40%' }}
-            />
-            {showError && nickname.trim().length === 0 && (
-              <span style={{ color: 'red' }}>닉네임을 입력해주세요.</span>
-            )}
-
-            <TextField
-              type="password"
-              placeholder="비밀번호"
-              name="password"
-              onChange={changePassword}
-              style={{ width: '40%' }}
-            />
-            {showError && password.trim().length === 0 && (
-              <span style={{ color: 'red' }}>비밀번호를 입력해주세요.</span>
-            )}
+            <Stack width={'45%'}>
+              <TextField
+                type="text"
+                placeholder="닉네임"
+                name="nickname"
+                onChange={changeNickname}
+                style={{ width: '100%' }}
+              />
+              {showError && nickname.trim().length === 0 && (
+                <div style={{ color: 'red' }}>닉네임을 입력해주세요.</div>
+              )}
+            </Stack>
+            <Stack width={'45%'}>
+              <TextField
+                type="password"
+                placeholder="비밀번호"
+                name="password"
+                onChange={changePassword}
+                style={{ width: '100%' }}
+              />
+              {showError && password.trim().length === 0 && (
+                <div style={{ color: 'red' }}>비밀번호를 입력해주세요.</div>
+              )}
+            </Stack>
           </Stack>
           <TextField
             id="outlined-multiline-static"
             multiline
             rows={4}
-            // defaultValue={}
+            // defaultValue={} //
             fullWidth
             onChange={changeMainText}
           />
           {showError && mainText.trim().length === 0 && (
-            <span style={{ color: 'red' }}>텍스트를 입력해주세요 </span>
+            <div style={{ color: 'red' }}>텍스트를 입력해주세요 </div>
           )}
-          <Button type="submit" variant="outlined">
-            수정하기
-          </Button>
-          <Button type="button" variant="outlined" onClick={handleOpen}>
-            삭제하기
-          </Button>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+            spacing={2}
           >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                정말로 삭제하시겠습니까?
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Button variant="contained" onClick={}>
-                  네
-                </Button>
-                <Button variant="outlined" onClick={handleClose}>
-                  아니요
-                </Button>
-              </Typography>
-            </Box>
-          </Modal>
+            <Button
+              type="button"
+              variant="outlined"
+              onClick={() => showError === false && handleOpen('수정')}
+            >
+              수정하기
+            </Button>
+            <Button
+              color="error"
+              type="button"
+              variant="outlined"
+              onClick={() => !showError && handleOpen('삭제')}
+            >
+              삭제하기
+            </Button>
+          </Stack>
+          <DeleteAndEditModal
+            open={open}
+            handleClose={handleClose}
+            evtHandler={action === '수정' ? submitHnadler : deleteHandler}
+            action={action}
+          />
         </Stack>
       </form>
-    </Container>
+    </>
   )
 }
 
-export default EditForm
+export default Page
