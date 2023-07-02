@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Question } from '@/types/Question'
 import {
   Button,
@@ -10,10 +11,12 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  useMediaQuery,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
 
 const minishell: Question = {
   question_id: 0,
@@ -30,13 +33,20 @@ const minishell: Question = {
 }
 
 const PageInfo = () => {
+  const [open, setOpen] = useState<boolean>(false)
+
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
+  const isTablet = useMediaQuery('(max-width: 900px)')
+  const titleWidth = isTablet ? 'column' : 'row'
+
   return (
     <>
-      <Button type="button">뒤로</Button>
       <Card variant="outlined">
         <CardContent>
           <Chip label={`home/${minishell.category}`}></Chip>
-          <Stack direction={'row'}>
+          <Stack direction={'row'} minHeight={'130px'}>
             <Typography variant="h3">Q.</Typography>
             <Tooltip title={minishell.title} arrow>
               <Typography
@@ -54,22 +64,37 @@ const PageInfo = () => {
               </Typography>
             </Tooltip>
           </Stack>
-          <Stack direction={'row'} justifyContent={'space-between'}>
-            <Stack>
-              <Typography variant="h6" my={1}>
-                {minishell.nickname}{' '}
-              </Typography>
-            </Stack>
-            <Stack direction={'row'}>
-              <Typography my={1} variant="h6">
-                {minishell.updated ? minishell.updated : minishell.created}
-              </Typography>
-              <IconButton size="small">
+          <Stack direction={titleWidth} justifyContent={'space-between'}>
+            <Typography variant="h6" my={1}>
+              조회수 {minishell.views}
+            </Typography>
+            <Typography variant="h6" my={1}>
+              작성자: {minishell.nickname}&nbsp;&nbsp;
+            </Typography>
+            <Typography my={1} variant="h6">
+              작성일:&nbsp;
+              {minishell.updated ? minishell.updated : minishell.created}
+              &nbsp;
+            </Typography>
+            <Stack direction={'row-reverse'}>
+              <IconButton size="small" onClick={handleOpen}>
                 <EditIcon fontSize="small" />
               </IconButton>
-              <IconButton size="small">
+              <DeleteAndEditModal
+                open={open}
+                handleClose={handleClose}
+                evtHandler={handleOpen}
+                action={'수정'}
+              />
+              <IconButton size="small" onClick={handleOpen}>
                 <DeleteIcon fontSize="small" />
               </IconButton>
+              <DeleteAndEditModal
+                open={open}
+                handleClose={handleClose}
+                evtHandler={handleOpen}
+                action={'삭제'}
+              />
             </Stack>
           </Stack>
         </CardContent>

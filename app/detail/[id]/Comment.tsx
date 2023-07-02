@@ -6,7 +6,7 @@ import {
   IconButton,
   Stack,
   Typography,
-  Box,
+  useMediaQuery,
 } from '@mui/material'
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
@@ -22,10 +22,10 @@ export interface IComment {
   updated?: string
 }
 
-const Comment = ({ comment }: { comment: IComment | null }) => {
+const Comment = () => {
   const [hidden, setHidden] = useState(true)
+  const [comments, setComments] = useState<IComment[]>([])
   const handleButton = () => {
-    console.log('click')
     setHidden(!hidden)
   }
 
@@ -34,33 +34,51 @@ const Comment = ({ comment }: { comment: IComment | null }) => {
       <Card sx={{ my: 1 }} variant="outlined">
         <Button onClick={handleButton}>댓글</Button>
         {!hidden ? (
-          !comment ? (
+          !comments ? (
             <Card>
               <CardContent>
                 <Typography>첫 댓글의 주인공이 되보세요!</Typography>
               </CardContent>
-              <TextForm />
+              <TextForm setter={setComments} />
             </Card>
           ) : (
             <>
               <Card>
-                <CardContent>
-                  <Stack direction={'row'} justifyContent={'space-between'}>
-                    <Stack direction={'row'}>
-                      <Stack margin={'5px'}>
-                        <Typography fontWeight={'bolder'}>
-                          {comment.nickname}
-                        </Typography>
-                        <Typography width={'max-content'} fontSize={'12px'}>
-                          {comment.created}
-                        </Typography>
+                <>
+                  {comments.map((com, id) => (
+                    <CardContent key={id}>
+                      <Stack
+                        direction={'row'}
+                        sx={{ maxWidth: '100%' }}
+                        justifyContent={'space-between'}
+                      >
+                        <Stack direction={'row'}>
+                          <Stack margin={'5px'} minWidth={'110px'}>
+                            <Typography fontWeight={'bolder'}>
+                              {com.nickname}
+                            </Typography>
+                            <Typography fontSize={'12px'}>
+                              {com.created}
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            sx={{
+                              wordWrap: 'break-word',
+                              whiteSpace: 'pre-line',
+                            }}
+                          >
+                            {com.content}
+                          </Typography>
+                        </Stack>
+                        <EditDeleteButton setter={setComments} />
                       </Stack>
-                      <Typography my={1}>{comment.content}</Typography>
-                    </Stack>
-                    <EditDeleteButton />
-                  </Stack>
-                </CardContent>
-                <TextForm />
+                    </CardContent>
+                  ))}
+                </>
+                <Typography variant="h5" margin={1}>
+                  댓글쓰기
+                </Typography>
+                <TextForm setter={setComments} />
               </Card>
             </>
           )

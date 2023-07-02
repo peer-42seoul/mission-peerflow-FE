@@ -1,32 +1,62 @@
 'use client'
 
-import { Stack, IconButton, Popper, Box } from '@mui/material'
+import { Stack, IconButton, Popper, Box, Modal, Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { IComment } from './Comment'
+import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
 
-const EditDeleteButton = () => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+const styleModal = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+}
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : e.currentTarget)
-  }
+const EditDeleteButton = ({
+  setter,
+}: {
+  setter: React.Dispatch<React.SetStateAction<IComment[]>>
+}) => {
+  const [open, setOpen] = useState<boolean>(false)
 
-  const open = Boolean(anchorEl)
-  const id = open ? 'simple-popper' : undefined
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   return (
     <Stack direction={'row'} height={'20px'}>
-      <IconButton size="small">
+      <IconButton
+        aria-describedby={'edit-button'}
+        size="small"
+        onClick={handleOpen}
+      >
         <EditIcon fontSize="inherit" />
       </IconButton>
-      <IconButton aria-describedby={id} size="small" onClick={handleClick}>
+      <DeleteAndEditModal
+        open={open}
+        handleClose={handleClose}
+        evtHandler={handleOpen}
+        action={'수정'}
+      />
+      <IconButton
+        aria-describedby={'delete-button'}
+        size="small"
+        onClick={handleOpen}
+      >
         <DeleteIcon fontSize="inherit" />
       </IconButton>
-      <Popper anchorEl={anchorEl} open={open}>
-        <Box sx={{ border: 1, p: 1, bgcolor: 'white' }}>
-          정말로 삭제하시겠습니까?
-        </Box>
-      </Popper>
+      <DeleteAndEditModal
+        open={open}
+        handleClose={handleClose}
+        evtHandler={handleOpen}
+        action={'삭제'}
+      />
     </Stack>
   )
 }
