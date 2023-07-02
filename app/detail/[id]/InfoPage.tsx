@@ -11,7 +11,6 @@ import {
   Typography,
   IconButton,
   Tooltip,
-  useMediaQuery,
 } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -38,15 +37,16 @@ const PageInfo = () => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const isTablet = useMediaQuery('(max-width: 900px)')
-  const titleWidth = isTablet ? 'column' : 'row'
-
   return (
     <>
       <Card variant="outlined">
         <CardContent>
           <Chip label={`home/${minishell.category}`}></Chip>
-          <Stack direction={'row'} minHeight={'130px'}>
+          <Stack
+            direction={'row'}
+            minHeight={'max-content'}
+            marginBottom={'50px'}
+          >
             <Typography variant="h3">Q.</Typography>
             <Tooltip title={minishell.title} arrow>
               <Typography
@@ -64,29 +64,27 @@ const PageInfo = () => {
               </Typography>
             </Tooltip>
           </Stack>
-          <Stack direction={titleWidth} justifyContent={'space-between'}>
-            <Typography variant="h6" my={1}>
-              조회수 {minishell.views}
-            </Typography>
-            <Typography variant="h6" my={1}>
-              작성자: {minishell.nickname}&nbsp;&nbsp;
-            </Typography>
-            <Typography my={1} variant="h6">
-              작성일:&nbsp;
-              {minishell.updated ? minishell.updated : minishell.created}
-              &nbsp;
-            </Typography>
+          <Stack direction={'row'} justifyContent={'space-between'}>
+            <Stack direction={'column'}>
+              <Typography variant="h6">조회수: {minishell.views}</Typography>
+              <Typography variant="h6">
+                작성자: {minishell.nickname}&nbsp;&nbsp;
+              </Typography>
+              <Typography variant="h6">
+                작성일:&nbsp;
+                {minishell.updated ? minishell.updated : minishell.created}
+                &nbsp;
+              </Typography>
+            </Stack>
             <Stack direction={'row-reverse'}>
-              <IconButton size="small" onClick={handleOpen}>
-                <EditIcon fontSize="small" />
-              </IconButton>
-              <DeleteAndEditModal
-                open={open}
-                handleClose={handleClose}
-                evtHandler={handleOpen}
-                action={'수정'}
-              />
-              <IconButton size="small" onClick={handleOpen}>
+              <IconButton
+                size="small"
+                onClick={handleOpen}
+                sx={{
+                  height: 'max-content',
+                  marginTop: 'auto',
+                }}
+              >
                 <DeleteIcon fontSize="small" />
               </IconButton>
               <DeleteAndEditModal
@@ -94,6 +92,22 @@ const PageInfo = () => {
                 handleClose={handleClose}
                 evtHandler={handleOpen}
                 action={'삭제'}
+              />
+              <IconButton
+                size="small"
+                onClick={handleOpen}
+                sx={{
+                  height: 'max-content',
+                  marginTop: 'auto',
+                }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <DeleteAndEditModal
+                open={open}
+                handleClose={handleClose}
+                evtHandler={handleOpen}
+                action={'수정'}
               />
             </Stack>
           </Stack>

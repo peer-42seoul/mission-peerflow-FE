@@ -4,11 +4,20 @@ import { Button, Stack, useMediaQuery } from '@mui/material'
 import { TextField } from '@mui/material'
 import { useEffect, useState, useCallback } from 'react'
 import { IComment } from './Comment'
+import { Answer } from '../../../types/Answer'
 
 const TextForm = ({
   setter,
+  editSetter,
+  isEdit,
+  editTarget,
+  editTargetId,
 }: {
-  setter: React.Dispatch<React.SetStateAction<IComment[]>>
+  setter: React.Dispatch<React.SetStateAction<any[]>>
+  editSetter?: React.Dispatch<React.SetStateAction<boolean>>
+  isEdit?: boolean
+  editTarget?: Answer
+  editTargetId?: number
 }) => {
   const isTablet = useMediaQuery('(max-width: 900px)')
   const textDirection = isTablet ? 'column' : 'row'
@@ -22,6 +31,14 @@ const TextForm = ({
     const commentsHandler = (comment: IComment) =>
       setter((prev) => [...prev, comment])
   }, [setter])
+
+  useEffect(() => {
+    if (isEdit === true) {
+      setNickname(editTarget.nickname)
+      setPassword(editTarget.password)
+      setComment(editTarget.content)
+    }
+  }, [isEdit, editTarget])
 
   const handleComments = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,18 +67,40 @@ const TextForm = ({
         return [year, month, day].join('-')
       }
 
-      const newComments: IComment = {
-        nickname: nickname,
-        password: password,
-        content: comment,
-        created: setNow(),
-      }
-      console.log(newComments)
-      setter((prev) => [...prev, newComments])
+      if (isEdit === true) {
+        console.log(1)
+        const editComments: IComment = {
+          nickname: nickname,
+          password: password,
+          content: comment,
+          created: editTarget.created,
+          updated: setNow(),
+        }
 
-      setComment('')
-      setNickname('')
-      setPassword('')
+        setter((prev) => {
+          const arr = [...prev]
+          arr[editTargetId] = editComments
+          return arr
+        })
+
+        setComment('')
+        setNickname('')
+        setPassword('')
+
+        editSetter(false)
+      } else {
+        const newComments: IComment = {
+          nickname: nickname,
+          password: password,
+          content: comment,
+          created: setNow(),
+        }
+        setter((prev) => [...prev, newComments])
+
+        setComment('')
+        setNickname('')
+        setPassword('')
+      }
     },
     [comment, password, nickname, setter],
   )

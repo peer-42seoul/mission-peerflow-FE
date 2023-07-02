@@ -48,7 +48,7 @@ const Question = () => {
         <CardContent sx={{ minHeight: '150px' }}>
           <Typography my={1}>{minishell.content}</Typography>
         </CardContent>
-        <CardContent sx={{ margin: 0, padding: 1, paddingBottom: 0 }}>
+        <CardContent sx={{ margin: 0 }}>
           <Stack direction={'row'} spacing={1} my={1} margin={0} padding={0}>
             <IconButton size="small" onClick={handleRecomments}>
               <RecommendIcon fontSize="inherit" />

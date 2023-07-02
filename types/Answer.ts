@@ -6,6 +6,6 @@ export interface Answer {
   content: string
   created: string
   updated?: string
-  is_adopted?: boolean
+  is_adopted: boolean
   recommended: number
 }

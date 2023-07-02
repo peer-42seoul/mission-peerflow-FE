@@ -6,11 +6,10 @@ import {
   IconButton,
   Stack,
   Typography,
-  useMediaQuery,
 } from '@mui/material'
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
 
 export interface IComment {
@@ -18,15 +17,27 @@ export interface IComment {
   nickname: string
   password: string
   content: string
-  created: string
+  created?: string
   updated?: string
 }
 
 const Comment = () => {
   const [hidden, setHidden] = useState(true)
+  const [edit, setEdit] = useState(false)
   const [comments, setComments] = useState<IComment[]>([])
+  const [target, setTarget] = useState(null)
+  const [targetId, setTargeId] = useState(0)
+
   const handleButton = () => {
     setHidden(!hidden)
+  }
+
+  useEffect(() => {}, [comments])
+
+  const handleEdit = (id: number) => {
+    setEdit(true)
+    setTarget(comments[id])
+    setTargeId(id)
   }
 
   return (
@@ -34,7 +45,7 @@ const Comment = () => {
       <Card sx={{ my: 1 }} variant="outlined">
         <Button onClick={handleButton}>댓글</Button>
         {!hidden ? (
-          !comments ? (
+          !comments.length ? (
             <Card>
               <CardContent>
                 <Typography>첫 댓글의 주인공이 되보세요!</Typography>
@@ -49,10 +60,15 @@ const Comment = () => {
                     <CardContent key={id}>
                       <Stack
                         direction={'row'}
-                        sx={{ maxWidth: '100%' }}
+                        sx={{
+                          maxWidth: '100%',
+                        }}
                         justifyContent={'space-between'}
                       >
-                        <Stack direction={'row'}>
+                        <Stack
+                          direction={'row'}
+                          sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                        >
                           <Stack margin={'5px'} minWidth={'110px'}>
                             <Typography fontWeight={'bolder'}>
                               {com.nickname}
@@ -70,15 +86,23 @@ const Comment = () => {
                             {com.content}
                           </Typography>
                         </Stack>
-                        <EditDeleteButton setter={setComments} />
+                        <EditDeleteButton
+                          objs={comments}
+                          setter={setComments}
+                          edit={handleEdit}
+                          id={id}
+                        />
                       </Stack>
                     </CardContent>
                   ))}
                 </>
-                <Typography variant="h5" margin={1}>
-                  댓글쓰기
-                </Typography>
-                <TextForm setter={setComments} />
+                <TextForm
+                  setter={setComments}
+                  editSetter={setEdit}
+                  isEdit={edit}
+                  editTarget={target}
+                  editTargetId={targetId}
+                />
               </Card>
             </>
           )

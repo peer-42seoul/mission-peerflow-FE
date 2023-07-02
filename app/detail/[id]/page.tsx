@@ -7,8 +7,18 @@ import { Container } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import GnbContext from '../../../hooks/GnbContext'
 
-const Page = ({ params }: { params: { id: number } }) => {
+// async function getData(id: number) {
+//   const res = await fetch(`paul.ryu9309.ddns.net/question/${id}`)
+//   if (!res.ok) throw new Error('Failed to load page')
+
+//   return res.json
+// }
+
+export default function Page({ params }: { params: { id: number } }) {
   const { setGnb } = useContext(GnbContext)
+  // const fetchData = getData(params.id)
+
+  // const [questionData] = await Promise.all([fetchData])
 
   useEffect(() => {
     setGnb({ title: '', back: true, add: false })
@@ -25,5 +35,3 @@ const Page = ({ params }: { params: { id: number } }) => {
     </>
   )
 }
-
-export default Page
