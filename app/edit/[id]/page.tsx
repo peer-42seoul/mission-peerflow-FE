@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from 'react'
 import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
 import axios, { AxiosResponse } from 'axios'
 import { WritingForm } from '../../../types/WritingForm'
+import DeleteAuthModal from '../../../components/DeleteAuthModal'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -32,7 +33,7 @@ const style = {
 
 const questionId = 42
 
-const Page = () => {
+const Page = ({ question }: number) => {
   const [questionData, setQuestionData] = useState({})
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
@@ -47,6 +48,7 @@ const Page = () => {
   ])
   const [open, setOpen] = useState(false)
   const [action, setAction] = useState('')
+
   const handleOpen = (action) => {
     setAction(action)
     setOpen(true)
@@ -58,7 +60,7 @@ const Page = () => {
   }, [])
 
   const deleteHandler = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    axios.delete(`/v1/question/${questionId}`)
+    axios.delete(`http://paulryu9309.ddns.net/v1/question/${questionId}`)
   }, [])
 
   const submitHnadler = useCallback(
@@ -97,8 +99,8 @@ const Page = () => {
 
   useEffect(() => {
     axios
-      .get(`/v1/question${questionId}`)
-      .then((res: string) => {
+      .get(`http://paulryu9309.ddns.net/v1/question${questionId}`)
+      .then((res: any) => {
         console.log(`res : ${res}`)
         changeTitle(res.title)
         changeNickname(res.nickname)
@@ -110,7 +112,7 @@ const Page = () => {
         console.log(`err ${err}`)
         alert('불러오기에 실패하였습니다.')
       })
-  }, [])
+  }, [title, nickname, password, content, category])
   return (
     <>
       <form onSubmit={submitHnadler}>
@@ -122,7 +124,7 @@ const Page = () => {
         >
           <TextField
             id="standard-basic"
-            label="제목"
+            placeholder="제목"
             fullWidth
             onChange={changeTitle}
             defaultValue={title}
@@ -157,7 +159,7 @@ const Page = () => {
               <TextField
                 id="standard-basic"
                 type="text"
-                label="닉네임"
+                placeholder="닉네임"
                 name="nickname"
                 onChange={changeNickname}
                 style={{ width: '100%' }}
@@ -171,7 +173,7 @@ const Page = () => {
               <TextField
                 id="standard-basic"
                 type="password"
-                label="비밀번호"
+                placeholder="비밀번호"
                 name="password"
                 onChange={changePassword}
                 defaultValue={password}
@@ -207,14 +209,14 @@ const Page = () => {
             >
               수정하기
             </Button>
-            <Button
+            {/* <Button
               color="error"
               type="button"
               variant="outlined"
               onClick={() => !showError && handleOpen('삭제')}
             >
               삭제하기
-            </Button>
+            </Button> */}
           </Stack>
           <DeleteAndEditModal
             open={open}
@@ -222,6 +224,11 @@ const Page = () => {
             evtHandler={action === '수정' ? submitHnadler : deleteHandler}
             action={action}
           />
+          {/* <DeleteAuthModal
+            open={open}
+            handleClose={handleClose}
+            questionId={questionId}
+          /> */}
         </Stack>
       </form>
     </>

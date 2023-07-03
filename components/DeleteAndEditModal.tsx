@@ -1,8 +1,6 @@
 import { Modal } from '@mui/base'
-import { Box, Typography, Button, Stack } from '@mui/material'
+import { Box, Button, Stack } from '@mui/material'
 import React from 'react'
-import RadioButtonUncheckedRoundedIcon from '@mui/icons-material/RadioButtonUncheckedRounded'
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 // 상위 컴포넌트에서 필요한 state
 
 // const [open, setOpen] = useState(false)
@@ -30,23 +28,20 @@ const DeleteAndEditModal = ({ open, handleClose, evtHandler, action }) => {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        {/* <Typography id="modal-modal-title" variant="h7" component="h2"> */}
         <h2 style={{ textAlign: 'center', marginBottom: '14px' }}>
           정말로 {action}하시겠어요?
         </h2>
-        {/* </Typography> */}
         <Stack
           direction="row"
           justifyContent="center"
           alignItems="center"
           spacing={2}
         >
-          {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
-          <Button variant="contained" onClick={evtHandler}>
-            <RadioButtonUncheckedRoundedIcon />
+          <Button variant="text" onClick={evtHandler}>
+            확인
           </Button>
-          <Button variant="contained" onClick={handleClose}>
-            <CloseRoundedIcon />
+          <Button variant="text" onClick={handleClose}>
+            취소
           </Button>
         </Stack>
       </Box>
