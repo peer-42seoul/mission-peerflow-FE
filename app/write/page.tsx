@@ -14,6 +14,7 @@ import axios, { AxiosResponse } from 'axios'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import useInput from '../../hooks/useInput'
 import GnbContext from '../../hooks/GnbContext'
+import { WritingForm } from '../../types/WritingForm'
 
 const Page = () => {
   const { setGnb } = useContext(GnbContext)
@@ -26,9 +27,9 @@ const Page = () => {
   const [password, changePassword] = useInput('')
   const [content, changeContent] = useInput('')
   const [category, setCategory] = useState<WritingForm['category'][]>([
-    { value: 1, name: 'Minishell' },
-    { value: 2, name: 'Minirt' },
-    { value: 3, name: 'Fdf' },
+    { value: 'minishell', name: 'Minishell' },
+    { value: 'minirt', name: 'Minirt' },
+    { value: 'fdf', name: 'Fdf' },
   ])
 
   const [name, setName] = useState('')
