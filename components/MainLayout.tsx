@@ -50,7 +50,7 @@ const Category = ({ children, setGnb, gnb }) => {
       </Toolbar>
       <Divider />
       <List sx={{ padding: 0, height: '100%' }}>
-        {['MINISHELL', 'MINIRT', 'FT_IRC'].map((text) => (
+        {['minishell', 'minirt', 'ft_irc'].map((text) => (
           <ListItem key={text} disablePadding sx={{ px: 2, py: 1 }}>
             <ListItemButton
               onClick={() => {

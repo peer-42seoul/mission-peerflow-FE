@@ -4,7 +4,7 @@
       "questionId": 1,
       "title": "미니쉘 우웩",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 0,
       "view": 0,
       "nickname": "san",
@@ -13,25 +13,25 @@
     },
     {
       "questionId": 7,
-      "title": "How to customize MINISHELL prompt?",
+      "title": "How to customize minishell prompt?",
       "answerCount": 0,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 2,
       "view": 5,
       "nickname": "codingWizard",
       "createdAt": "2023-06-25T19:55:34.675294",
-      "content": "You can customize the MINISHELL prompt by modifying the PS1 environment variable in your shell configuration file, such as ~/.bashrc or ~/.bash_profile. The PS1 variable controls the appearance of the prompt in the terminal. You can set it to any desired value using escape sequences and special variables."
+      "content": "You can customize the minishell prompt by modifying the PS1 environment variable in your shell configuration file, such as ~/.bashrc or ~/.bash_profile. The PS1 variable controls the appearance of the prompt in the terminal. You can set it to any desired value using escape sequences and special variables."
     },
     {
       "questionId": 8,
-      "title": "Recommended resources for learning MINISHELL",
+      "title": "Recommended resources for learning minishell",
       "answerCount": 1,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 4,
       "view": 7,
       "nickname": "devlearner",
       "createdAt": "2023-06-24T08:20:56.981200",
-      "content": "Here are some recommended resources for learning MINISHELL:\n\n1. Official MINISHELL documentation: The official documentation provides a comprehensive guide on MINISHELL's features, usage, and configuration options.\n\n2. Online tutorials and guides: Many online tutorials and guides are available that walk you through the process of using and customizing MINISHELL step by step.\n\n3. Community forums and discussions: Joining MINISHELL-related forums and discussions can help you learn from experienced users and get answers to your specific questions.\n\n4. Practice and experimentation: The best way to learn MINISHELL is by practicing and experimenting on your own. Try out different commands, explore its features, and experiment with customizations to gain hands-on experience."
+      "content": "Here are some recommended resources for learning minishell:\n\n1. Official minishell documentation: The official documentation provides a comprehensive guide on minishell's features, usage, and configuration options.\n\n2. Online tutorials and guides: Many online tutorials and guides are available that walk you through the process of using and customizing minishell step by step.\n\n3. Community forums and discussions: Joining minishell-related forums and discussions can help you learn from experienced users and get answers to your specific questions.\n\n4. Practice and experimentation: The best way to learn minishell is by practicing and experimenting on your own. Try out different commands, explore its features, and experiment with customizations to gain hands-on experience."
     }
   ],
   "view-1": [
@@ -39,7 +39,7 @@
       "questionId": 6,
       "title": "test2",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 0,
       "view": 0,
       "nickname": "test nick2",
@@ -50,7 +50,7 @@
       "questionId": 1,
       "title": "IRC 우웩",
       "answerCount": 0,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 5,
       "view": 4,
       "nickname": "test nick2",
@@ -59,80 +59,80 @@
     },
     {
       "questionId": 7,
-      "title": "How to customize MINISHELL prompt?",
+      "title": "How to customize minishell prompt?",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 2,
       "view": 5,
       "nickname": "codingWizard",
       "createdAt": "2023-06-25T19:55:34.675294",
-      "content": "I want to change the prompt in my MINISHELL."
+      "content": "I want to change the prompt in my minishell."
     },
     {
       "questionId": 8,
-      "title": "Recommended resources for learning MINIRT",
+      "title": "Recommended resources for learning minirt",
       "answerCount": 1,
-      "category": "MINIRT",
+      "category": "minirt",
       "recommend": 4,
       "view": 7,
       "nickname": "devlearner",
       "createdAt": "2023-06-24T08:20:56.981200",
-      "content": "Can someone suggest good resources to learn MINIRT?"
+      "content": "Can someone suggest good resources to learn minirt?"
     },
     {
       "questionId": 3,
-      "title": "MINIRT commands for file manipulation",
+      "title": "minirt commands for file manipulation",
       "answerCount": 1,
-      "category": "MINIRT",
+      "category": "minirt",
       "recommend": 3,
       "view": 8,
       "nickname": "shellMaster",
       "createdAt": "2023-06-29T16:45:12.543987",
-      "content": "I need a list of MINIRT commands for manipulating files."
+      "content": "I need a list of minirt commands for manipulating files."
     }
   ],
   "view-2": [
     {
       "questionId": 5,
-      "title": "What are the advantages of using FT_IRC?",
+      "title": "What are the advantages of using ft_irc?",
       "answerCount": 2,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 6,
       "view": 10,
       "nickname": "linuxLover",
       "createdAt": "2023-06-27T14:12:01.347815",
-      "content": "I want to know the benefits of using FT_IRC over other chat protocols."
+      "content": "I want to know the benefits of using ft_irc over other chat protocols."
     },
     {
       "questionId": 9,
-      "title": "MINISHELL vs Bash: Which one should I choose?",
+      "title": "minishell vs Bash: Which one should I choose?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 9,
       "view": 11,
-      "content": "I'm confused between MINISHELL and Bash. Which one is better for me?"
+      "content": "I'm confused between minishell and Bash. Which one is better for me?"
     },
     {
       "questionId": 2,
-      "title": "How to use the MINISHELL?",
+      "title": "How to use the minishell?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 10,
       "view": 12,
       "nickname": "user123",
       "createdAt": "2023-06-30T10:15:47.192831",
-      "content": "I need a beginner's guide on how to use the MINISHELL."
+      "content": "I need a beginner's guide on how to use the minishell."
     },
     {
       "questionId": 4,
-      "title": "Troubleshooting MINISHELL installation issues",
+      "title": "Troubleshooting minishell installation issues",
       "answerCount": 3,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 8,
       "view": 15,
       "nickname": "issueSolver",
       "createdAt": "2023-06-26T09:30:20.112773",
-      "content": "I'm having trouble installing MINISHELL. Any tips on troubleshooting?"
+      "content": "I'm having trouble installing minishell. Any tips on troubleshooting?"
     }
   ],
   "recommend-1": [
@@ -140,7 +140,7 @@
       "questionId": 6,
       "title": "test2",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 0,
       "view": 0,
       "nickname": "test nick2",
@@ -149,9 +149,9 @@
     },
     {
       "questionId": 7,
-      "title": "How to customize MINISHELL prompt?",
+      "title": "How to customize minishell prompt?",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 2,
       "view": 5,
       "nickname": "codingWizard",
@@ -160,9 +160,9 @@
     },
     {
       "questionId": 3,
-      "title": "MINIRT commands for file manipulation",
+      "title": "minirt commands for file manipulation",
       "answerCount": 1,
-      "category": "MINIRT",
+      "category": "minirt",
       "recommend": 3,
       "view": 8,
       "nickname": "shellMaster",
@@ -171,9 +171,9 @@
     },
     {
       "questionId": 8,
-      "title": "Recommended resources for learning MINIRT",
+      "title": "Recommended resources for learning minirt",
       "answerCount": 1,
-      "category": "MINIRT",
+      "category": "minirt",
       "recommend": 4,
       "view": 7,
       "nickname": "devlearner",
@@ -184,7 +184,7 @@
       "questionId": 1,
       "title": "IRC 우웩",
       "answerCount": 0,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 5,
       "view": 4,
       "nickname": "test nick2",
@@ -195,9 +195,9 @@
   "recommend-2": [
     {
       "questionId": 5,
-      "title": "What are the advantages of using FT_IRC?",
+      "title": "What are the advantages of using ft_irc?",
       "answerCount": 2,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 6,
       "view": 10,
       "nickname": "linuxLover",
@@ -206,9 +206,9 @@
     },
     {
       "questionId": 4,
-      "title": "Troubleshooting MINISHELL installation issues",
+      "title": "Troubleshooting minishell installation issues",
       "answerCount": 3,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 7,
       "view": 15,
       "nickname": "shellUser99",
@@ -217,18 +217,18 @@
     },
     {
       "questionId": 9,
-      "title": "MINISHELL vs Bash: Which one should I choose?",
+      "title": "minishell vs Bash: Which one should I choose?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 9,
       "view": 11,
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae sem non ligula pellentesque fringilla. Mauris sed justo urna."
     },
     {
       "questionId": 2,
-      "title": "How to use the MINISHELL?",
+      "title": "How to use the minishell?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 10,
       "view": 12,
       "nickname": "user123",
@@ -241,7 +241,7 @@
       "questionId": 6,
       "title": "test2",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 0,
       "view": 0,
       "nickname": "test nick2",
@@ -252,7 +252,7 @@
       "questionId": 1,
       "title": "IRC 우웩",
       "answerCount": 0,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 5,
       "view": 4,
       "nickname": "test nick2",
@@ -261,9 +261,9 @@
     },
     {
       "questionId": 2,
-      "title": "How to use the MINISHELL?",
+      "title": "How to use the minishell?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 10,
       "view": 12,
       "nickname": "user123",
@@ -272,9 +272,9 @@
     },
     {
       "questionId": 3,
-      "title": "MINIRT commands for file manipulation",
+      "title": "minirt commands for file manipulation",
       "answerCount": 1,
-      "category": "MINIRT",
+      "category": "minirt",
       "recommend": 3,
       "view": 8,
       "nickname": "shellMaster",
@@ -283,9 +283,9 @@
     },
     {
       "questionId": 4,
-      "title": "Troubleshooting MINISHELL installation issues",
+      "title": "Troubleshooting minishell installation issues",
       "answerCount": 3,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 7,
       "view": 15,
       "nickname": "shellUser99",
@@ -296,9 +296,9 @@
   "createdAt-2": [
     {
       "questionId": 5,
-      "title": "What are the advantages of using FT_IRC?",
+      "title": "What are the advantages of using ft_irc?",
       "answerCount": 2,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 6,
       "view": 10,
       "nickname": "linuxLover",
@@ -307,9 +307,9 @@
     },
     {
       "questionId": 7,
-      "title": "How to customize MINISHELL prompt?",
+      "title": "How to customize minishell prompt?",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 2,
       "view": 5,
       "nickname": "codingWizard",
@@ -318,9 +318,9 @@
     },
     {
       "questionId": 8,
-      "title": "Recommended resources for learning MINIRT",
+      "title": "Recommended resources for learning minirt",
       "answerCount": 1,
-      "category": "MINIRT",
+      "category": "minirt",
       "recommend": 4,
       "view": 7,
       "nickname": "devlearner",
@@ -329,20 +329,20 @@
     },
     {
       "questionId": 9,
-      "title": "MINISHELL vs Bash: Which one should I choose?",
+      "title": "minishell vs Bash: Which one should I choose?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 9,
       "view": 11,
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae sem non ligula pellentesque fringilla. Mauris sed justo urna."
     }
   ],
-  "MINISHELL": [
+  "minishell": [
     {
       "questionId": 6,
       "title": "test2",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 0,
       "view": 0,
       "nickname": "test nick2",
@@ -351,9 +351,9 @@
     },
     {
       "questionId": 2,
-      "title": "How to use the MINISHELL?",
+      "title": "How to use the minishell?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 10,
       "view": 12,
       "nickname": "user123",
@@ -362,9 +362,9 @@
     },
     {
       "questionId": 4,
-      "title": "Troubleshooting MINISHELL installation issues",
+      "title": "Troubleshooting minishell installation issues",
       "answerCount": 3,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 7,
       "view": 15,
       "nickname": "shellUser99",
@@ -373,9 +373,9 @@
     },
     {
       "questionId": 7,
-      "title": "How to customize MINISHELL prompt?",
+      "title": "How to customize minishell prompt?",
       "answerCount": 0,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 2,
       "view": 5,
       "nickname": "codingWizard",
@@ -384,20 +384,20 @@
     },
     {
       "questionId": 9,
-      "title": "MINISHELL vs Bash: Which one should I choose?",
+      "title": "minishell vs Bash: Which one should I choose?",
       "answerCount": 2,
-      "category": "MINISHELL",
+      "category": "minishell",
       "recommend": 9,
       "view": 11,
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae sem non ligula pellentesque fringilla. Mauris sed justo urna."
     }
   ],
-  "FT_IRC": [
+  "ft_irc": [
     {
       "questionId": 1,
       "title": "IRC 우웩",
       "answerCount": 0,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 5,
       "view": 4,
       "nickname": "test nick2",
@@ -406,9 +406,9 @@
     },
     {
       "questionId": 5,
-      "title": "What are the advantages of using FT_IRC?",
+      "title": "What are the advantages of using ft_irc?",
       "answerCount": 2,
-      "category": "FT_IRC",
+      "category": "ft_irc",
       "recommend": 6,
       "view": 10,
       "nickname": "linuxLover",
@@ -416,12 +416,12 @@
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae sem non ligula pellentesque fringilla. Mauris sed justo urna."
     }
   ],
-  "MINIRT": [
+  "minirt": [
     {
       "questionId": 3,
-      "title": "MINIRT commands for file manipulation",
+      "title": "minirt commands for file manipulation",
       "answerCount": 1,
-      "category": "MINIRT",
+      "category": "minirt",
       "recommend": 3,
       "view": 8,
       "nickname": "shellMaster",

@@ -13,14 +13,14 @@ import RecommendIcon from '@mui/icons-material/Recommend'
 import PageviewIcon from '@mui/icons-material/Pageview'
 import dayjs from 'dayjs'
 
-const DefaultCard = ({ data }) => {
+const DefaultCard = ({ data }: { data: Post }) => {
   const card = (
     <React.Fragment>
       <CardContent sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
         <Box>
           <Chip label={data?.category} />
         </Box>
-        <Link href={`/detail/1`}>
+        <Link href={`/detail/${data?.questionId}`}>
           <Tooltip title={data?.title} arrow>
             <Typography
               variant="h5"

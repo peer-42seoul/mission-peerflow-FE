@@ -5,8 +5,8 @@ import {
   InputAdornment,
   Stack,
   Container,
-  Typography,
   Skeleton,
+  Box,
 } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
@@ -15,41 +15,67 @@ import DefaultPagination from '../components/DefaultPagination'
 import DefaultDropdown from './DefaultDropdown'
 import DefaultCard from './DefaultCard'
 import axios from 'axios'
+
+type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
+export type Sort = 'lastest' | 'views' | 'recommends'
+
 const MainPage = () => {
   const { setGnb, gnb } = useContext(GnbContext)
   const [page, setPage] = useState(1)
-  const [data, setData] = useState([])
+  const [data, setData] = useState<Result>(null)
   const [error, setError] = useState(false)
-  const [url, setUrl] = useState('createdAt')
+  const [category, setCategory] = useState<Category>(null)
+  const [sort, setSort] = useState<Sort>('lastest')
+  const [title, setTitle] = useState<string>('')
 
+  console.log('category', category)
   useEffect(() => {
     setGnb({ title: '전체 보기', back: false, add: true })
   }, [])
 
   useEffect(() => {
+    changeCategory(
+      category !== 'search'
+        ? gnb.title === '전체 보기'
+          ? null
+          : gnb.title
+        : 'search',
+    )
     axios
       .get(
-        gnb.title === '전체 보기'
-          ? `http://localhost:3001/${url ?? 'createdAt'}-${page ?? 1}`
-          : `http://localhost:3001/${gnb.title}`,
+        category
+          ? category === 'search'
+            ? `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
+            : `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pageIndex=${page}&pageSize=${5}`
+          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pageIndex=${page}&pageSize=${5}`,
       )
       .then((res) => {
-        setData(res.data)
+        setData(res?.data)
       })
       .catch((error) => {
         console.error(error)
         setError(true)
       })
-  }, [url, page, gnb])
+  }, [category, page, gnb, sort])
 
-  const changeUrl = (url: string) => {
-    setUrl(url)
+  const changeCategory = (category: Category) => {
+    setCategory(category)
     setPage(1)
   }
 
-  if (error) return <Typography>error</Typography>
+  if (!data && error)
+    return (
+      <Stack direction={'row'} justifyContent={'center'} width={'100%'}>
+        <Box>문제가 발생했습니다</Box>
+      </Stack>
+    )
   if (!data) return <Skeleton variant="rectangular" width={210} height={118} />
-
+  if (!data?.content?.length)
+    return (
+      <Stack direction={'row'} justifyContent={'center'} width={'100%'}>
+        <Box>게시글이 없습니다</Box>
+      </Stack>
+    )
   return (
     <Container sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
       <Stack justifyContent={'space-between'} direction="row" mt={1}>
@@ -58,12 +84,15 @@ const MainPage = () => {
           type="search"
           placeholder="제목 검색"
           size={'small'}
+          onChange={(e) => {
+            setTitle(e.target.value)
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position={'end'}>
                 <IconButton
                   onClick={() => {
-                    changeUrl('search')
+                    changeCategory('search')
                   }}
                 >
                   <SearchOutlinedIcon />
@@ -72,13 +101,17 @@ const MainPage = () => {
             ),
           }}
         />
-        <DefaultDropdown changeUrl={changeUrl} />
+        <DefaultDropdown setSort={setSort} sort={sort} />
       </Stack>
-      {data?.map((item: Post) => (
+      {data?.content.map((item: Post) => (
         <DefaultCard data={item} key={item.title} />
       ))}
       <Stack justifyContent={'center'} direction="row" m={1}>
-        <DefaultPagination count={2} page={page} setPage={setPage} />
+        <DefaultPagination
+          count={data?.totalPages}
+          page={page}
+          setPage={setPage}
+        />
       </Stack>
     </Container>
   )

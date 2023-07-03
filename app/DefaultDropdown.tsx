@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { Sort } from './MainPage'
 
 const DefaultDropdown = ({
-  changeUrl,
+  sort,
+  setSort,
 }: {
-  changeUrl: (url: string) => void
+  sort: Sort
+  setSort: Dispatch<SetStateAction<Sort>>
 }) => {
-  const [sort, setSort] = useState<'recent' | 'view' | 'recommend'>('recent')
-
   const handleChange = (event: SelectChangeEvent) => {
-    setSort(event.target.value as 'recent' | 'view' | 'recommend')
+    setSort(event.target.value as Sort)
   }
   return (
     <FormControl size="small">
@@ -19,15 +20,9 @@ const DefaultDropdown = ({
         value={sort}
         onChange={handleChange}
       >
-        <MenuItem value={'recent'} onClick={() => changeUrl('createdAt')}>
-          최신순
-        </MenuItem>
-        <MenuItem value={'view'} onClick={() => changeUrl('view')}>
-          조회순
-        </MenuItem>
-        <MenuItem value={'recommend'} onClick={() => changeUrl('recommend')}>
-          추천순
-        </MenuItem>
+        <MenuItem value={'lastest'}>최신순</MenuItem>
+        <MenuItem value={'views'}>조회순</MenuItem>
+        <MenuItem value={'recommends'}>추천순</MenuItem>
       </Select>
     </FormControl>
   )
