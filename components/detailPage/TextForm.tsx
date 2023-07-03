@@ -4,7 +4,21 @@ import { Button, Stack, useMediaQuery } from '@mui/material'
 import { TextField } from '@mui/material'
 import { useEffect, useState, useCallback } from 'react'
 import { IComment } from './Comment'
-import { Answer } from '../../../types/Answer'
+import { Answer } from '../../types/Answer'
+
+const setNow = () => {
+  const leftPad = (value) => {
+    if (value >= 10) return value
+    return `0${value}`
+  }
+  const source = new Date()
+
+  const year = source.getFullYear()
+  const month = leftPad(source.getMonth() + 1)
+  const day = leftPad(source.getDate())
+
+  return [year, month, day].join('-')
+}
 
 const TextForm = ({
   setter,
@@ -53,22 +67,7 @@ const TextForm = ({
         return setNickname('')
       }
 
-      const setNow = () => {
-        const leftPad = (value) => {
-          if (value >= 10) return value
-          return `0${value}`
-        }
-        const source = new Date()
-
-        const year = source.getFullYear()
-        const month = leftPad(source.getMonth() + 1)
-        const day = leftPad(source.getDate())
-
-        return [year, month, day].join('-')
-      }
-
       if (isEdit === true) {
-        console.log(1)
         const editComments: IComment = {
           nickname: nickname,
           password: password,
@@ -102,7 +101,7 @@ const TextForm = ({
         setPassword('')
       }
     },
-    [comment, password, nickname, setter],
+    [comment, password, nickname, setter, isEdit, editSetter, editTargetId],
   )
 
   return (

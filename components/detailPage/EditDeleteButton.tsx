@@ -4,19 +4,8 @@ import { Stack, IconButton, Popper, Box, Modal, Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { useState } from 'react'
-import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
-
-const styleModal = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-}
+import DeleteAndEditModal from '../DeleteAndEditModal'
+import DefaultPassword from '../DefaultPassword'
 
 const EditDeleteButton = ({
   setter,
@@ -25,14 +14,14 @@ const EditDeleteButton = ({
   id,
 }: {
   setter: React.Dispatch<React.SetStateAction<any[]>>
-  edit?: (param) => void
+  edit?: (param: number) => void
   objs: any[]
   id: number
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [action, setAction] = useState('')
 
-  const handleOpen = (action) => {
+  const handleOpen = (action: string) => {
     setOpen(true)
     setAction(action)
   }
@@ -40,7 +29,9 @@ const EditDeleteButton = ({
   const handleClose = () => setOpen(false)
 
   const eventDelete = () => {
-    setter(objs.splice(id + 1))
+    const newObjs = [...objs]
+    newObjs.splice(id, 1)
+    setter(newObjs)
     handleClose()
   }
 
@@ -65,12 +56,21 @@ const EditDeleteButton = ({
       >
         <DeleteIcon fontSize="inherit" />
       </IconButton>
-      <DeleteAndEditModal
-        open={open}
-        handleClose={handleClose}
-        evtHandler={action === '삭제' ? eventDelete : eventEdit}
-        action={action}
-      />
+      {action === '수정' ? (
+        <DeleteAndEditModal
+          open={open}
+          handleClose={handleClose}
+          evtHandler={eventEdit}
+          action={action}
+        />
+      ) : (
+        <DefaultPassword
+          open={open}
+          handleClose={handleClose}
+          evtHandler={eventDelete}
+          action={action}
+        />
+      )}
     </Stack>
   )
 }

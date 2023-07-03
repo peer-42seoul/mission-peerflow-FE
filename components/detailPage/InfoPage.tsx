@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Question } from '@/types/Question'
+import { IAnswer } from '../../types/Answer'
 import {
-  Button,
   Card,
   CardContent,
   Chip,
@@ -15,23 +14,10 @@ import {
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
+import DeleteAndEditModal from '..//DeleteAndEditModal'
+import { IQuestion } from '../../types/Question'
 
-const minishell: Question = {
-  question_id: 0,
-  title:
-    'minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데minishell 하는 중인데',
-  content:
-    'minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 minishell 너무 어려워요 ',
-  category: 0,
-  password: '1234',
-  nickname: 'hoslim',
-  recomment: 98,
-  views: 1230,
-  created: '2023-06-23 12:17',
-}
-
-const PageInfo = () => {
+const PageInfo = ({ param }: { param: IQuestion }) => {
   const [open, setOpen] = useState<boolean>(false)
 
   const handleOpen = () => setOpen(true)
@@ -41,14 +27,14 @@ const PageInfo = () => {
     <>
       <Card variant="outlined">
         <CardContent>
-          <Chip label={`home/${minishell.category}`}></Chip>
+          <Chip label={`home/${param?.category}`}></Chip>
           <Stack
             direction={'row'}
             minHeight={'max-content'}
             marginBottom={'50px'}
           >
             <Typography variant="h3">Q.</Typography>
-            <Tooltip title={minishell.title} arrow>
+            <Tooltip title={param?.title} arrow>
               <Typography
                 variant="h4"
                 fontWeight={'bold'}
@@ -60,19 +46,19 @@ const PageInfo = () => {
                   WebkitBoxOrient: 'vertical',
                 }}
               >
-                {minishell.title}
+                {param?.title}
               </Typography>
             </Tooltip>
           </Stack>
           <Stack direction={'row'} justifyContent={'space-between'}>
             <Stack direction={'column'}>
-              <Typography variant="h6">조회수: {minishell.views}</Typography>
+              <Typography variant="h6">조회수: {param?.views}</Typography>
               <Typography variant="h6">
-                작성자: {minishell.nickname}&nbsp;&nbsp;
+                작성자: {param?.nickname}&nbsp;&nbsp;
               </Typography>
               <Typography variant="h6">
                 작성일:&nbsp;
-                {minishell.updated ? minishell.updated : minishell.created}
+                {param?.updatedAt ? param?.updatedAt : param?.createdAt}
                 &nbsp;
               </Typography>
             </Stack>

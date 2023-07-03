@@ -11,6 +11,7 @@ import Card from '@mui/material/Card'
 import TextForm from './TextForm'
 import React, { useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
+import DefaultPagination from '../DefaultPagination'
 
 export interface IComment {
   id?: number
@@ -24,6 +25,7 @@ export interface IComment {
 const Comment = () => {
   const [hidden, setHidden] = useState(true)
   const [edit, setEdit] = useState(false)
+  const [page, setPage] = useState(0)
   const [comments, setComments] = useState<IComment[]>([])
   const [target, setTarget] = useState(null)
   const [targetId, setTargeId] = useState(0)
@@ -96,6 +98,9 @@ const Comment = () => {
                     </CardContent>
                   ))}
                 </>
+                <Stack alignItems={'center'} margin={2}>
+                  <DefaultPagination count={5} page={page} setPage={setPage} />
+                </Stack>
                 <TextForm
                   setter={setComments}
                   editSetter={setEdit}

@@ -1,11 +1,11 @@
-export interface Answer {
-  question_id: number
+export interface IAnswer {
   answer_id: number
   nickname: string
-  password: string
   content: string
-  created: string
-  updated?: string
-  is_adopted: boolean
-  recommended: number
+  createdAt: string
+  updatedAt?: string
+  type: string
+  recommend: number
+  questionId: number
+  adopted: boolean
 }
