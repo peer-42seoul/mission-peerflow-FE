@@ -62,7 +62,7 @@ const CommentAnswer = ({
 
   useEffect(() => {
     fetchAndSet()
-  }, [])
+  }, [page])
 
   const handleEdit = (id: number, targetRawId: number) => {
     if (!targetRawId) return
