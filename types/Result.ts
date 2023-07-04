@@ -1,4 +1,5 @@
 interface Post {
+  content: string
   questionId: number
   title: string
   answerCount: number

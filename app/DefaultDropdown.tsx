@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { Sort } from './MainPage'
 
