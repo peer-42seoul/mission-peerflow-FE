@@ -14,34 +14,58 @@ import GnbContext from '../hooks/GnbContext'
 import DefaultPagination from '../components/DefaultPagination'
 import DefaultDropdown from './DefaultDropdown'
 import DefaultCard from './DefaultCard'
-import axios from 'axios'
 
-type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
+export type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
 export type Sort = 'lastest' | 'views' | 'recommends'
+export type Page = {
+  main: number
+  minishell: number
+  ft_irc: number
+  minirt: number
+}
 
 const MainPage = () => {
-  const { setGnb, gnb } = useContext(GnbContext)
-  const [page, setPage] = useState(1)
+  const { gnb } = useContext(GnbContext)
+  const [page, setPage] = useState<Page>({
+    main: 1,
+    minishell: 1,
+    ft_irc: 1,
+    minirt: 1,
+  })
   const [data, setData] = useState<Result>(null)
   const [error, setError] = useState(false)
   const [category, setCategory] = useState<Category>(null)
   const [sort, setSort] = useState<Sort>('lastest')
   const [title, setTitle] = useState<string>('')
-
-  useEffect(() => {
-    setGnb({ title: '전체 보기', back: false, add: true })
-  }, [])
+  const [search, setSearch] = useState<boolean>(false)
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        category
-          ? category === 'search'
-            ? `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
-            : `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pageIndex=${page}&pageSize=${5}`
-          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pageIndex=${page}&pageSize=${5}`,
-      )
-      setData(response?.data)
+      let url = !(category === 'search')
+        ? category
+          ? `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pagingIndex=${
+              page[category ? category : 'main'] - 1
+            }&pagingSize=${5}`
+          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pagingIndex=${
+              page[category ? category : 'main'] - 1
+            }&pagingSize=${5}`
+        : `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
+
+      console.log('url', url)
+      console.log('gnb', gnb)
+      console.log('category', category)
+
+      const response = await fetch(url)
+      if (!response.ok) {
+        console.log('Failed to fetch data')
+        return
+      }
+      const data = await response.json()
+      if (!data) {
+        console.log('Invalid data received')
+        return
+      }
+      setData(data)
     } catch (error) {
       console.error(error)
       setError(true)
@@ -49,21 +73,14 @@ const MainPage = () => {
   }
 
   useEffect(() => {
-    changeCategory(
-      category !== 'search'
-        ? gnb.title === '전체 보기'
-          ? null
-          : gnb.title
-        : 'search',
+    setCategory(
+      !search ? (gnb.title === '전체 보기' ? null : gnb.title) : 'search',
     )
-
     fetchData()
+    if (search) {
+      setSearch(false)
+    }
   }, [category, page, gnb, sort])
-
-  const changeCategory = (category: Category) => {
-    setCategory(category)
-    setPage(1)
-  }
 
   if (!data && error)
     return (
@@ -71,13 +88,7 @@ const MainPage = () => {
         <Box>문제가 발생했습니다</Box>
       </Stack>
     )
-  if (!data) return <Skeleton variant="rectangular" width={210} height={118} />
-  if (!data?.content?.length)
-    return (
-      <Stack direction={'row'} justifyContent={'center'} width={'100%'}>
-        <Box>게시글이 없습니다</Box>
-      </Stack>
-    )
+  if (!data) return <Skeleton variant="text" />
   return (
     <Container sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
       <Stack justifyContent={'space-between'} direction="row" mt={1}>
@@ -87,16 +98,16 @@ const MainPage = () => {
           placeholder="제목 검색"
           size={'small'}
           onChange={(e) => {
-            if (category === 'search') {
-              setTitle(e.target.value)
-            }
+            setTitle(e.target.value)
           }}
+          value={title}
           InputProps={{
             endAdornment: (
               <InputAdornment position={'end'}>
                 <IconButton
                   onClick={() => {
-                    changeCategory('search')
+                    setCategory('search')
+                    setSearch(true)
                   }}
                 >
                   <SearchOutlinedIcon />
@@ -107,14 +118,21 @@ const MainPage = () => {
         />
         <DefaultDropdown setSort={setSort} sort={sort} />
       </Stack>
-      {data?.content.map((item: Post) => {
-        return <DefaultCard data={item} key={item.questionId} />
-      })}
+      {data?.content?.length ? (
+        data?.content.map((item: Post) => {
+          return <DefaultCard data={item} key={item.questionId} />
+        })
+      ) : (
+        <Stack direction={'row'} justifyContent={'center'} width={'100%'}>
+          <Box sx={{ marginTop: '4px' }}>게시글이 없습니다</Box>
+        </Stack>
+      )}
       <Stack justifyContent={'center'} direction="row" m={1}>
         <DefaultPagination
           count={data?.totalPages}
           page={page}
           setPage={setPage}
+          category={category}
         />
       </Stack>
     </Container>

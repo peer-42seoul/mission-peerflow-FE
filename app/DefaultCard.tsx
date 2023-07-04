@@ -70,7 +70,7 @@ const DefaultCard = ({ data }: { data: Post }) => {
         >
           <RecommendIcon />
           <span>{data?.recommend}</span>
-          <PageviewIcon viewBox="조회수" />
+          <PageviewIcon />
           <span>{data?.view}</span>
         </Stack>
       </CardContent>
