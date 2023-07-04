@@ -3,6 +3,7 @@ import { Box, Typography, Button, Stack, TextField } from '@mui/material'
 import React, { useCallback } from 'react'
 import useInput from '../hooks/useInput'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 // 상위 컴포넌트에서 필요한 state
 
@@ -19,6 +20,8 @@ questionId={questionId}
 }
 
 const DeleteAuthModal = ({ open, handleClose, questionId }) => {
+  const router = useRouter()
+
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -36,15 +39,15 @@ const DeleteAuthModal = ({ open, handleClose, questionId }) => {
   const deleteHandler = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
       axios
-        .delete(`/v1/question/${questionId}`, {
+        .post(`http://paulryu9309.ddns.net/v1/question/${questionId}`, {
           type: 'question',
           password,
         })
         .then((res) => {
-          console.log(`res : ${res.data}`)
+          router.push('/')
         })
         .catch((err) => {
-          console.log(`err ${err}`)
+          alert('존재하지 않는 게시물입니다.')
         })
     },
     [password],

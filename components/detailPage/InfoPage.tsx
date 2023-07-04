@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { IAnswer } from '../../types/Answer'
 import {
   Card,
@@ -16,12 +16,28 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteAndEditModal from '..//DeleteAndEditModal'
 import { IQuestion } from '../../types/Question'
+import { useRouter } from 'next/navigation'
+import DefaultPassword from '../DefaultPassword'
+import DeleteAuthModal from '../DeleteAuthModal'
 
-const PageInfo = ({ param }: { param: IQuestion }) => {
-  const [open, setOpen] = useState<boolean>(false)
+const PageInfo = ({ param, qid }: { param: IQuestion; qid: number }) => {
+  const router = useRouter()
+  const [open, setOpen] = useState(false)
+  const [action, setAction] = useState('')
 
-  const handleOpen = () => setOpen(true)
+  const handleOpen = (action) => {
+    setAction(action)
+    setOpen(true)
+  }
   const handleClose = () => setOpen(false)
+
+  const editHandler = useCallback(() => {
+    router.push(`/edit/${qid}`)
+  }, [])
+
+  const removeHandler = useCallback(() => {
+    console.log(`remove`)
+  }, [])
 
   return (
     <>
@@ -73,15 +89,14 @@ const PageInfo = ({ param }: { param: IQuestion }) => {
               >
                 <DeleteIcon fontSize="small" />
               </IconButton>
-              <DeleteAndEditModal
+              <DeleteAuthModal
                 open={open}
                 handleClose={handleClose}
-                evtHandler={handleOpen}
-                action={'삭제'}
+                questionId={qid}
               />
               <IconButton
                 size="small"
-                onClick={handleOpen}
+                onClick={editHandler}
                 sx={{
                   height: 'max-content',
                   marginTop: 'auto',
@@ -89,12 +104,12 @@ const PageInfo = ({ param }: { param: IQuestion }) => {
               >
                 <EditIcon fontSize="small" />
               </IconButton>
-              <DeleteAndEditModal
+              {/* <DeleteAndEditModal
                 open={open}
                 handleClose={handleClose}
                 evtHandler={handleOpen}
                 action={'수정'}
-              />
+              /> */}
             </Stack>
           </Stack>
         </CardContent>

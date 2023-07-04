@@ -32,9 +32,10 @@ const style = {
 
 // 임시로 questionId을 활용해 api 테스트
 
-const questionId = 8
+// const questionId = 8
 
-const Page = ({ question }: number) => {
+const Page = ({ params }: { params: { id: number } }) => {
+  console.log('param : ', params)
   const router = useRouter()
   const [title, changeTitle, setTitle] = useInput('')
   const [nickname, changeNickname, setNickname] = useInput('')
@@ -78,7 +79,7 @@ const Page = ({ question }: number) => {
       }
       try {
         await updateQuestion({
-          questionId: questionId,
+          questionId: params?.id,
           data: updatedQuestionData,
         })
         router.push('/')
@@ -91,7 +92,7 @@ const Page = ({ question }: number) => {
 
   useEffect(() => {
     axios
-      .get(`http://paulryu9309.ddns.net/v1/question/${questionId}`)
+      .get(`http://paulryu9309.ddns.net/v1/question/${params?.id}`)
       .then((res: any) => {
         setTitle(res.data.title)
         setNickname(res.data.nickname)

@@ -13,9 +13,9 @@ export async function getData(url: string) {
     const urlPath = 'http://paulryu9309.ddns.net:80/v1/'
     const test = 'http://localhost:80/v1/'
 
-    console.log(test + url)
+    console.log(urlPath + url)
 
-    const res = await fetch(test + url)
+    const res = await fetch(urlPath + url)
 
     if (!res.ok) throw new Error('Failed to load')
 
@@ -49,7 +49,7 @@ export default function DetailPage({ param }: { param: number }) {
   return (
     <>
       <Container>
-        <PageInfo param={data} />
+        <PageInfo param={data} qid={param} />
         <Question
           content={data?.content}
           recomment={data?.recommend}
