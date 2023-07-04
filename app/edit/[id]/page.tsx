@@ -16,6 +16,7 @@ import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
 import axios, { AxiosResponse } from 'axios'
 import { WritingForm } from '../../../types/WritingForm'
 import DeleteAuthModal from '../../../components/DeleteAuthModal'
+import { useRouter } from 'next/navigation'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -31,22 +32,16 @@ const style = {
 
 // 임시로 questionId을 활용해 api 테스트
 
-const questionId = 4
+const questionId = 8
 
 const Page = ({ question }: number) => {
-  const [questionData, setQuestionData] = useState({})
+  const router = useRouter()
   const [title, changeTitle, setTitle] = useInput('')
   const [nickname, changeNickname, setNickname] = useInput('')
   const [password, changePassword, setPassword] = useInput('')
   const [content, changeContent, setContent] = useInput('')
-  const [name, setName] = useState('')
   const [showError, setShowError] = useState(false)
 
-  // const [category, setCategory] = useState<WritingForm['category'][]>([
-  //   { value: 'minishell', name: 'Minishell' },
-  //   { value: 'minirt', name: 'Minirt' },
-  //   { value: 'fdf', name: 'Fdf' },
-  // ])
   const [category, setCategory] = useState<WritingForm['category'][]>([
     { value: 'minishell', name: 'Minishell' },
     { value: 'minirt', name: 'Minirt' },
@@ -61,62 +56,43 @@ const Page = ({ question }: number) => {
   }
   const handleClose = () => setOpen(false)
 
-  const categoryHandler = useCallback((e: SelectChangeEvent) => {
-    setName(e.target.value)
-  }, [])
+  const submitHandler = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      console.log('submit')
 
-  const deleteHandler = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    axios.delete(`http://paulryu9309.ddns.net/v1/question/${questionId}`)
-  }, [])
-
-  const submitHnadler = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log('work 1')
-
-    // if (title.trim().length === 0) {
-    //   setShowError(true)
-    //   console.log('work 1=1')
-
-    //   return
-    // } else if (nickname.trim().length === 0) {
-    //   console.log('work 1=2')
-
-    //   setShowError(true)
-    //   return
-    // } else if (password.length === 0) {
-    //   console.log('work 1=3')
-
-    //   setShowError(true)
-    //   return
-    // } else if (content.trim().length === 0) {
-    //   setShowError(true)
-    //   return
-    // }
-    // console.log('work 2')
-
-    setQuestionData((prevQuestionData) => {
+      if (!password) {
+        setShowError(true)
+        return
+      } else if (!content) {
+        setShowError(true)
+        return
+      }
       const updatedQuestionData = {
-        ...prevQuestionData,
         type: 'question',
         title,
         nickname,
         password,
         content,
-        category: category.find((item) => item.value === name)?.value,
+        category,
       }
-      return updatedQuestionData
-    })
-    console.log('work 3')
-
-    updateQuestion({ questionId: questionId, data: questionData })
-  }, [])
+      try {
+        await updateQuestion({
+          questionId: questionId,
+          data: updatedQuestionData,
+        })
+        router.push('/')
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    [password, content],
+  )
 
   useEffect(() => {
     axios
       .get(`http://paulryu9309.ddns.net/v1/question/${questionId}`)
       .then((res: any) => {
-        console.log(`res : ${res}`)
-        console.log(`data : ${JSON.stringify(res.data)}`)
         setTitle(res.data.title)
         setNickname(res.data.nickname)
         setPassword(res.data.password)
@@ -124,13 +100,13 @@ const Page = ({ question }: number) => {
         setCategory(res.data.category)
       })
       .catch((err) => {
-        console.log(`err ${err}`)
-        alert('불러오기에 실패하였습니다.')
+        alert(`${err} 불러오기에 실패하였습니다.`)
       })
   }, [])
+
   return (
     <>
-      <form onSubmit={submitHnadler}>
+      <form onSubmit={submitHandler}>
         <Stack
           direction="column"
           justifyContent="center"
@@ -141,28 +117,19 @@ const Page = ({ question }: number) => {
             id="standard-basic"
             placeholder="제목"
             fullWidth
-            onChange={changeTitle}
             defaultValue={title}
+            InputProps={{
+              readOnly: true,
+            }}
           />
-          {showError && title.trim().length === 0 && (
-            <div style={{ color: 'red' }}>제목을 입력해주세요.</div>
-          )}
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">게시판 타입</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={name}
-              label="name"
-              onChange={categoryHandler}
-            >
-              {/* {category.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.name}
-                </MenuItem>
-              ))} */}
-            </Select>
-          </FormControl>
+          <TextField
+            id="standard-basic"
+            fullWidth
+            defaultValue={category}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
           <Stack
             spacing={{ xs: 1, sm: 2 }}
             direction="row"
@@ -176,13 +143,12 @@ const Page = ({ question }: number) => {
                 type="text"
                 placeholder="닉네임"
                 name="nickname"
-                onChange={changeNickname}
                 style={{ width: '100%' }}
                 defaultValue={nickname}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
-              {showError && nickname.trim().length === 0 && (
-                <div style={{ color: 'red' }}>닉네임을 입력해주세요.</div>
-              )}
             </Stack>
             <Stack width={'45%'}>
               <TextField
@@ -190,11 +156,11 @@ const Page = ({ question }: number) => {
                 type="password"
                 placeholder="비밀번호"
                 name="password"
+                value={password}
                 onChange={changePassword}
-                defaultValue={password}
                 style={{ width: '100%' }}
               />
-              {showError && password.trim().length === 0 && (
+              {showError && !password && (
                 <div style={{ color: 'red' }}>비밀번호를 입력해주세요.</div>
               )}
             </Stack>
@@ -208,7 +174,7 @@ const Page = ({ question }: number) => {
             fullWidth
             onChange={changeContent}
           />
-          {showError && content.trim().length === 0 && (
+          {showError && !content && (
             <div style={{ color: 'red' }}>텍스트를 입력해주세요 </div>
           )}
           <Stack
@@ -228,7 +194,7 @@ const Page = ({ question }: number) => {
           <DeleteAndEditModal
             open={open}
             handleClose={handleClose}
-            evtHandler={action === '수정' && submitHnadler}
+            evtHandler={action === '수정' && submitHandler}
             action={action}
           />
         </Stack>
