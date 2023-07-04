@@ -4,11 +4,31 @@ import { Button, Stack, useMediaQuery } from '@mui/material'
 import { TextField } from '@mui/material'
 import { useEffect, useState, useCallback } from 'react'
 import { IComment } from './Comment'
+import { IAnswer } from '../../types/Answer'
+import dayjs from 'dayjs'
+
+const setNow = () => {
+  const now = dayjs().format('YYYY-MM-DDTHH:mm:ss')
+
+  return now
+}
 
 const TextForm = ({
   setter,
+  editSetter,
+  isEdit,
+  editTarget,
+  editTargetId,
+  unique_id,
+  type,
 }: {
-  setter: React.Dispatch<React.SetStateAction<IComment[]>>
+  setter: React.Dispatch<React.SetStateAction<any[]>>
+  editSetter?: React.Dispatch<React.SetStateAction<boolean>>
+  isEdit?: boolean
+  editTarget?: IAnswer
+  editTargetId?: number
+  unique_id: number
+  type: string
 }) => {
   const isTablet = useMediaQuery('(max-width: 900px)')
   const textDirection = isTablet ? 'column' : 'row'
@@ -18,10 +38,14 @@ const TextForm = ({
   const [nickname, setNickname] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
+  useEffect(() => {}, [setter])
+
   useEffect(() => {
-    const commentsHandler = (comment: IComment) =>
-      setter((prev) => [...prev, comment])
-  }, [setter])
+    if (isEdit === true) {
+      setNickname(editTarget.nickname)
+      setComment(editTarget.content)
+    }
+  }, [isEdit, editTarget])
 
   const handleComments = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,34 +60,68 @@ const TextForm = ({
         return setNickname('')
       }
 
-      const setNow = () => {
-        const leftPad = (value) => {
-          if (value >= 10) return value
-          return `0${value}`
+      if (isEdit === true) {
+        const editComments: IComment = {
+          nickname: nickname,
+          password: password,
+          content: comment,
+          created: editTarget.createdAt,
+          updated: setNow(),
         }
-        const source = new Date()
 
-        const year = source.getFullYear()
-        const month = leftPad(source.getMonth() + 1)
-        const day = leftPad(source.getDate())
+        setter((prev) => {
+          const arr = Array.isArray(prev) ? [...prev] : []
+          arr[editTargetId] = editComments
+          return arr
+        })
 
-        return [year, month, day].join('-')
+        fetch(`${type}/${unique_id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            questionId: unique_id,
+            type: type,
+            nickname: editComments.nickname,
+            password: editComments.password,
+            content: editComments.content,
+          }),
+        })
+
+        setComment('')
+        setNickname('')
+        setPassword('')
+
+        editSetter(false)
+      } else {
+        const newComments: IComment = {
+          nickname: nickname,
+          password: password,
+          content: comment,
+          created: setNow(),
+        }
+
+        setter((prev) => {
+          const arr = Array.isArray(prev) ? [...prev] : []
+          return [...arr, newComments]
+        })
+
+        fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
+          method: 'POST',
+          body: JSON.stringify({
+            type: type,
+            questionId: unique_id,
+            nickname: newComments.nickname,
+            password: newComments.password,
+            content: newComments.content,
+            createdAt: newComments.created,
+          }),
+        })
+
+        setComment('')
+        setNickname('')
+        setPassword('')
       }
-
-      const newComments: IComment = {
-        nickname: nickname,
-        password: password,
-        content: comment,
-        created: setNow(),
-      }
-      console.log(newComments)
-      setter((prev) => [...prev, newComments])
-
-      setComment('')
-      setNickname('')
-      setPassword('')
     },
-    [comment, password, nickname, setter],
+    [comment, password, nickname],
   )
 
   return (

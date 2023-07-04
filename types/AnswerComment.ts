@@ -4,6 +4,6 @@ export interface AnswerComment {
   nickname: string
   password: string
   content: string
-  created: string
-  updated: string
+  created?: string
+  updated?: string
 }
