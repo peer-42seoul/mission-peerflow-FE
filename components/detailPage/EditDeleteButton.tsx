@@ -12,35 +12,59 @@ const EditDeleteButton = ({
   edit,
   objs,
   targetId,
-}: // type,
-// uniqueId,
-{
+  type,
+  targetRawId,
+  trigger,
+}: {
   setter: React.Dispatch<React.SetStateAction<any[]>>
-  edit?: (param: number) => void
+  edit?: (id: number, RawId: number) => void
   objs: any[]
   targetId: number
-  // type: string
-  // uniqueId: number
+  type: string
+  targetRawId: number
+  trigger?: Function
 }) => {
+  console.log('target', targetRawId)
   const [open, setOpen] = useState<boolean>(false)
   const [action, setAction] = useState('')
 
   const handleOpen = (action: string) => {
     setOpen(true)
     setAction(action)
+    if (trigger) trigger()
   }
 
   const handleClose = () => setOpen(false)
 
-  const eventDelete = () => {
-    const newObjs = [...objs]
-    newObjs.splice(targetId, 1)
-    setter(newObjs)
+  const eventDelete = (password: number) => {
+    if (!targetRawId) return
+    fetch(`http://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        type: type,
+        password: password,
+      }),
+    })
+      .then((res) => {
+        if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
+
+        const newObjs = [...objs]
+        newObjs.splice(targetId, 1)
+        setter(newObjs)
+      })
+      .catch((e) => {
+        return alert(e)
+      })
+
     handleClose()
   }
 
   const eventEdit = () => {
-    edit(targetId)
+    edit(targetId, targetRawId)
     handleClose()
   }
 

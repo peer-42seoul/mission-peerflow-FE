@@ -19,6 +19,7 @@ import { IQuestion } from '../../types/Question'
 import { useRouter } from 'next/navigation'
 import DefaultPassword from '../DefaultPassword'
 import DeleteAuthModal from '../DeleteAuthModal'
+import dayjs from 'dayjs'
 
 const PageInfo = ({ param, qid }: { param: IQuestion; qid: number }) => {
   const router = useRouter()
@@ -43,7 +44,7 @@ const PageInfo = ({ param, qid }: { param: IQuestion; qid: number }) => {
     <>
       <Card variant="outlined">
         <CardContent>
-          <Chip label={`home/${param?.category}`}></Chip>
+          <Chip label={`${param?.category}`}></Chip>
           <Stack
             direction={'row'}
             minHeight={'max-content'}
@@ -68,13 +69,15 @@ const PageInfo = ({ param, qid }: { param: IQuestion; qid: number }) => {
           </Stack>
           <Stack direction={'row'} justifyContent={'space-between'}>
             <Stack direction={'column'}>
-              <Typography variant="h6">조회수: {param?.views}</Typography>
+              <Typography variant="h6">조회수: {param?.view}</Typography>
               <Typography variant="h6">
                 작성자: {param?.nickname}&nbsp;&nbsp;
               </Typography>
               <Typography variant="h6">
                 작성일:&nbsp;
-                {param?.updatedAt ? param?.updatedAt : param?.createdAt}
+                {param?.updatedAt
+                  ? dayjs(param?.updatedAt).format('YYYY-MM-DD\nHH:mm')
+                  : dayjs(param?.createdAt).format('YYYY-MM-DD\nHH:mm')}
                 &nbsp;
               </Typography>
             </Stack>

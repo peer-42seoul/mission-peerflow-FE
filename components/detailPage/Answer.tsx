@@ -10,7 +10,6 @@ import {
 } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 
-import Comment from './Comment'
 import TextForm from './TextForm'
 import { IAnswer } from '../../types/Answer'
 
@@ -19,16 +18,20 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import DefaultPagination from '../DefaultPagination'
 import CheckIcon from '@mui/icons-material/Check'
+import DefaultPassword from '../DefaultPassword'
+import CommentAnswer from './CommentAnswer'
 
 const Answer = ({
   param,
   quest_id,
+  trigger,
 }: {
   param: IAnswer[]
   quest_id: number
+  trigger: Function
 }) => {
+  const type = 'answer'
   const [answers, setAnswers] = useState<IAnswer[]>([])
-  const [page, setPage] = useState<number>(0)
 
   const [adopt, setAdopt] = useState<boolean>(false)
   const [adoptAnswer, setAdoptAnswer] = useState<IAnswer | null>(null)
@@ -36,9 +39,15 @@ const Answer = ({
   const [target, setTarget] = useState(null)
   const [targetId, setTargeId] = useState(0)
 
+  const [targetRaw, setTargetRaw] = useState(0)
+
   useEffect(() => {
     setAnswers(param)
-  }, [answers, param])
+  }, [param])
+
+  useEffect(() => {
+    setAnswers(answers)
+  }, [answers])
 
   const handleAdopt = useCallback(
     (ans: IAnswer) => {
@@ -55,10 +64,11 @@ const Answer = ({
     [adopt, adoptAnswer],
   )
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: number, targetRawId: number) => {
     setEdit(true)
     setTarget(answers[id])
     setTargeId(id)
+    setTargetRaw(targetRawId)
   }
 
   return (
@@ -68,7 +78,7 @@ const Answer = ({
           <Typography variant="h5">답변</Typography>
         </CardContent>
         {adoptAnswer ? (
-          <Card key={100} sx={{ margin: 2, maxWidth: '100%' }}>
+          <Card sx={{ margin: 2, maxWidth: '100%' }}>
             <CheckIcon sx={{ margin: 2, color: '#44ff44' }} />
             <Stack direction={'row'} justifyContent={'space-between'}>
               <CardContent
@@ -87,7 +97,7 @@ const Answer = ({
                 <CheckCircleOutlineIcon />
                 <Typography>채택풀기</Typography>
               </IconButton>
-              <Comment questId={quest_id} type="answer" />
+              <CommentAnswer questId={quest_id} rawkey={adoptAnswer.answerId} />
             </CardContent>
           </Card>
         ) : (
@@ -113,8 +123,10 @@ const Answer = ({
                     <EditDeleteButton
                       objs={answers}
                       setter={setAnswers}
-                      id={id}
+                      targetId={id}
                       edit={handleEdit}
+                      type={type}
+                      targetRawId={answers[id].answerId}
                     />
                   </CardContent>
                 </Stack>
@@ -123,23 +135,25 @@ const Answer = ({
                     <CheckCircleIcon />
                     <Typography>채택하기</Typography>
                   </IconButton>
-                  <Comment questId={quest_id} type="answer" />
+                  <CommentAnswer
+                    questId={quest_id}
+                    rawkey={answers[id].answerId}
+                  />
                 </CardContent>
               </Card>
             )}
           </Box>
         ))}
-        <Stack alignItems={'center'} margin={2}>
-          <DefaultPagination count={5} page={page} setPage={setPage} />
-        </Stack>
         <TextForm
+          trigger={trigger}
           setter={setAnswers}
           editSetter={setEdit}
           isEdit={edit}
           editTarget={target}
           editTargetId={targetId}
           unique_id={quest_id}
-          type={'answer'}
+          type={type}
+          targetRawId={targetRaw}
         />
       </Card>
     </>

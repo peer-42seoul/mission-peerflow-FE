@@ -3,7 +3,7 @@
 import { Button, Stack, useMediaQuery } from '@mui/material'
 import { TextField } from '@mui/material'
 import { useEffect, useState, useCallback } from 'react'
-import { IComment } from './Comment'
+import { IComment } from './CommentQuestion'
 import { IAnswer } from '../../types/Answer'
 import dayjs from 'dayjs'
 
@@ -14,6 +14,7 @@ const setNow = () => {
 }
 
 const TextForm = ({
+  trigger,
   setter,
   editSetter,
   isEdit,
@@ -21,7 +22,9 @@ const TextForm = ({
   editTargetId,
   unique_id,
   type,
+  targetRawId,
 }: {
+  trigger: Function
   setter: React.Dispatch<React.SetStateAction<any[]>>
   editSetter?: React.Dispatch<React.SetStateAction<boolean>>
   isEdit?: boolean
@@ -29,6 +32,7 @@ const TextForm = ({
   editTargetId?: number
   unique_id: number
   type: string
+  targetRawId?: number
 }) => {
   const isTablet = useMediaQuery('(max-width: 900px)')
   const textDirection = isTablet ? 'column' : 'row'
@@ -37,8 +41,6 @@ const TextForm = ({
   const [comment, setComment] = useState<string>('')
   const [nickname, setNickname] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-
-  useEffect(() => {}, [setter])
 
   useEffect(() => {
     if (isEdit === true) {
@@ -65,18 +67,16 @@ const TextForm = ({
           nickname: nickname,
           password: password,
           content: comment,
-          created: editTarget.createdAt,
-          updated: setNow(),
+          createdAt: editTarget.createdAt,
+          updatedAt: setNow(),
         }
 
-        setter((prev) => {
-          const arr = Array.isArray(prev) ? [...prev] : []
-          arr[editTargetId] = editComments
-          return arr
-        })
-
-        fetch(`${type}/${unique_id}`, {
+        fetch(`http://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
           method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
           body: JSON.stringify({
             questionId: unique_id,
             type: type,
@@ -85,40 +85,101 @@ const TextForm = ({
             content: editComments.content,
           }),
         })
+          .then((res) => {
+            if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
+            console.log(res)
+            setter((prev) => {
+              const arr = Array.isArray(prev) ? [...prev] : []
+              arr[editTargetId] = editComments
+              return arr
+            })
+            setComment('')
+            setNickname('')
+            setPassword('')
 
-        setComment('')
-        setNickname('')
-        setPassword('')
-
-        editSetter(false)
+            editSetter(false)
+            if (trigger !== null) trigger()
+          })
+          .catch((e) => {
+            console.log(e)
+            return alert(e)
+          })
       } else {
         const newComments: IComment = {
           nickname: nickname,
           password: password,
           content: comment,
-          created: setNow(),
+          createdAt: setNow(),
         }
 
-        setter((prev) => {
-          const arr = Array.isArray(prev) ? [...prev] : []
-          return [...arr, newComments]
-        })
+        if (type === 'answer/comment') {
+          fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+              type: type,
+              answerId: targetRawId,
+              nickname: newComments.nickname,
+              password: newComments.password,
+              content: newComments.content,
+              createdAt: newComments.createdAt,
+            }),
+          })
+            .then((res) => {
+              if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
+              console.log('ok', res)
+              setter((prev) => {
+                const arr = Array.isArray(prev) ? [...prev] : []
+                console.log(arr)
+                return [...arr, newComments]
+              })
 
-        fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
-          method: 'POST',
-          body: JSON.stringify({
-            type: type,
-            questionId: unique_id,
-            nickname: newComments.nickname,
-            password: newComments.password,
-            content: newComments.content,
-            createdAt: newComments.created,
-          }),
-        })
+              setComment('')
+              setNickname('')
+              setPassword('')
+              if (trigger !== null) trigger()
+            })
+            .catch((e) => {
+              console.log(e)
+              return alert(e)
+            })
+        } else {
+          fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+              type: type,
+              questionId: unique_id,
+              nickname: newComments.nickname,
+              password: newComments.password,
+              content: newComments.content,
+              createdAt: newComments.createdAt,
+            }),
+          })
+            .then((res) => {
+              if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
+              console.log('ok', res)
+              setter((prev) => {
+                const arr = Array.isArray(prev) ? [...prev] : []
+                return [...arr, newComments]
+              })
 
-        setComment('')
-        setNickname('')
-        setPassword('')
+              setComment('')
+              setNickname('')
+              setPassword('')
+              if (trigger !== null) trigger()
+            })
+            .catch((e) => {
+              console.log(e)
+              return alert(e)
+            })
+        }
       }
     },
     [comment, password, nickname],

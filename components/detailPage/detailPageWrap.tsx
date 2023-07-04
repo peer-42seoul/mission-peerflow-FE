@@ -14,13 +14,14 @@ export async function getData(url: string) {
     const urlPath = 'http://paulryu9309.ddns.net:80/v1/'
     const test = 'http://localhost:80/v1/'
 
-    console.log(urlPath + url)
-
     const res = await fetch(urlPath + url)
 
     if (!res.ok) throw new Error('Failed to load')
 
     const data = res.json()
+
+    console.log('all', data)
+
     return data
   } catch (e) {
     console.log('error: ', e)
@@ -39,7 +40,6 @@ export default function DetailPage({ param }: { param: number }) {
       setEmptiness(true)
     }
     setData(fetchData)
-    console.log(data?.answerList)
   }
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export default function DetailPage({ param }: { param: number }) {
 
   return (
     <>
+<<<<<<< HEAD
       {emptiness ? (
         <NotFound />
       ) : (
@@ -66,6 +67,22 @@ export default function DetailPage({ param }: { param: number }) {
           <Answer param={data?.answerList} quest_id={param} />
         </Container>
       )}
+=======
+      <Container>
+        <PageInfo param={data} />
+        <Question
+          content={data?.content}
+          recomment={data?.recommend}
+          questId={param}
+        />
+        <br />
+        <Answer
+          param={data?.answerList}
+          quest_id={param}
+          trigger={fetchAndSet}
+        />
+      </Container>
+>>>>>>> 20-detail-page
     </>
   )
 }

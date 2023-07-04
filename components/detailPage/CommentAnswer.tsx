@@ -9,48 +9,73 @@ import {
 } from '@mui/material'
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
 import DefaultPagination from '../DefaultPagination'
 import { getData } from './detailPageWrap'
+import dayjs from 'dayjs'
 
 export interface IComment {
-  id?: number
+  answerCommentId?: number
   nickname: string
   password: string
   content: string
-  created?: string
-  updated?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
-const Comment = ({ type, questId }: { type: string; questId: number }) => {
+const CommentAnswer = ({
+  questId,
+  rawkey,
+}: {
+  questId: number
+  rawkey?: number
+}) => {
+  const type = 'answer'
   const [hidden, setHidden] = useState(true)
   const [edit, setEdit] = useState(false)
   const [page, setPage] = useState(1)
+
   const [comments, setComments] = useState<IComment[]>([])
   const [target, setTarget] = useState(null)
   const [targetId, setTargeId] = useState(0)
+  const [totalPage, setTotalPage] = useState(5)
+  const [targetRaw, setTargetRaw] = useState(0)
 
   const handleButton = () => {
+    fetchAndSet()
     setHidden(!hidden)
   }
 
   async function fetchAndSet() {
+    let key: number
+    if (!rawkey) key = questId
+    else key = rawkey
+
     const fetchData = await getData(
-      `${type}/comment?${type}Id=${questId}&page=${page}&size=${5}`,
+      `answer/comment?answerId=${key}&page=${page - 1}&size=5`,
     )
 
-    setComments(fetchData)
+    console.log(fetchData.content)
+
+    setTotalPage(fetchData.totalPage)
+    setComments(fetchData.content)
   }
+
+  useEffect(() => {
+    setTargetRaw(rawkey)
+  }, [])
 
   useEffect(() => {
     fetchAndSet()
   }, [])
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: number, targetRawId: number) => {
+    if (!targetRawId) return
     setEdit(true)
     setTarget(comments[id])
     setTargeId(id)
+    setTargetRaw(targetRawId)
   }
 
   return (
@@ -63,7 +88,13 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
               <CardContent>
                 <Typography>첫 댓글의 주인공이 되보세요!</Typography>
               </CardContent>
-              <TextForm setter={setComments} unique_id={questId} type={type} />
+              <TextForm
+                trigger={fetchAndSet}
+                setter={setComments}
+                unique_id={questId}
+                type={type + '/comment'}
+                targetRawId={targetRaw}
+              />
             </Card>
           ) : (
             <>
@@ -87,7 +118,7 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
                               {com.nickname}
                             </Typography>
                             <Typography fontSize={'12px'}>
-                              {com.created}
+                              {dayjs(com.createdAt).format('YYYY-MM-DD HH:mm')}
                             </Typography>
                           </Stack>
                           <Typography
@@ -100,20 +131,27 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
                           </Typography>
                         </Stack>
                         <EditDeleteButton
+                          trigger={fetchAndSet}
                           objs={comments}
                           setter={setComments}
                           edit={handleEdit}
                           targetId={id}
-                          // type={}
+                          type={type + '/comment'}
+                          targetRawId={comments[id].answerCommentId}
                         />
                       </Stack>
                     </CardContent>
                   ))}
                 </>
                 <Stack alignItems={'center'} margin={2}>
-                  <DefaultPagination count={5} page={page} setPage={setPage} />
+                  <DefaultPagination
+                    count={totalPage}
+                    page={page}
+                    setPage={setPage}
+                  />
                 </Stack>
                 <TextForm
+                  trigger={fetchAndSet}
                   setter={setComments}
                   editSetter={setEdit}
                   isEdit={edit}
@@ -121,6 +159,7 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
                   editTargetId={targetId}
                   unique_id={questId}
                   type={type + '/comment'}
+                  targetRawId={targetRaw}
                 />
               </Card>
             </>
@@ -133,4 +172,4 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
   )
 }
 
-export default Comment
+export default CommentAnswer

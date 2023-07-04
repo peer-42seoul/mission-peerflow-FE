@@ -23,7 +23,7 @@ export default function DefaultPassword({
 
   const evtSubmit = (e: React.FocusEvent<HTMLFormElement>) => {
     e.preventDefault()
-    evtHandler()
+    evtHandler(value)
     setValue('')
   }
 
