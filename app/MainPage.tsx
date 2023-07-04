@@ -28,10 +28,25 @@ const MainPage = () => {
   const [sort, setSort] = useState<Sort>('lastest')
   const [title, setTitle] = useState<string>('')
 
-  console.log('category', category)
   useEffect(() => {
     setGnb({ title: '전체 보기', back: false, add: true })
   }, [])
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        category
+          ? category === 'search'
+            ? `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
+            : `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pageIndex=${page}&pageSize=${5}`
+          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pageIndex=${page}&pageSize=${5}`,
+      )
+      setData(response?.data)
+    } catch (error) {
+      console.error(error)
+      setError(true)
+    }
+  }
 
   useEffect(() => {
     changeCategory(
@@ -41,21 +56,8 @@ const MainPage = () => {
           : gnb.title
         : 'search',
     )
-    axios
-      .get(
-        category
-          ? category === 'search'
-            ? `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
-            : `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pageIndex=${page}&pageSize=${5}`
-          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pageIndex=${page}&pageSize=${5}`,
-      )
-      .then((res) => {
-        setData(res?.data)
-      })
-      .catch((error) => {
-        console.error(error)
-        setError(true)
-      })
+
+    fetchData()
   }, [category, page, gnb, sort])
 
   const changeCategory = (category: Category) => {
@@ -85,7 +87,9 @@ const MainPage = () => {
           placeholder="제목 검색"
           size={'small'}
           onChange={(e) => {
-            setTitle(e.target.value)
+            if (category === 'search') {
+              setTitle(e.target.value)
+            }
           }}
           InputProps={{
             endAdornment: (
@@ -103,9 +107,9 @@ const MainPage = () => {
         />
         <DefaultDropdown setSort={setSort} sort={sort} />
       </Stack>
-      {data?.content.map((item: Post) => (
-        <DefaultCard data={item} key={item.title} />
-      ))}
+      {data?.content.map((item: Post) => {
+        return <DefaultCard data={item} key={item.questionId} />
+      })}
       <Stack justifyContent={'center'} direction="row" m={1}>
         <DefaultPagination
           count={data?.totalPages}
