@@ -13,10 +13,10 @@ type ReturnTypes<T> = [
 ]
 
 const useInput = <T>(Data: T): ReturnTypes<T> => {
-  const [value, setValue] = useState(Data)
+  const [value, setValue] = useState<T>(Data)
 
   const inputHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
+    setValue(e.target.value as unknown as SetStateAction<T>)
   }, [])
 
   return [value, inputHandler, setValue]
