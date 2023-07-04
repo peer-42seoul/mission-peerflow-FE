@@ -22,7 +22,7 @@ const DefaultDropdown = ({
       >
         <MenuItem value={'lastest'}>최신순</MenuItem>
         <MenuItem value={'views'}>조회순</MenuItem>
-        <MenuItem value={'recommends'}>추천순</MenuItem>
+        <MenuItem value={'recommendations'}>추천순</MenuItem>
       </Select>
     </FormControl>
   )

@@ -16,7 +16,7 @@ import DefaultDropdown from './DefaultDropdown'
 import DefaultCard from './DefaultCard'
 
 export type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
-export type Sort = 'lastest' | 'views' | 'recommends'
+export type Sort = 'lastest' | 'views' | 'recommendations'
 export type Page = {
   main: number
   minishell: number
