@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Button,
-  CardContent,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Button, CardContent, Stack, Typography } from '@mui/material'
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -64,7 +58,7 @@ const CommentAnswer = ({
 
   useEffect(() => {
     setTargetRaw(rawkey)
-  }, [])
+  }, [rawkey])
 
   useEffect(() => {
     fetchAndSet()
@@ -83,87 +77,70 @@ const CommentAnswer = ({
       <Card sx={{ my: 1 }} variant="outlined">
         <Button onClick={handleButton}>댓글</Button>
         {!hidden ? (
-          !comments?.length ? (
-            <Card>
-              <CardContent>
-                <Typography>첫 댓글의 주인공이 되보세요!</Typography>
-              </CardContent>
-              <TextForm
-                trigger={fetchAndSet}
-                setter={setComments}
-                unique_id={questId}
-                type={type + '/comment'}
-                targetRawId={targetRaw}
-              />
-            </Card>
-          ) : (
+          <Card>
             <>
-              <Card>
-                <>
-                  {comments?.map((com, id) => (
-                    <CardContent key={id}>
-                      <Stack
-                        direction={'row'}
-                        sx={{
-                          maxWidth: '100%',
-                        }}
-                        justifyContent={'space-between'}
-                      >
-                        <Stack
-                          direction={'row'}
-                          sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                        >
-                          <Stack margin={'5px'} minWidth={'110px'}>
-                            <Typography fontWeight={'bolder'}>
-                              {com.nickname}
-                            </Typography>
-                            <Typography fontSize={'12px'}>
-                              {dayjs(com.createdAt).format('YYYY-MM-DD HH:mm')}
-                            </Typography>
-                          </Stack>
-                          <Typography
-                            sx={{
-                              wordWrap: 'break-word',
-                              whiteSpace: 'pre-line',
-                            }}
-                          >
-                            {com.content}
-                          </Typography>
-                        </Stack>
-                        <EditDeleteButton
-                          trigger={fetchAndSet}
-                          objs={comments}
-                          setter={setComments}
-                          edit={handleEdit}
-                          targetId={id}
-                          type={type + '/comment'}
-                          targetRawId={comments[id].answerCommentId}
-                        />
+              {comments?.map((com, id) => (
+                <CardContent key={id}>
+                  <Stack
+                    direction={'row'}
+                    sx={{
+                      maxWidth: '100%',
+                    }}
+                    justifyContent={'space-between'}
+                  >
+                    <Stack
+                      direction={'row'}
+                      sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                    >
+                      <Stack margin={'5px'} minWidth={'110px'}>
+                        <Typography fontWeight={'bolder'}>
+                          {com.nickname}
+                        </Typography>
+                        <Typography fontSize={'12px'}>
+                          {dayjs(com.createdAt).format('YYYY-MM-DD HH:mm')}
+                        </Typography>
                       </Stack>
-                    </CardContent>
-                  ))}
-                </>
-                <Stack alignItems={'center'} margin={2}>
-                  <DefaultPagination
-                    count={totalPage}
-                    page={page}
-                    setPage={setPage}
-                  />
-                </Stack>
-                <TextForm
-                  trigger={fetchAndSet}
-                  setter={setComments}
-                  editSetter={setEdit}
-                  isEdit={edit}
-                  editTarget={target}
-                  editTargetId={targetId}
-                  unique_id={questId}
-                  type={type + '/comment'}
-                  targetRawId={targetRaw}
-                />
-              </Card>
+                      <Typography
+                        sx={{
+                          wordWrap: 'break-word',
+                          whiteSpace: 'pre-line',
+                        }}
+                      >
+                        {com.content}
+                      </Typography>
+                    </Stack>
+                    <EditDeleteButton
+                      trigger={fetchAndSet}
+                      objs={comments}
+                      setter={setComments}
+                      edit={handleEdit}
+                      targetId={id}
+                      type={type + '/comment'}
+                      targetRawId={comments[id].answerCommentId}
+                    />
+                  </Stack>
+                </CardContent>
+              ))}
             </>
-          )
+            <Stack alignItems={'center'} margin={2}>
+              <DefaultPagination
+                count={totalPage}
+                page={page}
+                setPage={setPage}
+              />
+            </Stack>
+            <TextForm
+              trigger={fetchAndSet}
+              setter={setComments}
+              editSetter={setEdit}
+              isEdit={edit}
+              editTarget={target}
+              editTargetId={targetId}
+              unique_id={questId}
+              type={type + '/comment'}
+              targetRawId={targetRaw}
+            />
+          </Card>
         ) : (
           <br />
         )}

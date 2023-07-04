@@ -52,7 +52,6 @@ export default function DetailPage({ param }: { param: number }) {
 
   return (
     <>
-<<<<<<< HEAD
       {emptiness ? (
         <NotFound />
       ) : (
@@ -64,25 +63,13 @@ export default function DetailPage({ param }: { param: number }) {
             questId={param}
           />
           <br />
-          <Answer param={data?.answerList} quest_id={param} />
+          <Answer
+            param={data?.answerList}
+            quest_id={param}
+            trigger={fetchAndSet}
+          />
         </Container>
       )}
-=======
-      <Container>
-        <PageInfo param={data} />
-        <Question
-          content={data?.content}
-          recomment={data?.recommend}
-          questId={param}
-        />
-        <br />
-        <Answer
-          param={data?.answerList}
-          quest_id={param}
-          trigger={fetchAndSet}
-        />
-      </Container>
->>>>>>> 20-detail-page
     </>
   )
 }

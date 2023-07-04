@@ -1,5 +1,5 @@
 import { Box, Button, Modal, Stack, TextField } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -56,7 +56,7 @@ export default function DefaultPassword({
               }}
               value={value}
               focused={true}
-              label={'작성 시 비밀번호를 입력하세요'}
+              label={'비밀번호를 입력하세요'}
             />
             <Button type="submit">입력</Button>
           </Stack>

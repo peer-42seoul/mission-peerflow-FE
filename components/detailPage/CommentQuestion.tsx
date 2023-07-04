@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Button,
-  CardContent,
-  IconButton,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Button, CardContent, Stack, Typography } from '@mui/material'
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
 import React, { useEffect, useState } from 'react'
@@ -46,15 +40,13 @@ const CommentAnswer = ({ questId }: { questId: number }) => {
       `${type}/comment?${type}Id=${questId}&page=${page - 1}&size=5`,
     )
 
-    console.log(`${type}/comment?${type}Id=${questId}&page=${page - 1}&size=5`)
-
-    setTotalPage(fetchData.totalPage)
+    setTotalPage(fetchData.totalPages)
     setComments(fetchData.content)
   }
 
   useEffect(() => {
     fetchAndSet()
-  }, [])
+  }, [page])
 
   const handleEdit = (id: number, targetRaw: number) => {
     setEdit(true)

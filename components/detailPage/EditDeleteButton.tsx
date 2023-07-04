@@ -24,7 +24,6 @@ const EditDeleteButton = ({
   targetRawId: number
   trigger?: Function
 }) => {
-  console.log('target', targetRawId)
   const [open, setOpen] = useState<boolean>(false)
   const [action, setAction] = useState('')
 

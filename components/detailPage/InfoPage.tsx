@@ -14,10 +14,8 @@ import {
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import DeleteAndEditModal from '..//DeleteAndEditModal'
 import { IQuestion } from '../../types/Question'
 import { useRouter } from 'next/navigation'
-import DefaultPassword from '../DefaultPassword'
 import DeleteAuthModal from '../DeleteAuthModal'
 import dayjs from 'dayjs'
 
@@ -107,12 +105,6 @@ const PageInfo = ({ param, qid }: { param: IQuestion; qid: number }) => {
               >
                 <EditIcon fontSize="small" />
               </IconButton>
-              {/* <DeleteAndEditModal
-                open={open}
-                handleClose={handleClose}
-                evtHandler={handleOpen}
-                action={'수정'}
-              /> */}
             </Stack>
           </Stack>
         </CardContent>
