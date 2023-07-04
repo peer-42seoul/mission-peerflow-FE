@@ -31,7 +31,7 @@ const style = {
 
 // 임시로 questionId을 활용해 api 테스트
 
-const questionId = 2
+const questionId = 4
 
 const Page = ({ question }: number) => {
   const [questionData, setQuestionData] = useState({})
