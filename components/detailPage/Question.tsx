@@ -15,20 +15,17 @@ const Question = ({
   questId: number
 }) => {
   const [recomments, setRecomments] = useState<number>(0)
-  const check = useRef<Boolean>(false)
 
   useEffect(() => {
+    if (Number.isNaN(recomment)) recomment = 0
     setRecomments(recomment)
-  }, [])
+  }, [recomment])
 
   const handleRecomments = useCallback(() => {
-    if (check.current === true) {
-      setRecomments((prev) => prev - 1)
-      check.current = false
-    } else {
-      setRecomments((prev) => prev + 1)
-      check.current = true
-    }
+    setRecomments((prev) => prev + 1)
+    fetch(`http://paulryu9309.ddns.net:80/v1/question/${questId}/recommend`, {
+      method: 'POST',
+    })
   }, [])
 
   return (

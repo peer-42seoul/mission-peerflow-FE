@@ -36,9 +36,15 @@ const Answer = ({
   const [target, setTarget] = useState(null)
   const [targetId, setTargeId] = useState(0)
 
+  const [targetRaw, setTargetRaw] = useState(0)
+
   useEffect(() => {
     setAnswers(param)
-  }, [answers, param])
+  }, [param])
+
+  useEffect(() => {
+    setAnswers(answers)
+  }, [answers])
 
   const handleAdopt = useCallback(
     (ans: IAnswer) => {
@@ -55,10 +61,11 @@ const Answer = ({
     [adopt, adoptAnswer],
   )
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: number, targetRawId: number) => {
     setEdit(true)
     setTarget(answers[id])
     setTargeId(id)
+    setTargetRaw(targetRawId)
   }
 
   return (
@@ -113,8 +120,10 @@ const Answer = ({
                     <EditDeleteButton
                       objs={answers}
                       setter={setAnswers}
-                      id={id}
+                      targetId={id}
                       edit={handleEdit}
+                      type="answer"
+                      targetRawId={answers[id].answerId}
                     />
                   </CardContent>
                 </Stack>
@@ -133,6 +142,7 @@ const Answer = ({
           <DefaultPagination count={5} page={page} setPage={setPage} />
         </Stack>
         <TextForm
+          trigger={null}
           setter={setAnswers}
           editSetter={setEdit}
           isEdit={edit}
@@ -140,6 +150,7 @@ const Answer = ({
           editTargetId={targetId}
           unique_id={quest_id}
           type={'answer'}
+          targetRawId={targetRaw}
         />
       </Card>
     </>

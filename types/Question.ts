@@ -8,6 +8,6 @@ export interface IQuestion {
   title: string
   category: number
   recommend: number
-  views: number
+  view: number
   answerList: IAnswer[]
 }
