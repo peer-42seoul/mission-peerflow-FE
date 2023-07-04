@@ -11,7 +11,7 @@ const Page = ({ params }: { params: { id: number } }) => {
   const { setGnb } = useContext(GnbContext)
 
   useEffect(() => {
-    setGnb({ title: '', back: true, add: false })
+    setGnb({ title: null, back: true, add: false })
   }, [])
 
   return (

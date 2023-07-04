@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Pagination } from '@mui/material'
 
 const DefaultPagination = ({
@@ -13,7 +13,7 @@ const DefaultPagination = ({
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
   }
-  return <Pagination count={5} page={page} onChange={handleChange} />
+  return <Pagination count={count} page={page} onChange={handleChange} />
 }
 
 export default DefaultPagination

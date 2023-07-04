@@ -19,13 +19,10 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <meta charSet="UTF-8"></meta>
+        <title>peer-flow</title>
       </head>
       <body className={inter.className}>
         <MainLayout>{children}</MainLayout>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
       </body>
     </html>
   )
