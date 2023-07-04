@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent, Typography, Stack, IconButton } from '@mui/material'
-import Comment from './Comment'
+import CommentQuestion from './CommentQuestion'
 import RecommendIcon from '@mui/icons-material/Recommend'
 import { useCallback, useState, useRef, useEffect } from 'react'
 
@@ -41,7 +41,7 @@ const Question = ({
               {recomments}
             </IconButton>
           </Stack>
-          <Comment questId={questId} type="question" />
+          <CommentQuestion questId={questId} />
         </CardContent>
       </Card>
     </>

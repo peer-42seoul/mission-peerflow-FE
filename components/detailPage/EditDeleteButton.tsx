@@ -14,26 +14,30 @@ const EditDeleteButton = ({
   targetId,
   type,
   targetRawId,
+  trigger,
 }: {
   setter: React.Dispatch<React.SetStateAction<any[]>>
-  edit?: (id: number, targetRawId: number) => void
+  edit?: (id: number, RawId: number) => void
   objs: any[]
   targetId: number
   type: string
   targetRawId: number
+  trigger?: Function
 }) => {
+  console.log('target', targetRawId)
   const [open, setOpen] = useState<boolean>(false)
   const [action, setAction] = useState('')
 
   const handleOpen = (action: string) => {
     setOpen(true)
     setAction(action)
+    if (trigger) trigger()
   }
 
   const handleClose = () => setOpen(false)
 
   const eventDelete = (password: number) => {
-    // const key = type === 'answer'
+    if (!targetRawId) return
     fetch(`http://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
       method: 'POST',
       headers: {
@@ -46,7 +50,6 @@ const EditDeleteButton = ({
       }),
     })
       .then((res) => {
-        console.log(res)
         if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
 
         const newObjs = [...objs]

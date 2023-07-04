@@ -3,7 +3,7 @@
 import { Button, Stack, useMediaQuery } from '@mui/material'
 import { TextField } from '@mui/material'
 import { useEffect, useState, useCallback } from 'react'
-import { IComment } from './Comment'
+import { IComment } from './CommentQuestion'
 import { IAnswer } from '../../types/Answer'
 import dayjs from 'dayjs'
 
@@ -61,7 +61,6 @@ const TextForm = ({
         alert('10자 이하인 닉네임만 가능합니다.')
         return setNickname('')
       }
-      console.log(type, targetRawId, unique_id)
 
       if (isEdit === true) {
         const editComments: IComment = {
@@ -113,9 +112,6 @@ const TextForm = ({
           createdAt: setNow(),
         }
 
-        console.log(unique_id, targetRawId)
-        console.log(type)
-
         if (type === 'answer/comment') {
           fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
             method: 'POST',
@@ -137,6 +133,7 @@ const TextForm = ({
               console.log('ok', res)
               setter((prev) => {
                 const arr = Array.isArray(prev) ? [...prev] : []
+                console.log(arr)
                 return [...arr, newComments]
               })
 
@@ -185,7 +182,7 @@ const TextForm = ({
         }
       }
     },
-    [comment, password, nickname, targetRawId],
+    [comment, password, nickname],
   )
 
   return (

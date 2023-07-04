@@ -9,14 +9,14 @@ import {
 } from '@mui/material'
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
 import DefaultPagination from '../DefaultPagination'
 import { getData } from './detailPageWrap'
 import dayjs from 'dayjs'
 
 export interface IComment {
-  questionCommentId?: number
+  answerCommentId?: number
   nickname: string
   password: string
   content: string
@@ -24,15 +24,14 @@ export interface IComment {
   updatedAt?: string
 }
 
-const Comment = ({
-  type,
+const CommentAnswer = ({
   questId,
   rawkey,
 }: {
-  type: string
   questId: number
   rawkey?: number
 }) => {
+  const type = 'answer'
   const [hidden, setHidden] = useState(true)
   const [edit, setEdit] = useState(false)
   const [page, setPage] = useState(1)
@@ -44,13 +43,17 @@ const Comment = ({
   const [targetRaw, setTargetRaw] = useState(0)
 
   const handleButton = () => {
+    fetchAndSet()
     setHidden(!hidden)
   }
 
   async function fetchAndSet() {
-    const key = type === 'answer' ? rawkey : questId
+    let key: number
+    if (!rawkey) key = questId
+    else key = rawkey
+
     const fetchData = await getData(
-      `${type}/comment?${type}Id=${key}&page=${page - 1}&size=5`,
+      `answer/comment?answerId=${key}&page=${page - 1}&size=5`,
     )
 
     console.log(fetchData.content)
@@ -61,11 +64,14 @@ const Comment = ({
 
   useEffect(() => {
     setTargetRaw(rawkey)
+  }, [])
+
+  useEffect(() => {
     fetchAndSet()
   }, [])
 
   const handleEdit = (id: number, targetRawId: number) => {
-    console.log(targetRawId)
+    if (!targetRawId) return
     setEdit(true)
     setTarget(comments[id])
     setTargeId(id)
@@ -83,7 +89,7 @@ const Comment = ({
                 <Typography>첫 댓글의 주인공이 되보세요!</Typography>
               </CardContent>
               <TextForm
-                trigger={null}
+                trigger={fetchAndSet}
                 setter={setComments}
                 unique_id={questId}
                 type={type + '/comment'}
@@ -125,12 +131,13 @@ const Comment = ({
                           </Typography>
                         </Stack>
                         <EditDeleteButton
+                          trigger={fetchAndSet}
                           objs={comments}
                           setter={setComments}
                           edit={handleEdit}
                           targetId={id}
                           type={type + '/comment'}
-                          targetRawId={comments[id]?.questionCommentId}
+                          targetRawId={comments[id].answerCommentId}
                         />
                       </Stack>
                     </CardContent>
@@ -165,4 +172,4 @@ const Comment = ({
   )
 }
 
-export default Comment
+export default CommentAnswer

@@ -10,7 +10,6 @@ import {
 } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 
-import Comment from './Comment'
 import TextForm from './TextForm'
 import { IAnswer } from '../../types/Answer'
 
@@ -20,14 +19,18 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import DefaultPagination from '../DefaultPagination'
 import CheckIcon from '@mui/icons-material/Check'
 import DefaultPassword from '../DefaultPassword'
+import CommentAnswer from './CommentAnswer'
 
 const Answer = ({
   param,
   quest_id,
+  trigger,
 }: {
   param: IAnswer[]
   quest_id: number
+  trigger: Function
 }) => {
+  const type = 'answer'
   const [answers, setAnswers] = useState<IAnswer[]>([])
 
   const [adopt, setAdopt] = useState<boolean>(false)
@@ -94,12 +97,7 @@ const Answer = ({
                 <CheckCircleOutlineIcon />
                 <Typography>채택풀기</Typography>
               </IconButton>
-              {/* <DefaultPassword /> */}
-              <Comment
-                questId={quest_id}
-                type="answer"
-                rawkey={adoptAnswer.answerId}
-              />
+              <CommentAnswer questId={quest_id} rawkey={adoptAnswer.answerId} />
             </CardContent>
           </Card>
         ) : (
@@ -127,7 +125,7 @@ const Answer = ({
                       setter={setAnswers}
                       targetId={id}
                       edit={handleEdit}
-                      type="answer"
+                      type={type}
                       targetRawId={answers[id].answerId}
                     />
                   </CardContent>
@@ -137,9 +135,8 @@ const Answer = ({
                     <CheckCircleIcon />
                     <Typography>채택하기</Typography>
                   </IconButton>
-                  <Comment
+                  <CommentAnswer
                     questId={quest_id}
-                    type="answer"
                     rawkey={answers[id].answerId}
                   />
                 </CardContent>
@@ -148,14 +145,14 @@ const Answer = ({
           </Box>
         ))}
         <TextForm
-          trigger={null}
+          trigger={trigger}
           setter={setAnswers}
           editSetter={setEdit}
           isEdit={edit}
           editTarget={target}
           editTargetId={targetId}
           unique_id={quest_id}
-          type={'answer'}
+          type={type}
           targetRawId={targetRaw}
         />
       </Card>

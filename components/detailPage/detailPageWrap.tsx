@@ -18,7 +18,9 @@ export async function getData(url: string) {
     if (!res.ok) throw new Error('Failed to load')
 
     const data = res.json()
-    console.log(data)
+
+    console.log('all', data)
+
     return data
   } catch (e) {
     console.log('error: ', e)
@@ -53,7 +55,11 @@ export default function DetailPage({ param }: { param: number }) {
           questId={param}
         />
         <br />
-        <Answer param={data?.answerList} quest_id={param} />
+        <Answer
+          param={data?.answerList}
+          quest_id={param}
+          trigger={fetchAndSet}
+        />
       </Container>
     </>
   )
