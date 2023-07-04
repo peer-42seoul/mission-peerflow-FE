@@ -24,7 +24,15 @@ export interface IComment {
   updatedAt?: string
 }
 
-const Comment = ({ type, questId }: { type: string; questId: number }) => {
+const Comment = ({
+  type,
+  questId,
+  rawkey,
+}: {
+  type: string
+  questId: number
+  rawkey?: number
+}) => {
   const [hidden, setHidden] = useState(true)
   const [edit, setEdit] = useState(false)
   const [page, setPage] = useState(1)
@@ -40,22 +48,24 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
   }
 
   async function fetchAndSet() {
+    const key = type === 'answer' ? rawkey : questId
     const fetchData = await getData(
-      `${type}/comment?${type}Id=${questId}&page=${page - 1}&size=5`,
+      `${type}/comment?${type}Id=${key}&page=${page - 1}&size=5`,
     )
 
-    console.log(fetchData)
     console.log(fetchData.content)
-    console.log(fetchData.totalPage)
+
     setTotalPage(fetchData.totalPage)
     setComments(fetchData.content)
   }
 
   useEffect(() => {
+    setTargetRaw(rawkey)
     fetchAndSet()
   }, [])
 
   const handleEdit = (id: number, targetRawId: number) => {
+    console.log(targetRawId)
     setEdit(true)
     setTarget(comments[id])
     setTargeId(id)
@@ -77,6 +87,7 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
                 setter={setComments}
                 unique_id={questId}
                 type={type + '/comment'}
+                targetRawId={targetRaw}
               />
             </Card>
           ) : (
@@ -119,7 +130,7 @@ const Comment = ({ type, questId }: { type: string; questId: number }) => {
                           edit={handleEdit}
                           targetId={id}
                           type={type + '/comment'}
-                          targetRawId={comments[id].questionCommentId}
+                          targetRawId={comments[id]?.questionCommentId}
                         />
                       </Stack>
                     </CardContent>

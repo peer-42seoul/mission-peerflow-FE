@@ -18,6 +18,7 @@ export async function getData(url: string) {
     if (!res.ok) throw new Error('Failed to load')
 
     const data = res.json()
+    console.log(data)
     return data
   } catch (e) {
     console.log('error: ', e)

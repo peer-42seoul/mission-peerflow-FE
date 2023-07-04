@@ -19,6 +19,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import DefaultPagination from '../DefaultPagination'
 import CheckIcon from '@mui/icons-material/Check'
+import DefaultPassword from '../DefaultPassword'
 
 const Answer = ({
   param,
@@ -28,7 +29,6 @@ const Answer = ({
   quest_id: number
 }) => {
   const [answers, setAnswers] = useState<IAnswer[]>([])
-  const [page, setPage] = useState<number>(0)
 
   const [adopt, setAdopt] = useState<boolean>(false)
   const [adoptAnswer, setAdoptAnswer] = useState<IAnswer | null>(null)
@@ -75,7 +75,7 @@ const Answer = ({
           <Typography variant="h5">답변</Typography>
         </CardContent>
         {adoptAnswer ? (
-          <Card key={100} sx={{ margin: 2, maxWidth: '100%' }}>
+          <Card sx={{ margin: 2, maxWidth: '100%' }}>
             <CheckIcon sx={{ margin: 2, color: '#44ff44' }} />
             <Stack direction={'row'} justifyContent={'space-between'}>
               <CardContent
@@ -94,7 +94,12 @@ const Answer = ({
                 <CheckCircleOutlineIcon />
                 <Typography>채택풀기</Typography>
               </IconButton>
-              <Comment questId={quest_id} type="answer" />
+              {/* <DefaultPassword /> */}
+              <Comment
+                questId={quest_id}
+                type="answer"
+                rawkey={adoptAnswer.answerId}
+              />
             </CardContent>
           </Card>
         ) : (
@@ -132,15 +137,16 @@ const Answer = ({
                     <CheckCircleIcon />
                     <Typography>채택하기</Typography>
                   </IconButton>
-                  <Comment questId={quest_id} type="answer" />
+                  <Comment
+                    questId={quest_id}
+                    type="answer"
+                    rawkey={answers[id].answerId}
+                  />
                 </CardContent>
               </Card>
             )}
           </Box>
         ))}
-        <Stack alignItems={'center'} margin={2}>
-          <DefaultPagination count={5} page={page} setPage={setPage} />
-        </Stack>
         <TextForm
           trigger={null}
           setter={setAnswers}

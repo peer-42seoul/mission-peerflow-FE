@@ -33,6 +33,7 @@ const EditDeleteButton = ({
   const handleClose = () => setOpen(false)
 
   const eventDelete = (password: number) => {
+    // const key = type === 'answer'
     fetch(`http://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
       method: 'POST',
       headers: {

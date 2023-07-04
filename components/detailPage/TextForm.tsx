@@ -61,6 +61,7 @@ const TextForm = ({
         alert('10자 이하인 닉네임만 가능합니다.')
         return setNickname('')
       }
+      console.log(type, targetRawId, unique_id)
 
       if (isEdit === true) {
         const editComments: IComment = {
@@ -87,6 +88,7 @@ const TextForm = ({
         })
           .then((res) => {
             if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
+            console.log(res)
             setter((prev) => {
               const arr = Array.isArray(prev) ? [...prev] : []
               arr[editTargetId] = editComments
@@ -97,7 +99,7 @@ const TextForm = ({
             setPassword('')
 
             editSetter(false)
-            trigger()
+            if (trigger !== null) trigger()
           })
           .catch((e) => {
             console.log(e)
@@ -111,42 +113,79 @@ const TextForm = ({
           createdAt: setNow(),
         }
 
+        console.log(unique_id, targetRawId)
         console.log(type)
 
-        fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: JSON.stringify({
-            type: type,
-            questionId: unique_id,
-            nickname: newComments.nickname,
-            password: newComments.password,
-            content: newComments.content,
-            createdAt: newComments.createdAt,
-          }),
-        })
-          .then((res) => {
-            if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
-            setter((prev) => {
-              const arr = Array.isArray(prev) ? [...prev] : []
-              return [...arr, newComments]
-            })
+        if (type === 'answer/comment') {
+          fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+              type: type,
+              answerId: targetRawId,
+              nickname: newComments.nickname,
+              password: newComments.password,
+              content: newComments.content,
+              createdAt: newComments.createdAt,
+            }),
+          })
+            .then((res) => {
+              if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
+              console.log('ok', res)
+              setter((prev) => {
+                const arr = Array.isArray(prev) ? [...prev] : []
+                return [...arr, newComments]
+              })
 
-            setComment('')
-            setNickname('')
-            setPassword('')
-            if (trigger !== null) trigger()
+              setComment('')
+              setNickname('')
+              setPassword('')
+              if (trigger !== null) trigger()
+            })
+            .catch((e) => {
+              console.log(e)
+              return alert(e)
+            })
+        } else {
+          fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+              type: type,
+              questionId: unique_id,
+              nickname: newComments.nickname,
+              password: newComments.password,
+              content: newComments.content,
+              createdAt: newComments.createdAt,
+            }),
           })
-          .catch((e) => {
-            console.log(e)
-            return alert(e)
-          })
+            .then((res) => {
+              if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
+              console.log('ok', res)
+              setter((prev) => {
+                const arr = Array.isArray(prev) ? [...prev] : []
+                return [...arr, newComments]
+              })
+
+              setComment('')
+              setNickname('')
+              setPassword('')
+              if (trigger !== null) trigger()
+            })
+            .catch((e) => {
+              console.log(e)
+              return alert(e)
+            })
+        }
       }
     },
-    [comment, password, nickname],
+    [comment, password, nickname, targetRawId],
   )
 
   return (
