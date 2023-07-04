@@ -8,9 +8,11 @@ import { useCallback, useState, useRef, useEffect } from 'react'
 const Question = ({
   content,
   recomment,
+  questId,
 }: {
   content: string
   recomment: number
+  questId: number
 }) => {
   const [recomments, setRecomments] = useState<number>(0)
   const check = useRef<Boolean>(false)
@@ -42,7 +44,7 @@ const Question = ({
               {recomments}
             </IconButton>
           </Stack>
-          <Comment />
+          <Comment questId={questId} type="question" />
         </CardContent>
       </Card>
     </>

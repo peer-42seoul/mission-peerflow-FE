@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack, IconButton, Popper, Box, Modal, Button } from '@mui/material'
+import { Stack, IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { useState } from 'react'
@@ -11,12 +11,16 @@ const EditDeleteButton = ({
   setter,
   edit,
   objs,
-  id,
-}: {
+  targetId,
+}: // type,
+// uniqueId,
+{
   setter: React.Dispatch<React.SetStateAction<any[]>>
   edit?: (param: number) => void
   objs: any[]
-  id: number
+  targetId: number
+  // type: string
+  // uniqueId: number
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [action, setAction] = useState('')
@@ -30,13 +34,13 @@ const EditDeleteButton = ({
 
   const eventDelete = () => {
     const newObjs = [...objs]
-    newObjs.splice(id, 1)
+    newObjs.splice(targetId, 1)
     setter(newObjs)
     handleClose()
   }
 
   const eventEdit = () => {
-    edit(id)
+    edit(targetId)
     handleClose()
   }
 
