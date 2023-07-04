@@ -7,6 +7,7 @@ import { Container } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import GnbContext from '../../hooks/GnbContext'
 import { IQuestion } from '../../types/Question'
+import NotFound from '../NotFound'
 
 export async function getData(url: string) {
   try {
@@ -30,9 +31,13 @@ export async function getData(url: string) {
 export default function DetailPage({ param }: { param: number }) {
   const { setGnb } = useContext(GnbContext)
   const [data, setData] = useState<IQuestion>(null)
+  const [emptiness, setEmptiness] = useState(false)
 
   async function fetchAndSet() {
     const fetchData = await getData(`question/${param}`)
+    if (!fetchData) {
+      setEmptiness(true)
+    }
     setData(fetchData)
     console.log(data?.answerList)
   }
@@ -43,21 +48,24 @@ export default function DetailPage({ param }: { param: number }) {
 
   useEffect(() => {
     fetchAndSet()
-    console.log(data)
   }, [])
 
   return (
     <>
-      <Container>
-        <PageInfo param={data} qid={param} />
-        <Question
-          content={data?.content}
-          recomment={data?.recommend}
-          questId={param}
-        />
-        <br />
-        <Answer param={data?.answerList} quest_id={param} />
-      </Container>
+      {emptiness ? (
+        <NotFound />
+      ) : (
+        <Container>
+          <PageInfo param={data} qid={param} />
+          <Question
+            content={data?.content}
+            recomment={data?.recommend}
+            questId={param}
+          />
+          <br />
+          <Answer param={data?.answerList} quest_id={param} />
+        </Container>
+      )}
     </>
   )
 }
