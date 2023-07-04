@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from 'react'
 import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
 import axios, { AxiosResponse } from 'axios'
 import { WritingForm } from '../../../types/WritingForm'
+import DeleteAuthModal from '../../../components/DeleteAuthModal'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -30,23 +31,30 @@ const style = {
 
 // 임시로 questionId을 활용해 api 테스트
 
-const questionId = 42
+const questionId = 4
 
-const Page = () => {
+const Page = ({ question }: number) => {
   const [questionData, setQuestionData] = useState({})
-  const [title, changeTitle] = useInput('')
-  const [nickname, changeNickname] = useInput('')
-  const [password, changePassword] = useInput('')
-  const [content, changeContent] = useInput('')
+  const [title, changeTitle, setTitle] = useInput('')
+  const [nickname, changeNickname, setNickname] = useInput('')
+  const [password, changePassword, setPassword] = useInput('')
+  const [content, changeContent, setContent] = useInput('')
   const [name, setName] = useState('')
   const [showError, setShowError] = useState(false)
+
+  // const [category, setCategory] = useState<WritingForm['category'][]>([
+  //   { value: 'minishell', name: 'Minishell' },
+  //   { value: 'minirt', name: 'Minirt' },
+  //   { value: 'fdf', name: 'Fdf' },
+  // ])
   const [category, setCategory] = useState<WritingForm['category'][]>([
-    { value: 1, name: 'Minishell' },
-    { value: 2, name: 'Minirt' },
-    { value: 3, name: 'Fdf' },
+    { value: 'minishell', name: 'Minishell' },
+    { value: 'minirt', name: 'Minirt' },
+    { value: 'fdf', name: 'Fdf' },
   ])
   const [open, setOpen] = useState(false)
   const [action, setAction] = useState('')
+
   const handleOpen = (action) => {
     setAction(action)
     setOpen(true)
@@ -58,53 +66,62 @@ const Page = () => {
   }, [])
 
   const deleteHandler = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    axios.delete(`/v1/question/${questionId}`)
+    axios.delete(`http://paulryu9309.ddns.net/v1/question/${questionId}`)
   }, [])
 
-  const submitHnadler = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      if (title.trim().length === 0) {
-        setShowError(true)
-        return
-      } else if (nickname.trim().length === 0) {
-        setShowError(true)
-        return
-      } else if (password.trim().length === 0) {
-        setShowError(true)
-        return
-      } else if (content.trim().length === 0) {
-        setShowError(true)
-        return
-      }
+  const submitHnadler = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log('work 1')
 
-      setQuestionData((prevQuestionData) => {
-        const updatedQuestionData = {
-          ...prevQuestionData,
-          title,
-          nickname,
-          password,
-          content,
-          category: category.find((item) => item.value.toString() === name)
-            ?.value,
-        }
-        return updatedQuestionData
-      })
-      updateQuestion({ questionId: questionId, data: questionData })
-    },
-    [title, nickname, password, content, category],
-  )
+    // if (title.trim().length === 0) {
+    //   setShowError(true)
+    //   console.log('work 1=1')
+
+    //   return
+    // } else if (nickname.trim().length === 0) {
+    //   console.log('work 1=2')
+
+    //   setShowError(true)
+    //   return
+    // } else if (password.length === 0) {
+    //   console.log('work 1=3')
+
+    //   setShowError(true)
+    //   return
+    // } else if (content.trim().length === 0) {
+    //   setShowError(true)
+    //   return
+    // }
+    // console.log('work 2')
+
+    setQuestionData((prevQuestionData) => {
+      const updatedQuestionData = {
+        ...prevQuestionData,
+        type: 'question',
+        title,
+        nickname,
+        password,
+        content,
+        category: category.find((item) => item.value === name)?.value,
+      }
+      return updatedQuestionData
+    })
+    console.log('work 3')
+
+    updateQuestion({ questionId: questionId, data: questionData })
+  }, [])
 
   useEffect(() => {
     axios
-      .get(`/v1/question${questionId}`)
-      .then((res: string) => {
+      .get(`http://paulryu9309.ddns.net/v1/question/${questionId}`)
+      .then((res: any) => {
         console.log(`res : ${res}`)
-        changeTitle(res.title)
-        changeNickname(res.nickname)
-        changePassword(res.password)
-        changeContent(res.content)
-        setCategory(res.value)
+        console.log(`data : ${JSON.stringify(res.data)}`)
+        setTitle(res.data.title)
+        setNickname(res.data.nickname)
+        setPassword(res.data.password)
+        setContent(res.data.content)
+        setCategory(res.data.category)
       })
       .catch((err) => {
         console.log(`err ${err}`)
@@ -122,7 +139,7 @@ const Page = () => {
         >
           <TextField
             id="standard-basic"
-            label="제목"
+            placeholder="제목"
             fullWidth
             onChange={changeTitle}
             defaultValue={title}
@@ -139,11 +156,11 @@ const Page = () => {
               label="name"
               onChange={categoryHandler}
             >
-              {category.map((option) => (
+              {/* {category.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.name}
                 </MenuItem>
-              ))}
+              ))} */}
             </Select>
           </FormControl>
           <Stack
@@ -155,6 +172,7 @@ const Page = () => {
           >
             <Stack width={'45%'}>
               <TextField
+                id="standard-basic"
                 type="text"
                 placeholder="닉네임"
                 name="nickname"
@@ -168,6 +186,7 @@ const Page = () => {
             </Stack>
             <Stack width={'45%'}>
               <TextField
+                id="standard-basic"
                 type="password"
                 placeholder="비밀번호"
                 name="password"
@@ -181,6 +200,7 @@ const Page = () => {
             </Stack>
           </Stack>
           <TextField
+            placeholder="내용을 입력해주세요."
             id="outlined-multiline-static"
             multiline
             rows={4}
@@ -204,19 +224,11 @@ const Page = () => {
             >
               수정하기
             </Button>
-            <Button
-              color="error"
-              type="button"
-              variant="outlined"
-              onClick={() => !showError && handleOpen('삭제')}
-            >
-              삭제하기
-            </Button>
           </Stack>
           <DeleteAndEditModal
             open={open}
             handleClose={handleClose}
-            evtHandler={action === '수정' ? submitHnadler : deleteHandler}
+            evtHandler={action === '수정' && submitHnadler}
             action={action}
           />
         </Stack>

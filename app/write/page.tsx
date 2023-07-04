@@ -14,6 +14,7 @@ import axios, { AxiosResponse } from 'axios'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import useInput from '../../hooks/useInput'
 import GnbContext from '../../hooks/GnbContext'
+import { WritingForm } from '../../types/WritingForm'
 
 const Page = () => {
   const { setGnb } = useContext(GnbContext)
@@ -26,9 +27,9 @@ const Page = () => {
   const [password, changePassword] = useInput('')
   const [content, changeContent] = useInput('')
   const [category, setCategory] = useState<WritingForm['category'][]>([
-    { value: 1, name: 'Minishell' },
-    { value: 2, name: 'Minirt' },
-    { value: 3, name: 'Fdf' },
+    { value: 'minishell', name: 'Minishell' },
+    { value: 'minirt', name: 'Minirt' },
+    { value: 'fdf', name: 'Fdf' },
   ])
 
   const [name, setName] = useState('')
@@ -62,7 +63,7 @@ const Page = () => {
       )
 
       axios
-        .post('/v1/question', {
+        .post('http://paulryu9309.ddns.net/v1/question', {
           type: 'question',
           title,
           nickname,
@@ -124,7 +125,7 @@ const Page = () => {
             <Stack width={'45%'}>
               <TextField
                 type="text"
-                placeholder="닉네임"
+                label="닉네임"
                 name="nickname"
                 onChange={changeNickname}
                 style={{ width: '100%' }}
@@ -138,7 +139,7 @@ const Page = () => {
             <Stack width={'45%'}>
               <TextField
                 type="password"
-                placeholder="비밀번호"
+                label="비밀번호"
                 name="password"
                 onChange={changePassword}
                 style={{ width: '100%' }}
@@ -154,7 +155,7 @@ const Page = () => {
             id="outlined-multiline-static"
             multiline
             rows={4}
-            // defaultValue={title}
+            placeholder="내용을 입력해주세요."
             fullWidth
             onChange={changeContent}
           />
