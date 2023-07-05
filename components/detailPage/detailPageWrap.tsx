@@ -11,7 +11,7 @@ import NotFound from '../NotFound'
 
 export async function getData(url: string) {
   try {
-    const urlPath = 'http://paulryu9309.ddns.net:8080/v1/'
+    const urlPath = 'http://paulryu9309.ddns.net:80/v1/'
     const test = 'http://localhost:80/v1/'
 
     const res = await fetch(urlPath + url)

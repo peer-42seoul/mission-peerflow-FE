@@ -72,7 +72,7 @@ const TextForm = ({
           updatedAt: setNow(),
         }
 
-        fetch(`http://paulryu9309.ddns.net:8080/v1/${type}/${targetRawId}`, {
+        fetch(`http://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ const TextForm = ({
         }
 
         if (type === 'answer/comment') {
-          fetch(`http://paulryu9309.ddns.net:8080/v1/${type}`, {
+          fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ const TextForm = ({
               return alert(e)
             })
         } else {
-          fetch(`http://paulryu9309.ddns.net:8080/v1/${type}`, {
+          fetch(`http://paulryu9309.ddns.net:80/v1/${type}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
