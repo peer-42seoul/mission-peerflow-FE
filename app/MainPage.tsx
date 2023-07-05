@@ -43,13 +43,13 @@ const MainPage = () => {
     try {
       let url = !(category === 'search')
         ? category
-          ? `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pagingIndex=${
+          ? `http://paulryu9309.ddns.net:8080/v1?category=${category}&sort=${sort}&pagingIndex=${
               page[category ? category : 'main'] - 1
             }&pagingSize=${5}`
-          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pagingIndex=${
+          : `http://paulryu9309.ddns.net:8080/v1?sort=${sort}&pagingIndex=${
               page[category ? category : 'main'] - 1
             }&pagingSize=${5}`
-        : `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
+        : `http://paulryu9309.ddns.net:8080/v1/search?title=${title}&sort=${sort}`
 
       const response = await fetch(url)
       if (!response.ok) {

@@ -69,7 +69,7 @@ const Page = ({ params }: { params: { id: number } }) => {
 
   useEffect(() => {
     axios
-      .get(`http://paulryu9309.ddns.net/v1/question/${params?.id}`)
+      .get(`http://paulryu9309.ddns.net:8080/v1/question/${params?.id}`)
       .then((res: any) => {
         setTitle(res.data.title)
         setNickname(res.data.nickname)

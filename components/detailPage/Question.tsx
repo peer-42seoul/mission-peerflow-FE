@@ -23,7 +23,7 @@ const Question = ({
 
   const handleRecomments = useCallback(() => {
     setRecomments((prev) => prev + 1)
-    fetch(`http://paulryu9309.ddns.net:80/v1/question/${questId}/recommend`, {
+    fetch(`http://paulryu9309.ddns.net:8080/v1/question/${questId}/recommend`, {
       method: 'POST',
     })
   }, [])

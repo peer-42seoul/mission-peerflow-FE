@@ -5,7 +5,7 @@ const updateQuestion = async (questionId, data) => {
     console.log(`데이터는 ? ${JSON.stringify(data)}`)
 
     await axios.put(
-      `http://paulryu9309.ddns.net/v1/question/${questionId}`,
+      `http://paulryu9309.ddns.net:8080/v1/question/${questionId}`,
       data,
     )
   } catch (error) {
