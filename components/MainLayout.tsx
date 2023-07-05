@@ -37,7 +37,7 @@ const Category = ({ children, setGnb, gnb }) => {
   const drawer = (
     <div>
       <Toolbar>
-        <Link href={'/'}>
+        <Link href="/">
           <Typography
             onClick={() => {
               setGnb({ title: '전체 보기', add: true, back: false })
@@ -77,7 +77,7 @@ const Category = ({ children, setGnb, gnb }) => {
     typeof window !== 'undefined' ? () => window.document.body : undefined
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Stack direction={'row'}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -94,16 +94,15 @@ const Category = ({ children, setGnb, gnb }) => {
             justifyContent={'space-between'}
           >
             {gnb.back ? (
-              <Link href={'/'}>
-                <IconButton
-                  edge="start"
-                  onClick={() =>
-                    setGnb({ title: '전체 보기', back: false, add: true })
-                  }
-                >
-                  <ArrowBackIosNew sx={{ color: 'white' }} />
-                </IconButton>
-              </Link>
+              <IconButton
+                edge="start"
+                onClick={() => {
+                  setGnb({ title: '전체 보기', back: false, add: true })
+                  router.back()
+                }}
+              >
+                <ArrowBackIosNew sx={{ color: 'white' }} />
+              </IconButton>
             ) : (
               <IconButton
                 color="inherit"
@@ -118,7 +117,7 @@ const Category = ({ children, setGnb, gnb }) => {
             <Typography noWrap component="div" color={'white'}>
               {gnb.title}
             </Typography>
-            <Box sx={!gnb.add && { visibility: 'hidden' }}>
+            <Box sx={{ visibility: `${!gnb.add && 'hidden'}` }}>
               <Link href={'/write'}>
                 <IconButton>
                   <AddOutlinedIcon sx={{ color: 'white' }} />
@@ -177,7 +176,7 @@ const Category = ({ children, setGnb, gnb }) => {
         <Toolbar />
         {children}
       </Box>
-    </Box>
+    </Stack>
   )
 }
 
