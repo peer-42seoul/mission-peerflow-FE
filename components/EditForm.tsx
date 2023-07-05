@@ -1,5 +1,3 @@
-import updateQuestion from '@/api/updateQuestion'
-import useInput from '@/hooks/useInput'
 import {
   Button,
   FormControl,
@@ -10,11 +8,14 @@ import {
   Stack,
   TextField,
   Typography,
+  SelectChangeEvent,
 } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { WritingForm } from '../types/WritingForm'
 import { Modal } from '@mui/base'
 import { Box } from '@mui/system'
+import useInput from '../hooks/useInput'
+import updateQuestion from '../api/updateQuestion'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -28,7 +29,7 @@ const style = {
   p: 4,
 }
 
-const EditForm = ({ questionId }: number) => {
+const EditForm = ({ questionId }: { questionId: number }) => {
   const [questionData, setQuestionData] = useState({})
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
@@ -174,7 +175,7 @@ const EditForm = ({ questionId }: number) => {
                 정말로 삭제하시겠습니까?
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Button variant="contained" onClick={}>
+                <Button variant="contained" onClick={handleClose}>
                   네
                 </Button>
                 <Button variant="outlined" onClick={handleClose}>

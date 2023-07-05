@@ -1,11 +1,16 @@
 'use client'
 
-import { Button, CardContent, Stack, Typography } from '@mui/material'
+import {
+  Button,
+  CardContent,
+  Pagination,
+  Stack,
+  Typography,
+} from '@mui/material'
 import Card from '@mui/material/Card'
 import TextForm from './TextForm'
 import React, { useCallback, useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
-import DefaultPagination from '../DefaultPagination'
 import { getData } from './detailPageWrap'
 import dayjs from 'dayjs'
 
@@ -50,9 +55,7 @@ const CommentAnswer = ({
       `answer/comment?answerId=${key}&page=${page - 1}&size=5`,
     )
 
-    console.log(fetchData.content)
-
-    setTotalPage(fetchData.totalPage)
+    setTotalPage(fetchData.totalPages)
     setComments(fetchData.content)
   }
 
@@ -70,6 +73,10 @@ const CommentAnswer = ({
     setTarget(comments[id])
     setTargeId(id)
     setTargetRaw(targetRawId)
+  }
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
   }
 
   return (
@@ -123,10 +130,10 @@ const CommentAnswer = ({
               ))}
             </>
             <Stack alignItems={'center'} margin={2}>
-              <DefaultPagination
+              <Pagination
                 count={totalPage}
                 page={page}
-                setPage={setPage}
+                onChange={handleChange}
               />
             </Stack>
             <TextForm

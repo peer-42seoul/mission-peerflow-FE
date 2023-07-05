@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const updateQuestion = async ({ questionId, data }) => {
+const updateQuestion = async (questionId, data) => {
   try {
     console.log(`데이터는 ? ${JSON.stringify(data)}`)
 

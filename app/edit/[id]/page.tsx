@@ -58,10 +58,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         category,
       }
       try {
-        await updateQuestion({
-          questionId: params?.id,
-          data: updatedQuestionData,
-        })
+        await updateQuestion(params?.id, updatedQuestionData)
         router.push('/')
       } catch (err) {
         alert('수정에 실패하였습니다.')

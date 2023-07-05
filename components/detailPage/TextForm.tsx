@@ -50,9 +50,10 @@ const TextForm = ({
   }, [isEdit, editTarget])
 
   const handleComments = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.FormEvent) => {
       e.preventDefault()
-      if (e.nativeEvent.isComposing) return
+      const event = e.nativeEvent as InputEvent
+      if (event.isComposing) return
 
       if (!nickname) return alert('닉네임을 작성해주세요')
       if (!password) return alert('비밀번호를 입력해주세요')

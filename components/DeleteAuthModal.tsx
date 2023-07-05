@@ -1,5 +1,5 @@
 import { Modal } from '@mui/base'
-import { Box, Typography, Button, Stack, TextField } from '@mui/material'
+import { Box, Button, Stack, TextField } from '@mui/material'
 import React, { useCallback } from 'react'
 import useInput from '../hooks/useInput'
 import axios from 'axios'
@@ -37,7 +37,7 @@ const DeleteAuthModal = ({ open, handleClose, questionId }) => {
   const [password, changePassword] = useInput('')
 
   const deleteHandler = useCallback(
-    (e: MouseEvent<HTMLButtonElement>) => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       axios
         .post(`http://paulryu9309.ddns.net/v1/question/${questionId}`, {
           type: 'question',
