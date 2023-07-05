@@ -2,20 +2,10 @@
 
 import updateQuestion from '../../../api/updateQuestion'
 import useInput from '../../../hooks/useInput'
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-} from '@mui/material'
+import { Button, Stack, TextField } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import DeleteAndEditModal from '../../../components/DeleteAndEditModal'
-import axios, { AxiosResponse } from 'axios'
-import { WritingForm } from '../../../types/WritingForm'
-import DeleteAuthModal from '../../../components/DeleteAuthModal'
+import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
 const style = {
@@ -30,32 +20,22 @@ const style = {
   p: 4,
 }
 
-// 임시로 questionId을 활용해 api 테스트
-
-// const questionId = 8
-
 const Page = ({ params }: { params: { id: number } }) => {
-  console.log('param : ', params)
   const router = useRouter()
   const [title, changeTitle, setTitle] = useInput('')
   const [nickname, changeNickname, setNickname] = useInput('')
   const [password, changePassword, setPassword] = useInput('')
   const [content, changeContent, setContent] = useInput('')
   const [showError, setShowError] = useState(false)
-
-  const [category, setCategory] = useState<WritingForm['category'][]>([
-    { value: 'minishell', name: 'Minishell' },
-    { value: 'minirt', name: 'Minirt' },
-    { value: 'fdf', name: 'Fdf' },
-  ])
+  const [category, setCategory] = useState('')
   const [open, setOpen] = useState(false)
   const [action, setAction] = useState('')
 
   const handleOpen = (action) => {
     setAction(action)
-    setOpen(true)
+    setOpen(!open)
   }
-  const handleClose = () => setOpen(false)
+  const handleClose = () => setOpen(!open)
 
   const submitHandler = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,7 +64,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         })
         router.push('/')
       } catch (err) {
-        console.log(err)
+        alert('수정에 실패하였습니다.')
       }
     },
     [password, content],
@@ -187,7 +167,7 @@ const Page = ({ params }: { params: { id: number } }) => {
             <Button
               type="button"
               variant="outlined"
-              onClick={() => showError === false && handleOpen('수정')}
+              onClick={() => handleOpen('수정')}
             >
               수정하기
             </Button>

@@ -15,10 +15,11 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import useInput from '../../hooks/useInput'
 import GnbContext from '../../hooks/GnbContext'
 import { WritingForm } from '../../types/WritingForm'
+import { useRouter } from 'next/navigation'
 
 const Page = () => {
   const { setGnb } = useContext(GnbContext)
-
+  const router = useRouter()
   useEffect(() => {
     setGnb({ title: '새 글', back: true, add: false })
   }, [])
@@ -72,9 +73,10 @@ const Page = () => {
           category: category.find((item) => item.value === name)?.value,
         })
         .then((res: AxiosResponse<any>) => {
-          console.log(`res : ${res}`)
+          router.push('/')
         })
         .catch((err) => {
+          alert('글 작성에 실패하였습니다.')
           console.log(`err ${err}`)
         })
     },
