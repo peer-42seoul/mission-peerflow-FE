@@ -51,10 +51,6 @@ const MainPage = () => {
             }&pagingSize=${5}`
         : `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
 
-      console.log('url', url)
-      console.log('gnb', gnb)
-      console.log('category', category)
-
       const response = await fetch(url)
       if (!response.ok) {
         console.log('Failed to fetch data')

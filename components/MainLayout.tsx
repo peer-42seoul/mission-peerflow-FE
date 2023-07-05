@@ -94,16 +94,15 @@ const Category = ({ children, setGnb, gnb }) => {
             justifyContent={'space-between'}
           >
             {gnb.back ? (
-              <Link href={'/'}>
-                <IconButton
-                  edge="start"
-                  onClick={() =>
-                    setGnb({ title: '전체 보기', back: false, add: true })
-                  }
-                >
-                  <ArrowBackIosNew sx={{ color: 'white' }} />
-                </IconButton>
-              </Link>
+              <IconButton
+                edge="start"
+                onClick={() => {
+                  setGnb({ title: '전체 보기', back: false, add: true })
+                  router.back()
+                }}
+              >
+                <ArrowBackIosNew sx={{ color: 'white' }} />
+              </IconButton>
             ) : (
               <IconButton
                 color="inherit"
