@@ -1,12 +1,13 @@
-export interface Question {
-  question_id: number
-  title: string
-  content: string
-  category: number
-  password: string
+import { IAnswer } from './Answer'
+
+export interface IQuestion {
   nickname: string
-  recomment: number
-  views: number
-  created: string
-  updated?: string
+  content: string
+  createdAt: string
+  updatedAt?: string
+  title: string
+  category: number
+  recommend: number
+  view: number
+  answerList: IAnswer[]
 }

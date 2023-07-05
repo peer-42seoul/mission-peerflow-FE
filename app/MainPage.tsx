@@ -1,155 +1,90 @@
 'use client'
 import {
-  Box,
-  CardContent,
-  MenuItem,
-  Pagination,
-  Select,
-  SelectChangeEvent,
-  Typography,
-  Card,
-  Chip,
   TextField,
   IconButton,
   InputAdornment,
-  FormControl,
   Stack,
   Container,
-  Tooltip,
+  Skeleton,
+  Box,
 } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-import Link from 'next/link'
-import RecommendIcon from '@mui/icons-material/Recommend'
-import PageviewIcon from '@mui/icons-material/Pageview'
 import GnbContext from '../hooks/GnbContext'
 import DefaultPagination from '../components/DefaultPagination'
+import DefaultDropdown from './DefaultDropdown'
+import DefaultCard from './DefaultCard'
 
-const DefaultDropdown = () => {
-  const [sort, setSort] = useState<'recent' | 'view' | 'recommend'>('recent')
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSort(event.target.value as 'recent' | 'view' | 'recommend')
-  }
-  return (
-    <FormControl size="small">
-      <Select
-        sx={{ minWidth: 80 }}
-        id="post-sort"
-        value={sort}
-        onChange={handleChange}
-      >
-        <MenuItem value={'recent'}>최신순</MenuItem>
-        <MenuItem value={'view'}>조회순</MenuItem>
-        <MenuItem value={'recommend'}>추천순</MenuItem>
-      </Select>
-    </FormControl>
-  )
-}
-
-const DefaultCard = ({ data }) => {
-  const card = (
-    <React.Fragment>
-      <CardContent sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
-        <Box>
-          <Chip label={data?.category} />
-        </Box>
-        <Link href={`/detail/1`}>
-          <Tooltip title={data.title} arrow>
-            <Typography
-              variant="h5"
-              fontWeight={'bold'}
-              sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitLineClamp: '2',
-                WebkitBoxOrient: 'vertical',
-              }}
-            >
-              <strong style={{ color: 'skyblue' }}>Q. </strong>
-              {data?.title}
-            </Typography>
-          </Tooltip>
-        </Link>
-        <Stack spacing={1} direction={'row'} justifyContent={'space-between'}>
-          <Typography variant="body2"> {data?.nickname}</Typography>
-          <Typography color="text.secondary" variant="body2" pr={1}>
-            {data?.created}
-          </Typography>
-        </Stack>
-        <Link href={`/detail/1`}>
-          <Typography
-            sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: '2',
-              WebkitBoxOrient: 'vertical',
-            }}
-            variant="body2"
-            color="text.secondary"
-            maxHeight={40}
-          >
-            {data.content}
-          </Typography>
-        </Link>
-        <Stack
-          direction={'row'}
-          spacing={1}
-          my={1}
-          margin={0}
-          padding={0}
-          fontSize={'12px'}
-        >
-          <RecommendIcon />
-          <span>{data?.recomment}</span>
-          <PageviewIcon viewBox="조회수" />
-          <span>{data?.views}</span>
-        </Stack>
-      </CardContent>
-    </React.Fragment>
-  )
-
-  return (
-    <Box sx={{ minWidth: 275 }}>
-      <Card variant="outlined">{card}</Card>
-    </Box>
-  )
+export type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
+export type Sort = 'lastest' | 'views' | 'recommendations'
+export type Page = {
+  main: number
+  minishell: number
+  ft_irc: number
+  minirt: number
 }
 
 const MainPage = () => {
-  const { setGnb } = useContext(GnbContext)
-  const [page, setPage] = useState(1)
+  const { gnb } = useContext(GnbContext)
+  const [page, setPage] = useState<Page>({
+    main: 1,
+    minishell: 1,
+    ft_irc: 1,
+    minirt: 1,
+  })
+  const [data, setData] = useState<Result>(null)
+  const [error, setError] = useState(false)
+  const [category, setCategory] = useState<Category>(null)
+  const [sort, setSort] = useState<Sort>('lastest')
+  const [title, setTitle] = useState<string>('')
+  const [search, setSearch] = useState<boolean>(false)
+
+  const fetchData = async () => {
+    try {
+      let url = !(category === 'search')
+        ? category
+          ? `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pagingIndex=${
+              page[category ? category : 'main'] - 1
+            }&pagingSize=${5}`
+          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pagingIndex=${
+              page[category ? category : 'main'] - 1
+            }&pagingSize=${5}`
+        : `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
+
+      const response = await fetch(url)
+      if (!response.ok) {
+        console.log('Failed to fetch data')
+        return
+      }
+      const data = await response.json()
+      if (!data) {
+        console.log('Invalid data received')
+        return
+      }
+      setData(data)
+    } catch (error) {
+      console.error(error)
+      setError(true)
+    }
+  }
 
   useEffect(() => {
-    setGnb({ title: '전체 보기', back: false, add: true })
-  }, [])
+    setCategory(
+      !search ? (gnb.title === '전체 보기' ? null : gnb.title) : 'search',
+    )
+    fetchData()
+    if (search) {
+      setSearch(false)
+    }
+  }, [category, page, gnb, sort])
 
-  const datas = [
-    {
-      title:
-        'minishell minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
-      content:
-        'minishell 너무 어려워요 minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
-      category: 0,
-      nickname: 'nickname',
-      recomment: 1,
-      views: 2,
-      created: '2023-06-23 12:17',
-    },
-    {
-      title:
-        'minishell2 minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
-      content:
-        'minishell 너무 어려워요2 minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요minishell 너무 어려워요',
-      category: 0,
-      nickname: 'nickname',
-      recomment: 2,
-      views: 2,
-      created: '2023-06-23 12:17',
-    },
-  ]
+  if (!data && error)
+    return (
+      <Stack direction={'row'} justifyContent={'center'} width={'100%'}>
+        <Box>문제가 발생했습니다</Box>
+      </Stack>
+    )
+  if (!data) return <Skeleton variant="text" />
   return (
     <Container sx={{ display: 'flex', gap: 1, flexDirection: 'column' }}>
       <Stack justifyContent={'space-between'} direction="row" mt={1}>
@@ -158,23 +93,43 @@ const MainPage = () => {
           type="search"
           placeholder="제목 검색"
           size={'small'}
+          onChange={(e) => {
+            setTitle(e.target.value)
+          }}
+          value={title}
           InputProps={{
             endAdornment: (
               <InputAdornment position={'end'}>
-                <IconButton>
+                <IconButton
+                  onClick={() => {
+                    setCategory('search')
+                    setSearch(true)
+                  }}
+                >
                   <SearchOutlinedIcon />
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
-        <DefaultDropdown />
+        <DefaultDropdown setSort={setSort} sort={sort} />
       </Stack>
-      {datas?.map((item: Post) => (
-        <DefaultCard data={item} key={item.title} />
-      ))}
+      {data?.content?.length ? (
+        data?.content.map((item: Post) => {
+          return <DefaultCard data={item} key={item.questionId} />
+        })
+      ) : (
+        <Stack direction={'row'} justifyContent={'center'} width={'100%'}>
+          <Box sx={{ marginTop: '4px' }}>게시글이 없습니다</Box>
+        </Stack>
+      )}
       <Stack justifyContent={'center'} direction="row" m={1}>
-        <DefaultPagination count={5} page={page} setPage={setPage} />
+        <DefaultPagination
+          count={data?.totalPages}
+          page={page}
+          setPage={setPage}
+          category={category}
+        />
       </Stack>
     </Container>
   )

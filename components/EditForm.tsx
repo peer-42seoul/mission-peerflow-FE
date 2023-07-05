@@ -1,111 +1,106 @@
-import updateQuestion from '@/api/updateQuestion'
-import useInput from '@/hooks/useInput'
 import {
   Button,
   FormControl,
+  Container,
   InputLabel,
   MenuItem,
   Select,
   Stack,
-  TextareaAutosize,
+  TextField,
+  Typography,
+  SelectChangeEvent,
 } from '@mui/material'
-import axios from 'axios'
-import { FormEvent, useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
+import { WritingForm } from '../types/WritingForm'
+import { Modal } from '@mui/base'
+import { Box } from '@mui/system'
+import useInput from '../hooks/useInput'
+import updateQuestion from '../api/updateQuestion'
 
-const EditForm = ({ questionId }: number) => {
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+}
+
+const EditForm = ({ questionId }: { questionId: number }) => {
+  const [questionData, setQuestionData] = useState({})
   const [title, changeTitle] = useInput('')
   const [nickname, changeNickname] = useInput('')
   const [password, changePassword] = useInput('')
   const [mainText, changeMainText] = useInput('')
-  const [option, setOptions] = useState<Options[]>([
-    { value: 1, name: '자유 게시판' },
-    { value: 2, name: '정보 게시판' },
-    { value: 3, name: '42 게시판' },
-  ])
   const [name, setName] = useState('')
-
   const [showError, setShowError] = useState(false)
+  const [category, setCategory] = useState<WritingForm['category'][]>([
+    { value: 1, name: 'Minishell' },
+    { value: 2, name: 'Minirt' },
+    { value: 3, name: 'Fdf' },
+  ])
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
-  const optionHandler = useCallback((e: SelectChangeEvent) => {
-    setName(e.target.value as string)
+  const categoryHandler = useCallback((e: SelectChangeEvent) => {
+    setName(e.target.value)
   }, [])
 
-  // const submitHnadler = useCallback(
-  //   (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault()
-  //     if (title.trim().length === 0) {
-  //       setShowError(true)
-  //       return
-  //     } else if (nickname.trim().length === 0) {
-  //       setShowError(true)
-  //       return
-  //     } else if (password.trim().length === 0) {
-  //       setShowError(true)
-  //       return
-  //     } else if (mainText.trim().length === 0) {
-  //       setShowError(true)
-  //       return
-  //     }
-  //     // console.log(
-  //     //   `Data: ${title}, ${
-  //     //     option.find((item) => item.value === name)?.value
-  //     //   }, ${nickname}, ${password}, ${mainText}`,
-  //     // )
+  //delete 구현해야함
+  // const deleteHandler = useCallback(
+  //   (e: MouseEvent<HTMLButtonElement>) => {},
 
-  //     axios
-  //       .post('/v1/question', {
-  //         title,
-  //         nickname,
-  //         password,
-  //         mainText,
-  //         option: option.find((item) => item.value === name)?.value,
-  //       })
-  //       .then((res: AxiosResponse<any>) => {
-  //         console.log(`res : ${res}`)
-  //       })
-  //       .catch((err) => {
-  //         console.log(`err ${err}`)
-  //       })
-  //   },
-  //   [title, nickname, password, mainText, option],
+  //   [],
   // )
-  const [question, setQuestion] = useState(null)
-
-  useEffect(() => {
-    const sendData = async () => {
-      try {
-        const response = await axios.get(`/v1/question/${questionId}`)
-        setQuestion(response.data)
-      } catch (error) {
-        console.error('Failed to fetch question data:', error)
+  const submitHnadler = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      if (title.trim().length === 0) {
+        setShowError(true)
+        return
+      } else if (nickname.trim().length === 0) {
+        setShowError(true)
+        return
+      } else if (password.trim().length === 0) {
+        setShowError(true)
+        return
+      } else if (mainText.trim().length === 0) {
+        setShowError(true)
+        return
       }
-    }
-
-    sendData()
-  }, [questionId])
-
-  const submitHnadler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    // 수정된 데이터를 구성합니다.
-    const updatedData = {
-      // 필요한 데이터를 구성합니다.
-    }
-    updateQuestion(questionId, updatedData)
-  }
+      setQuestionData({
+        title,
+        nickname,
+        password,
+        mainText,
+        category: category.find((item) => item.value === name)?.value,
+      })
+      updateQuestion(questionId, questionData)
+    },
+    [title, nickname, password, mainText, category],
+  )
 
   return (
-    <>
-      <Stack spacing={2}>
-        <form onSubmit={submitHnadler}>
-          <input
-            type="text"
-            placeholder="제목"
-            name="title"
+    <Container>
+      <form onSubmit={submitHnadler}>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={2}
+        >
+          <TextField
+            id="standard-basic"
+            label="제목"
+            fullWidth
             onChange={changeTitle}
           />
           {showError && title.trim().length === 0 && (
-            <span>제목을 입력해주세요.</span>
+            <span style={{ color: 'red' }}>제목을 입력해주세요.</span>
           )}
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">게시판 타입</InputLabel>
@@ -114,53 +109,84 @@ const EditForm = ({ questionId }: number) => {
               id="demo-simple-select"
               value={name}
               label="name"
-              onChange={optionHandler}
+              onChange={categoryHandler}
             >
-              {option.map((option) => (
+              {category.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <input
-            type="text"
-            placeholder="닉네임"
-            name="nickname"
-            onChange={changeNickname}
-          />
-          {showError && nickname.trim().length === 0 && (
-            <span>닉네임을 입력해주세요.</span>
-          )}
+          <Stack
+            spacing={{ xs: 1, sm: 2 }}
+            direction="row"
+            useFlexGap
+            flexWrap="wrap"
+            justifyContent="space-between"
+          >
+            <TextField
+              type="text"
+              placeholder="닉네임"
+              name="nickname"
+              onChange={changeNickname}
+              style={{ width: '40%' }}
+            />
+            {showError && nickname.trim().length === 0 && (
+              <span style={{ color: 'red' }}>닉네임을 입력해주세요.</span>
+            )}
 
-          <input
-            type="password"
-            placeholder="비밀번호"
-            name="password"
-            onChange={changePassword}
-          />
-          {showError && password.trim().length === 0 && (
-            <span>비밀번호를 입력해주세요.</span>
-          )}
-          <TextareaAutosize
-            name="mainText"
-            color="neutral"
-            disabled={false}
-            minRows={2}
-            placeholder={'입력해주세요 ...'}
-            size="lg"
-            variant="solid"
+            <TextField
+              type="password"
+              placeholder="비밀번호"
+              name="password"
+              onChange={changePassword}
+              style={{ width: '40%' }}
+            />
+            {showError && password.trim().length === 0 && (
+              <span style={{ color: 'red' }}>비밀번호를 입력해주세요.</span>
+            )}
+          </Stack>
+          <TextField
+            id="outlined-multiline-static"
+            multiline
+            rows={4}
+            // defaultValue={}
+            fullWidth
             onChange={changeMainText}
           />
           {showError && mainText.trim().length === 0 && (
-            <span>텍스트를 입력해주세요 </span>
+            <span style={{ color: 'red' }}>텍스트를 입력해주세요 </span>
           )}
           <Button type="submit" variant="outlined">
             수정하기
           </Button>
-        </form>
-      </Stack>
-    </>
+          <Button type="button" variant="outlined" onClick={handleOpen}>
+            삭제하기
+          </Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                정말로 삭제하시겠습니까?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Button variant="contained" onClick={handleClose}>
+                  네
+                </Button>
+                <Button variant="outlined" onClick={handleClose}>
+                  아니요
+                </Button>
+              </Typography>
+            </Box>
+          </Modal>
+        </Stack>
+      </form>
+    </Container>
   )
 }
 
