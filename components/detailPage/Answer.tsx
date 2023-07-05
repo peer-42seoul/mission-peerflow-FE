@@ -64,7 +64,7 @@ const Answer = ({
   //   if (!password) return
   //   console.log(adoptAnswerBuf.answerId)
   //   await fetch(
-  //     `http://paulryu9309.ddns.net:80/v1/answer/${adoptAnswerBuf.answerId}/adopt`,
+  //     `https://paulryu9309.ddns.net:80/v1/answer/${adoptAnswerBuf.answerId}/adopt`,
   //     {
   //       method: 'PATCH',
   //       headers: {
