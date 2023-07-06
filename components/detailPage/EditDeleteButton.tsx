@@ -30,34 +30,38 @@ const EditDeleteButton = ({
   const handleOpen = (action: string) => {
     setOpen(true)
     setAction(action)
-    if (trigger) trigger()
+    // if (trigger) trigger()
   }
 
   const handleClose = () => setOpen(false)
 
   const eventDelete = (password: number) => {
-    if (!targetRawId) return
-    fetch(`http://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify({
-        type: type,
-        password: password,
-      }),
-    })
-      .then((res) => {
-        if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
+    // if (!targetRawId) return
+    // fetch(`http://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     // 'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   body: JSON.stringify({
+    //     type: type,
+    //     password: password,
+    //   }),
+    // })
+    //   .then((res) => {
+    //     if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
 
-        const newObjs = [...objs]
-        newObjs.splice(targetId, 1)
-        setter(newObjs)
-      })
-      .catch((e) => {
-        return alert(e)
-      })
+    //     const newObjs = [...objs]
+    //     newObjs.splice(targetId, 1)
+    //     setter(newObjs)
+    //   })
+    //   .catch((e) => {
+    //     return alert(e)
+    //   })
+
+    const newObjs = [...objs]
+    newObjs.splice(targetId, 1)
+    setter(newObjs)
 
     handleClose()
   }
