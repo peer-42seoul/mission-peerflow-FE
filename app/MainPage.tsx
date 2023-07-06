@@ -14,7 +14,10 @@ import GnbContext from '../hooks/GnbContext'
 import DefaultPagination from '../components/DefaultPagination'
 import DefaultDropdown from './DefaultDropdown'
 import DefaultCard from './DefaultCard'
-import { mainMockData } from '../mocks/mainMockData'
+import { mainMockData } from '../mocks/main/mainMockData'
+import { categoryMockData } from '../mocks/main/categoryMockData'
+import { searchMockData } from '../mocks/main/searchMockData'
+import { sortMockData } from '../mocks/main/sortMockData'
 
 export type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
 export type Sort = 'lastest' | 'views' | 'recommendations'
@@ -63,7 +66,20 @@ const MainPage = () => {
       //   return
       // }
       // setData(data)
-      setData(mainMockData)
+      if (category === null) {
+        if (page.main == 2) setData(mainMockData[1])
+        else if (sort !== 'lastest')
+          setData(sort === 'views' ? sortMockData[0] : sortMockData[1])
+        else setData(mainMockData[0])
+      } else if (category !== 'search') {
+        setData(
+          category !== 'minirt'
+            ? category !== 'ft_irc'
+              ? categoryMockData[0]
+              : categoryMockData[1]
+            : categoryMockData[2],
+        )
+      } else setData(searchMockData[0])
     } catch (error) {
       console.error(error)
       setError(true)

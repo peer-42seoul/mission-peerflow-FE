@@ -44,7 +44,7 @@ const DefaultCard = ({ data }: { data: Post }) => {
             {dayjs(data?.createdAt).format('YYYY-MM-DD HH:mm')}
           </Typography>
         </Stack>
-        <Link href={`/detail/1`}>
+        <Link href={`/detail/${data?.questionId}`}>
           <Typography
             sx={{
               overflow: 'hidden',
