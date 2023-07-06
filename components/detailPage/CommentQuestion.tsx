@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
 import { getData } from './detailPageWrap'
 import dayjs from 'dayjs'
+import { commentMockData } from '../../mocks/commentMockData'
 
 export interface IComment {
   questionCommentId?: number
@@ -41,12 +42,14 @@ const CommentAnswer = ({ questId }: { questId: number }) => {
   }
 
   async function fetchAndSet() {
-    const fetchData = await getData(
-      `${type}/comment?${type}Id=${questId}&page=${page - 1}&size=5`,
-    )
+    // const fetchData = await getData(
+    //   `${type}/comment?${type}Id=${questId}&page=${page - 1}&size=5`,
+    // )
 
-    setTotalPage(fetchData.totalPages)
-    setComments(fetchData.content)
+    // setTotalPage(fetchData.totalPages)
+    // setComments(fetchData.content)
+    setTotalPage(1)
+    setComments(commentMockData)
   }
 
   useEffect(() => {

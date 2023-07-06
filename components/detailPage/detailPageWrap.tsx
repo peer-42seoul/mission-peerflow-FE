@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react'
 import GnbContext from '../../hooks/GnbContext'
 import { IQuestion } from '../../types/Question'
 import NotFound from '../NotFound'
+import { detailMockData } from '../../mocks/detailMockData'
 
 export async function getData(url: string) {
   try {
@@ -31,15 +32,16 @@ export async function getData(url: string) {
 
 export default function DetailPage({ param }: { param: number }) {
   const { setGnb } = useContext(GnbContext)
-  const [data, setData] = useState<IQuestion>(null)
+  const [data, setData] = useState<IQuestion | any>(null)
   const [emptiness, setEmptiness] = useState(false)
 
   async function fetchAndSet() {
-    const fetchData = await getData(`question/${param}`)
-    if (!fetchData) {
-      setEmptiness(true)
-    }
-    setData(fetchData)
+    // const fetchData = await getData(`question/${param}`)
+    // if (!fetchData) {
+    //   setEmptiness(true)
+    // }
+    // setData(fetchData)
+    setData(detailMockData[param])
   }
 
   useEffect(() => {
