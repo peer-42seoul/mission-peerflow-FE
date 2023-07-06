@@ -14,6 +14,7 @@ import GnbContext from '../hooks/GnbContext'
 import DefaultPagination from '../components/DefaultPagination'
 import DefaultDropdown from './DefaultDropdown'
 import DefaultCard from './DefaultCard'
+import { mainMockData } from '../mocks/mainMockData'
 
 export type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
 export type Sort = 'lastest' | 'views' | 'recommendations'
@@ -32,7 +33,7 @@ const MainPage = () => {
     ft_irc: 1,
     minirt: 1,
   })
-  const [data, setData] = useState<Result>(null)
+  const [data, setData] = useState(null)
   const [error, setError] = useState(false)
   const [category, setCategory] = useState<Category>(null)
   const [sort, setSort] = useState<Sort>('lastest')
@@ -41,27 +42,28 @@ const MainPage = () => {
 
   const fetchData = async () => {
     try {
-      let url = !(category === 'search')
-        ? category
-          ? `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pagingIndex=${
-              page[category ? category : 'main'] - 1
-            }&pagingSize=${5}`
-          : `http://paulryu9309.ddns.net/v1?sort=${sort}&pagingIndex=${
-              page[category ? category : 'main'] - 1
-            }&pagingSize=${5}`
-        : `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
-
-      const response = await fetch(url)
-      if (!response.ok) {
-        console.log('Failed to fetch data')
-        return
-      }
-      const data = await response.json()
-      if (!data) {
-        console.log('Invalid data received')
-        return
-      }
-      setData(data)
+      // let url = !(category === 'search')
+      //   ? category
+      //     ? `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pagingIndex=${
+      //         page[category ? category : 'main'] - 1
+      //       }&pagingSize=${5}`
+      //     : `http://paulryu9309.ddns.net/v1?sort=${sort}&pagingIndex=${
+      //         page[category ? category : 'main'] - 1
+      //       }&pagingSize=${5}`
+      //   : `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
+      //
+      // const response = await fetch(url)
+      // if (!response.ok) {
+      //   console.log('Failed to fetch data')
+      //   return
+      // }
+      // const data = await response.json()
+      // if (!data) {
+      //   console.log('Invalid data received')
+      //   return
+      // }
+      // setData(data)
+      setData(mainMockData)
     } catch (error) {
       console.error(error)
       setError(true)

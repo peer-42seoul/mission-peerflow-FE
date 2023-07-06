@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
 import { getData } from './detailPageWrap'
 import dayjs from 'dayjs'
+import { commentMockData } from '../../mocks/commentMockData'
 
 export interface IComment {
   answerCommentId?: number
@@ -47,16 +48,17 @@ const CommentAnswer = ({
   }
 
   async function fetchAndSet() {
-    let key: number
-    if (!rawkey) key = questId
-    else key = rawkey
-
-    const fetchData = await getData(
-      `answer/comment?answerId=${key}&page=${page - 1}&size=5`,
-    )
-
-    setTotalPage(fetchData.totalPages)
-    setComments(fetchData.content)
+    // let key: number
+    // if (!rawkey) key = questId
+    // else key = rawkey
+    //
+    // const fetchData = await getData(
+    //   `answer/comment?answerId=${key}&page=${page - 1}&size=5`,
+    // )
+    //
+    // setTotalPage(fetchData.totalPages)
+    // setComments(fetchData.content)
+    setComments(commentMockData)
   }
 
   useEffect(() => {
