@@ -3,7 +3,7 @@
     { "source": "/(.*)", "destination": "/index.html" },
     {
       "source": "/detail/:id",
-      "destination": "/detail/[id]/page.tsx"
+      "destination": "/detail/[id]"
     }
   ]
 }
