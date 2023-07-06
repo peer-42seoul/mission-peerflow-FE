@@ -11,7 +11,7 @@ import Card from '@mui/material/Card'
 import TextForm from './TextForm'
 import React, { useEffect, useState } from 'react'
 import EditDeleteButton from './EditDeleteButton'
-import { getData } from './detailPageWrap'
+// import { getData } from './detailPageWrap'
 import dayjs from 'dayjs'
 import { commentMockData } from '../../mocks/commentMockData'
 
