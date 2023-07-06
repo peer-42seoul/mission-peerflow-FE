@@ -58,7 +58,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         category,
       }
       try {
-        await updateQuestion(params?.id, updatedQuestionData)
+        // await updateQuestion(params?.id, updatedQuestionData)
         router.push('/')
       } catch (err) {
         alert('수정에 실패하였습니다.')
@@ -68,18 +68,23 @@ const Page = ({ params }: { params: { id: number } }) => {
   )
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/v1/question/${params?.id}`)
-      .then((res: any) => {
-        setTitle(res.data.title)
-        setNickname(res.data.nickname)
-        setPassword(res.data.password)
-        setContent(res.data.content)
-        setCategory(res.data.category)
-      })
-      .catch((err) => {
-        alert(`${err} 불러오기에 실패하였습니다.`)
-      })
+    // setTitle(res.data.title)
+    // setNickname(res.data.nickname)
+    // setPassword(res.data.password)
+    // setContent(res.data.content)
+    // setCategory(res.data.category)
+    // axios
+    //   .get(`http://localhost:8080/v1/question/${params?.id}`)
+    //   .then((res: any) => {
+    //     setTitle(res.data.title)
+    //     setNickname(res.data.nickname)
+    //     setPassword(res.data.password)
+    //     setContent(res.data.content)
+    //     setCategory(res.data.category)
+    //   })
+    //   .catch((err) => {
+    //     alert(`${err} 불러오기에 실패하였습니다.`)
+    //   })
   }, [])
 
   return (

@@ -63,22 +63,23 @@ const Page = () => {
         }, ${nickname}, ${password}, ${content}`,
       )
 
-      axios
-        .post('http://localhost:8080/v1/question', {
-          type: 'question',
-          title,
-          nickname,
-          password,
-          content,
-          category: category.find((item) => item.value === name)?.value,
-        })
-        .then((res: AxiosResponse<any>) => {
-          router.push('/')
-        })
-        .catch((err) => {
-          alert('글 작성에 실패하였습니다.')
-          console.log(`err ${err}`)
-        })
+      router.push('/')
+      // axios
+      //   .post('http://localhost:8080/v1/question', {
+      //     type: 'question',
+      //     title,
+      //     nickname,
+      //     password,
+      //     content,
+      //     category: category.find((item) => item.value === name)?.value,
+      //   })
+      //   .then((res: AxiosResponse<any>) => {
+      //     router.push('/')
+      //   })
+      //   .catch((err) => {
+      //     alert('글 작성에 실패하였습니다.')
+      //     console.log(`err ${err}`)
+      //   })
     },
     [title, nickname, password, content, category],
   )

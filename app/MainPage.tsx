@@ -45,29 +45,6 @@ const MainPage = () => {
 
   const fetchData = async () => {
     try {
-<<<<<<< HEAD
-      let url = !(category === 'search')
-        ? category
-          ? `http://localhost:8080/v1?category=${category}&sort=${sort}&pagingIndex=${
-              page[category ? category : 'main'] - 1
-            }&pagingSize=${5}`
-          : `http://localhost:8080/v1?sort=${sort}&pagingIndex=${
-              page[category ? category : 'main'] - 1
-            }&pagingSize=${5}`
-        : `http://localhost:8080/v1/search?title=${title}&sort=${sort}`
-
-      const response = await fetch(url)
-      if (!response.ok) {
-        console.log('Failed to fetch data')
-        return
-      }
-      const data = await response.json()
-      if (!data) {
-        console.log('Invalid data received')
-        return
-      }
-      setData(data)
-=======
       // let url = !(category === 'search')
       //   ? category
       //     ? `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pagingIndex=${
@@ -103,7 +80,6 @@ const MainPage = () => {
             : categoryMockData[2],
         )
       } else setData(searchMockData[0])
->>>>>>> b555396c9b37a265889e1ed99c86c110291e85c3
     } catch (error) {
       console.error(error)
       setError(true)

@@ -71,40 +71,50 @@ const TextForm = ({
           createdAt: editTarget.createdAt,
           updatedAt: setNow(),
         }
-
-        fetch(`http://localhost:8080/v1/${type}/${targetRawId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: JSON.stringify({
-            questionId: unique_id,
-            type: type,
-            nickname: editComments.nickname,
-            password: editComments.password,
-            content: editComments.content,
-          }),
+        setter((prev) => {
+          const arr = Array.isArray(prev) ? [...prev] : []
+          arr[editTargetId] = editComments
+          return arr
         })
-          .then((res) => {
-            if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
-            console.log(res)
-            setter((prev) => {
-              const arr = Array.isArray(prev) ? [...prev] : []
-              arr[editTargetId] = editComments
-              return arr
-            })
-            setComment('')
-            setNickname('')
-            setPassword('')
+        setComment('')
+        setNickname('')
+        setPassword('')
 
-            editSetter(false)
-            if (trigger !== null) trigger()
-          })
-          .catch((e) => {
-            console.log(e)
-            return alert(e)
-          })
+        editSetter(false)
+
+        // fetch(`http://localhost:8080/v1/${type}/${targetRawId}`, {
+        //   method: 'PUT',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     // 'Content-Type': 'application/x-www-form-urlencoded',
+        //   },
+        //   body: JSON.stringify({
+        //     questionId: unique_id,
+        //     type: type,
+        //     nickname: editComments.nickname,
+        //     password: editComments.password,
+        //     content: editComments.content,
+        //   }),
+        // })
+        //   .then((res) => {
+        //     if (res.status === 403) throw new Error('잘못된 패스워드 입니다.')
+        //     console.log(res)
+        //     setter((prev) => {
+        //       const arr = Array.isArray(prev) ? [...prev] : []
+        //       arr[editTargetId] = editComments
+        //       return arr
+        //     })
+        //     setComment('')
+        //     setNickname('')
+        //     setPassword('')
+
+        //     editSetter(false)
+        //     if (trigger !== null) trigger()
+        //   })
+        //   .catch((e) => {
+        //     console.log(e)
+        //     return alert(e)
+        // })
       } else {
         const newComments: IComment = {
           nickname: nickname,
@@ -112,75 +122,84 @@ const TextForm = ({
           content: comment,
           createdAt: setNow(),
         }
+        setter((prev) => {
+          const arr = Array.isArray(prev) ? [...prev] : []
+          console.log(arr)
+          return [...arr, newComments]
+        })
 
-        if (type === 'answer/comment') {
-          fetch(`http://localhost:8080/v1/${type}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-              type: type,
-              answerId: targetRawId,
-              nickname: newComments.nickname,
-              password: newComments.password,
-              content: newComments.content,
-              createdAt: newComments.createdAt,
-            }),
-          })
-            .then((res) => {
-              if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
-              console.log('ok', res)
-              setter((prev) => {
-                const arr = Array.isArray(prev) ? [...prev] : []
-                console.log(arr)
-                return [...arr, newComments]
-              })
+        setComment('')
+        setNickname('')
+        setPassword('')
 
-              setComment('')
-              setNickname('')
-              setPassword('')
-              if (trigger !== null) trigger()
-            })
-            .catch((e) => {
-              console.log(e)
-              return alert(e)
-            })
-        } else {
-          fetch(`http://localhost:8080/v1/${type}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-              type: type,
-              questionId: unique_id,
-              nickname: newComments.nickname,
-              password: newComments.password,
-              content: newComments.content,
-              createdAt: newComments.createdAt,
-            }),
-          })
-            .then((res) => {
-              if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
-              console.log('ok', res)
-              setter((prev) => {
-                const arr = Array.isArray(prev) ? [...prev] : []
-                return [...arr, newComments]
-              })
+        // if (type === 'answer/comment') {
+        //   fetch(`http://localhost:8080/v1/${type}`, {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       // 'Content-Type': 'application/x-www-form-urlencoded',
+        //     },
+        //     body: JSON.stringify({
+        //       type: type,
+        //       answerId: targetRawId,
+        //       nickname: newComments.nickname,
+        //       password: newComments.password,
+        //       content: newComments.content,
+        //       createdAt: newComments.createdAt,
+        //     }),
+        //   })
+        //     .then((res) => {
+        //       if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
+        //       console.log('ok', res)
+        //       setter((prev) => {
+        //         const arr = Array.isArray(prev) ? [...prev] : []
+        //         console.log(arr)
+        //         return [...arr, newComments]
+        //       })
 
-              setComment('')
-              setNickname('')
-              setPassword('')
-              if (trigger !== null) trigger()
-            })
-            .catch((e) => {
-              console.log(e)
-              return alert(e)
-            })
-        }
+        //       setComment('')
+        //       setNickname('')
+        //       setPassword('')
+        //       if (trigger !== null) trigger()
+        //     })
+        //     .catch((e) => {
+        //       console.log(e)
+        //       return alert(e)
+        //     })
+        // } else {
+        //   fetch(`http://localhost:8080/v1/${type}`, {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       // 'Content-Type': 'application/x-www-form-urlencoded',
+        //     },
+        //     body: JSON.stringify({
+        //       type: type,
+        //       questionId: unique_id,
+        //       nickname: newComments.nickname,
+        //       password: newComments.password,
+        //       content: newComments.content,
+        //       createdAt: newComments.createdAt,
+        //     }),
+        //   })
+        //     .then((res) => {
+        //       if (res.status === 403) throw new Error('잘못된 패스워드입니다.')
+        //       console.log('ok', res)
+        //       setter((prev) => {
+        //         const arr = Array.isArray(prev) ? [...prev] : []
+        //         return [...arr, newComments]
+        //       })
+
+        //       setComment('')
+        //       setNickname('')
+        //       setPassword('')
+        //       if (trigger !== null) trigger()
+        //     })
+        //     .catch((e) => {
+        //       console.log(e)
+        //       return alert(e)
+        //     })
+        // }
       }
     },
     [comment, password, nickname],

@@ -23,9 +23,9 @@ const Question = ({
 
   const handleRecomments = useCallback(() => {
     setRecomments((prev) => prev + 1)
-    fetch(`http://localhost:8080/v1/question/${questId}/recommend`, {
-      method: 'POST',
-    })
+    // fetch(`http://localhost:8080/v1/question/${questId}/recommend`, {
+    //   method: 'POST',
+    // })
   }, [])
 
   return (

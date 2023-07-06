@@ -38,17 +38,18 @@ const DeleteAuthModal = ({ open, handleClose, questionId }) => {
 
   const deleteHandler = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      axios
-        .post(`http://localhost:8080/v1/question/${questionId}`, {
-          type: 'question',
-          password,
-        })
-        .then((res) => {
-          router.push('/')
-        })
-        .catch((err) => {
-          alert('존재하지 않는 게시물입니다.')
-        })
+      router.push('/')
+      // axios
+      //   .post(`http://localhost:8080/v1/question/${questionId}`, {
+      //     type: 'question',
+      //     password,
+      //   })
+      //   .then((res) => {
+      //     router.push('/')
+      //   })
+      //   .catch((err) => {
+      //     alert('존재하지 않는 게시물입니다.')
+      //   })
     },
     [password],
   )
