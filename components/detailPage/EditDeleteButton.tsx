@@ -37,7 +37,7 @@ const EditDeleteButton = ({
 
   const eventDelete = (password: number) => {
     if (!targetRawId) return
-    fetch(`https://paulryu9309.ddns.net:80/v1/${type}/${targetRawId}`, {
+    fetch(`http://localhost:8080/v1/${type}/${targetRawId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

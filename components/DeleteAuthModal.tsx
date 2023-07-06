@@ -39,7 +39,7 @@ const DeleteAuthModal = ({ open, handleClose, questionId }) => {
   const deleteHandler = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       axios
-        .post(`https://paulryu9309.ddns.net:80/v1/question/${questionId}`, {
+        .post(`http://localhost:8080/v1/question/${questionId}`, {
           type: 'question',
           password,
         })

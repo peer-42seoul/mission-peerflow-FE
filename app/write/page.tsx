@@ -64,7 +64,7 @@ const Page = () => {
       )
 
       axios
-        .post('https://paulryu9309.ddns.net:80/v1/question', {
+        .post('http://localhost:8080/v1/question', {
           type: 'question',
           title,
           nickname,
