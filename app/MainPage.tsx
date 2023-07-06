@@ -14,6 +14,10 @@ import GnbContext from '../hooks/GnbContext'
 import DefaultPagination from '../components/DefaultPagination'
 import DefaultDropdown from './DefaultDropdown'
 import DefaultCard from './DefaultCard'
+import { mainMockData } from '../mocks/main/mainMockData'
+import { categoryMockData } from '../mocks/main/categoryMockData'
+import { searchMockData } from '../mocks/main/searchMockData'
+import { sortMockData } from '../mocks/main/sortMockData'
 
 export type Category = null | 'ft_irc' | 'minishell' | 'minirt' | 'search'
 export type Sort = 'lastest' | 'views' | 'recommendations'
@@ -32,7 +36,7 @@ const MainPage = () => {
     ft_irc: 1,
     minirt: 1,
   })
-  const [data, setData] = useState<Result>(null)
+  const [data, setData] = useState(null)
   const [error, setError] = useState(false)
   const [category, setCategory] = useState<Category>(null)
   const [sort, setSort] = useState<Sort>('lastest')
@@ -41,6 +45,7 @@ const MainPage = () => {
 
   const fetchData = async () => {
     try {
+<<<<<<< HEAD
       let url = !(category === 'search')
         ? category
           ? `http://localhost:8080/v1?category=${category}&sort=${sort}&pagingIndex=${
@@ -62,6 +67,43 @@ const MainPage = () => {
         return
       }
       setData(data)
+=======
+      // let url = !(category === 'search')
+      //   ? category
+      //     ? `http://paulryu9309.ddns.net/v1?category=${category}&sort=${sort}&pagingIndex=${
+      //         page[category ? category : 'main'] - 1
+      //       }&pagingSize=${5}`
+      //     : `http://paulryu9309.ddns.net/v1?sort=${sort}&pagingIndex=${
+      //         page[category ? category : 'main'] - 1
+      //       }&pagingSize=${5}`
+      //   : `http://paulryu9309.ddns.net/v1/search?title=${title}&sort=${sort}`
+      //
+      // const response = await fetch(url)
+      // if (!response.ok) {
+      //   console.log('Failed to fetch data')
+      //   return
+      // }
+      // const data = await response.json()
+      // if (!data) {
+      //   console.log('Invalid data received')
+      //   return
+      // }
+      // setData(data)
+      if (category === null) {
+        if (page.main == 2) setData(mainMockData[1])
+        else if (sort !== 'lastest')
+          setData(sort === 'views' ? sortMockData[0] : sortMockData[1])
+        else setData(mainMockData[0])
+      } else if (category !== 'search') {
+        setData(
+          category !== 'minirt'
+            ? category !== 'ft_irc'
+              ? categoryMockData[0]
+              : categoryMockData[1]
+            : categoryMockData[2],
+        )
+      } else setData(searchMockData[0])
+>>>>>>> b555396c9b37a265889e1ed99c86c110291e85c3
     } catch (error) {
       console.error(error)
       setError(true)
