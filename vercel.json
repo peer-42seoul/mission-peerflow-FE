@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" },
-    { "source": "/detail/(.*)", "destination": "/detail/(.*)/page.tsx" }
+    {
+      "source": "/detail/:id",
+      "destination": "/detail/[id]"
+    }
   ]
 }
