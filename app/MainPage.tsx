@@ -43,7 +43,7 @@ const MainPage = () => {
   const [title, setTitle] = useState<string>('')
   const [search, setSearch] = useState<boolean>(false)
 
-  const fetchData = async () => {
+  const fetchData = () => {
     try {
       // let url = !(category === 'search')
       //   ? category
